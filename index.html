@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduFlow - Espace Étudiant</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars and specifics -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Drag and Drop visual feedback */
+        .drag-over { border: 2px dashed #6366f1 !important; background-color: rgba(99, 102, 241, 0.05) !important; }
+        .dragging { opacity: 0.5; transform: scale(0.98); }
+
+        /* Hide sections by default for SPA logic */
+        .section-view { display: none; }
+        .section-view.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism utilities */
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .dark .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex transition-colors duration-300">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 transition-colors duration-300">
+        <div>
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-700">
+                <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3"></i>
+                <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">EduFlow</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="p-4 space-y-1" id="nav-menu">
+                <button onclick="app.navigate('dashboard')" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all active-nav">
+                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Vue d'ensemble
+                </button>
+                <button onclick="app.navigate('tasks')" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <i class="fa-solid fa-kanban w-6 text-center mr-2"></i> Tâches
+                </button>
+                <button onclick="app.navigate('schedule')" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <i class="fa-regular fa-calendar-days w-6 text-center mr-2"></i> Emploi du temps
+                </button>
+                <button onclick="app.navigate('notes')" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <i class="fa-solid fa-book w-6 text-center mr-2"></i> Bloc-notes
+                </button>
+                <button onclick="app.navigate('pomodoro')" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    <i class="fa-solid fa-stopwatch w-6 text-center mr-2"></i> Pomodoro
+                </button>
+            </nav>
+        </div>
+
+        <!-- Footer / Dark Mode Toggle -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-700">
+            <button onclick="app.toggleDarkMode()" class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2"></i> Thème sombre</span>
+                <div class="w-10 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors duration-300">
+                    <div id="theme-toggle-dot" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-transform duration-300 dark:translate-x-5 shadow-sm"></div>
+                </div>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative scroll-smooth h-full">
+        <!-- Background decorative blob -->
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10"></div>
+
+        <div class="p-8 max-w-7xl mx-auto h-full flex flex-col">
+            
+            <section id="dashboard" class="section-view active">
+                <header class="mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="greeting-msg">Bonjour !</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-2">Prêt à organiser ta journée ?</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Clock Widget -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
+                        <div id="live-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
+                        <div id="live-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
+                    </div>
+
+                    <!-- Stats Widget -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-slate-700 dark:text-slate-200">Tâches urgentes</h3>
+                            <div class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-lg"><i class="fa-solid fa-fire"></i></div>
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <span class="text-4xl font-bold text-slate-900 dark:text-white" id="stat-todo">0</span>
+                            <span class="text-slate-500 dark:text-slate-400 mb-1">à faire</span>
+                        </div>
+                        <div class="mt-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                            <div class="bg-brand-500 h-2 rounded-full transition-all duration-500" id="stat-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quote Widget -->
+                    <div class="bg-gradient-to-br from-brand-500 to-brand-700 rounded-3xl p-6 shadow-sm text-white flex flex-col justify-center relative overflow-hidden">
+                        <i class="fa-solid fa-quote-right absolute -bottom-4 -right-2 text-6xl opacity-20"></i>
+                        <p class="font-medium text-lg leading-snug italic relative z-10" id="daily-quote">"Le succès est la somme de petits efforts, répétés jour après jour."</p>
+                        <span class="text-brand-100 text-sm mt-4 font-semibold block" id="daily-author">- Robert Collier</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tasks" class="section-view h-full flex flex-col">
+                <header class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Gère ton travail avec la méthode Kanban.</p>
+                    </div>
+                    <button onclick="tasksApp.toggleAddForm()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Nouvelle tâche
+                    </button>
+                </header>
+
+                <!-- Add Task Form (Hidden by default) -->
+                <div id="add-task-form" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 transition-all">
+                    <form onsubmit="tasksApp.addTask(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input type="text" id="task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 dark:focus:border-brand-500 text-slate-800 dark:text-white">
+                        <input type="text" id="task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 dark:focus:border-brand-500 text-slate-800 dark:text-white">
+                        <div class="flex gap-2">
+                            <input type="date" id="task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 dark:focus:border-brand-500 text-slate-800 dark:text-white">
+                            <button type="submit" class="bg-brand-600 text-white px-4 rounded-xl hover:bg-brand-700 transition"><i class="fa-solid fa-check"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-8 min-h-0">
+                    <!-- TODO Column -->
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                            <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-todo">0</span>
+                        </h3>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" id="col-todo" data-status="todo" ondragover="tasksApp.allowDrop(event)" ondrop="tasksApp.drop(event)" ondragenter="tasksApp.dragEnter(event)" ondragleave="tasksApp.dragLeave(event)">
+                            <!-- Tasks will be injected here -->
+                        </div>
+                    </div>
+                    <!-- IN PROGRESS Column -->
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                            <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-in-progress">0</span>
+                        </h3>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" id="col-in-progress" data-status="in-progress" ondragover="tasksApp.allowDrop(event)" ondrop="tasksApp.drop(event)" ondragenter="tasksApp.dragEnter(event)" ondragleave="tasksApp.dragLeave(event)">
+                            <!-- Tasks will be injected here -->
+                        </div>
+                    </div>
+                    <!-- DONE Column -->
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                            <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-done">0</span>
+                        </h3>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" id="col-done" data-status="done" ondragover="tasksApp.allowDrop(event)" ondrop="tasksApp.drop(event)" ondragenter="tasksApp.dragEnter(event)" ondragleave="tasksApp.dragLeave(event)">
+                            <!-- Tasks will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="schedule" class="section-view h-full flex flex-col">
+                <header class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Emploi du temps</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Organise ta semaine de cours.</p>
+                    </div>
+                    <button onclick="scheduleApp.toggleAddForm()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Ajouter un cours
+                    </button>
+                </header>
+
+                <!-- Add Class Form -->
+                <div id="add-class-form" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 transition-all">
+                    <form onsubmit="scheduleApp.addClass(event)" class="flex flex-wrap gap-4 items-end">
+                        <div class="flex-1 min-w-[150px]">
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Jour</label>
+                            <select id="class-day" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                                <option value="Lundi">Lundi</option>
+                                <option value="Mardi">Mardi</option>
+                                <option value="Mercredi">Mercredi</option>
+                                <option value="Jeudi">Jeudi</option>
+                                <option value="Vendredi">Vendredi</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[150px]">
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Matière</label>
+                            <input type="text" id="class-subject" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        </div>
+                        <div class="w-24">
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Début</label>
+                            <input type="time" id="class-start" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        </div>
+                        <div class="w-24">
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Fin</label>
+                            <input type="time" id="class-end" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        </div>
+                        <div class="flex-1 min-w-[100px]">
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Salle</label>
+                            <input type="text" id="class-room" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        </div>
+                        <button type="submit" class="bg-brand-600 text-white px-6 py-2.5 rounded-xl hover:bg-brand-700 transition">Ajouter</button>
+                    </form>
+                </div>
+
+                <!-- Weekly Grid -->
+                <div class="flex-1 overflow-x-auto pb-4">
+                    <div class="min-w-[800px] grid grid-cols-5 gap-4 h-full">
+                        <!-- Days generated by JS -->
+                        <div id="col-Lundi" class="flex flex-col gap-3">
+                            <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">Lundi</div>
+                            <div class="flex-1 space-y-3 schedule-list" data-day="Lundi"></div>
+                        </div>
+                        <div id="col-Mardi" class="flex flex-col gap-3">
+                            <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">Mardi</div>
+                            <div class="flex-1 space-y-3 schedule-list" data-day="Mardi"></div>
+                        </div>
+                        <div id="col-Mercredi" class="flex flex-col gap-3">
+                            <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">Mercredi</div>
+                            <div class="flex-1 space-y-3 schedule-list" data-day="Mercredi"></div>
+                        </div>
+                        <div id="col-Jeudi" class="flex flex-col gap-3">
+                            <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">Jeudi</div>
+                            <div class="flex-1 space-y-3 schedule-list" data-day="Jeudi"></div>
+                        </div>
+                        <div id="col-Vendredi" class="flex flex-col gap-3">
+                            <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">Vendredi</div>
+                            <div class="flex-1 space-y-3 schedule-list" data-day="Vendredi"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="notes" class="section-view h-full flex flex-col">
+                <header class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Bloc-notes</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Tes idées et mémos rapides.</p>
+                </header>
+
+                <div class="flex flex-col md:flex-row gap-6 h-full min-h-0">
+                    <!-- Note Form -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-4">
+                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Nouvelle note</h3>
+                            <input type="text" id="note-title" placeholder="Titre..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none focus:border-brand-500 mb-3 text-slate-800 dark:text-white font-medium">
+                            <textarea id="note-content" placeholder="Contenu de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none flex-1 mb-4"></textarea>
+                            <button onclick="notesApp.addNote()" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors shadow-sm">
+                                Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Notes Grid -->
+                    <div class="w-full md:w-2/3 overflow-y-auto pb-8">
+                        <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-max">
+                            <!-- Notes will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pomodoro" class="section-view flex flex-col items-center justify-center h-full">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi par intervalles.</p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-8 md:p-12 rounded-[3rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center max-w-md w-full relative overflow-hidden">
+                    <!-- Mode toggles -->
+                    <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-full mb-10 relative z-10 w-full">
+                        <button onclick="pomoApp.setMode('work')" id="btn-mode-work" class="flex-1 py-2 rounded-full font-medium text-sm transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400">Travail (25m)</button>
+                        <button onclick="pomoApp.setMode('break')" id="btn-mode-break" class="flex-1 py-2 rounded-full font-medium text-sm transition-all text-slate-500 dark:text-slate-400 hover:text-slate-700">Pause (5m)</button>
+                    </div>
+
+                    <!-- Timer Display -->
+                    <div class="relative flex items-center justify-center w-64 h-64 mb-10">
+                        <!-- Decorative animated rings -->
+                        <div id="pomo-ring-1" class="absolute w-full h-full rounded-full border-4 border-brand-100 dark:border-brand-900/50"></div>
+                        <div id="pomo-ring-2" class="absolute w-full h-full rounded-full border-4 border-brand-500 border-t-transparent border-r-transparent transform -rotate-45 transition-all duration-1000 opacity-0"></div>
+                        
+                        <span id="pomo-time" class="text-7xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums z-10">25:00</span>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex items-center gap-4 z-10 w-full justify-center">
+                        <button onclick="pomoApp.toggleTimer()" id="pomo-start-btn" class="bg-brand-600 hover:bg-brand-700 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl shadow-lg transition-transform hover:scale-105 active:scale-95">
+                            <i class="fa-solid fa-play ml-1"></i>
+                        </button>
+                        <button onclick="pomoApp.resetTimer()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 w-12 h-12 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // --- DATA & STATE MANAGEMENT ---
+        const STORAGE_KEY = 'eduflow_data';
+        
+        let state = {
+            darkMode: false,
+            tasks: [
+                { id: '1', title: 'Lire le chapitre 3', subject: 'Histoire', date: '2026-10-01', status: 'todo' },
+                { id: '2', title: 'Exercices algèbre', subject: 'Maths', date: '2026-09-30', status: 'in-progress' }
+            ],
+            schedule: {
+                Lundi: [{ id: 's1', subject: 'Maths', start: '08:00', end: '10:00', room: 'B201' }],
+                Mardi: [], Mercredi: [], Jeudi: [], Vendredi: []
+            },
+            notes: [
+                { id: 'n1', title: 'Idée de projet', content: 'Faire une app de flashcards en JS.', date: new Date().toLocaleDateString('fr-FR') }
+            ]
+        };
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { state = JSON.parse(saved); } 
+                catch (e) { console.error("Erreur de chargement des données", e); }
+            }
+            // Ensure schedule structure exists for old saves
+            if(!state.schedule.Lundi) state.schedule = { Lundi: [], Mardi: [], Mercredi: [], Jeudi: [], Vendredi: [] };
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            app.updateDashboardStats(); // Update dashboard whenever data changes
+        }
+
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        // --- GLOBAL APP LOGIC (Navigation, Theme, Dashboard) ---
+        const app = {
+            quotes: [
+                "Le succès est la somme de petits efforts, répétés jour après jour. - Robert Collier",
+                "L'éducation est l'arme la plus puissante pour changer le monde. - Nelson Mandela",
+                "Croyez en vous et en tout ce que vous êtes. - Christian D. Larson",
+                "Il n'y a pas de secret pour réussir. C'est le résultat de la préparation et du travail. - Colin Powell",
+                "Ne limite pas tes défis, défie tes limites.",
+                "Le meilleur moyen de prédire l'avenir est de le créer. - Peter Drucker"
+            ],
+            
+            init() {
+                loadData();
+                this.applyTheme();
+                this.navigate('dashboard');
+                this.startClock();
+                this.setRandomQuote();
+                
+                // Init modules
+                tasksApp.render();
+                scheduleApp.render();
+                notesApp.render();
+                this.updateDashboardStats();
+            },
+
+            navigate(sectionId) {
+                // Hide all
+                document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+                // Show target
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Update nav buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('bg-brand-50', 'text-brand-600', 'dark:bg-brand-900/30', 'dark:text-brand-400', 'active-nav');
+                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+                });
+                
+                // Find and activate the clicked button
+                const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(sectionId));
+                if(activeBtn) {
+                    activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                    activeBtn.classList.add('bg-brand-50', 'text-brand-600', 'dark:bg-brand-900/30', 'dark:text-brand-400', 'active-nav');
+                }
+            },
+
+            toggleDarkMode() {
+                state.darkMode = !state.darkMode;
+                this.applyTheme();
+                saveData();
+            },
+
+            applyTheme() {
+                const html = document.documentElement;
+                const dot = document.getElementById('theme-toggle-dot');
+                if (state.darkMode) {
+                    html.classList.add('dark');
+                    if(dot) dot.style.transform = 'translateX(20px)';
+                } else {
+                    html.classList.remove('dark');
+                    if(dot) dot.style.transform = 'translateX(0)';
+                }
+            },
+
+            startClock() {
+                const timeEl = document.getElementById('live-time');
+                const dateEl = document.getElementById('live-date');
+                
+                const updateTime = () => {
+                    const now = new Date();
+                    timeEl.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                    dateEl.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    
+                    // Simple greeting logic
+                    const hour = now.getHours();
+                    let greeting = "Bonjour !";
+                    if(hour >= 18) greeting = "Bonsoir !";
+                    document.getElementById('greeting-msg').textContent = greeting;
+                };
+                
+                updateTime();
+                setInterval(updateTime, 60000);
+            },
+
+            setRandomQuote() {
+                const q = this.quotes[Math.floor(Math.random() * this.quotes.length)].split(' - ');
+                document.getElementById('daily-quote').textContent = `"${q[0]}"`;
+                document.getElementById('daily-author').textContent = q[1] ? `- ${q[1]}` : '';
+            },
+            
+            updateDashboardStats() {
+                const todos = state.tasks.filter(t => t.status !== 'done').length;
+                const total = state.tasks.length;
+                const done = state.tasks.filter(t => t.status === 'done').length;
+                
+                document.getElementById('stat-todo').textContent = todos;
+                
+                const progress = total === 0 ? 0 : Math.round((done / total) * 100);
+                document.getElementById('stat-progress').style.width = `${progress}%`;
+            }
+        };
+
+        const tasksApp = {
+            draggedTask: null,
+
+            toggleAddForm() {
+                const form = document.getElementById('add-task-form');
+                form.classList.toggle('hidden');
+                if(!form.classList.contains('hidden')) document.getElementById('task-title').focus();
+            },
+
+            addTask(e) {
+                e.preventDefault();
+                const title = document.getElementById('task-title').value;
+                const subject = document.getElementById('task-subject').value;
+                const date = document.getElementById('task-date').value;
+
+                if(!title) return;
+
+                state.tasks.push({
+                    id: generateId(),
+                    title, subject, date,
+                    status: 'todo'
+                });
+
+                saveData();
+                this.render();
+                
+                // Reset form
+                e.target.reset();
+                this.toggleAddForm();
+            },
+
+            deleteTask(id) {
+                state.tasks = state.tasks.filter(t => t.id !== id);
+                saveData();
+                this.render();
+            },
+            
+            moveTask(id, newStatus) {
+                const task = state.tasks.find(t => t.id === id);
+                if (task) {
+                    task.status = newStatus;
+                    saveData();
+                    this.render();
+                }
+            },
+
+            render() {
+                const cols = { 'todo': [], 'in-progress': [], 'done': [] };
+                
+                state.tasks.forEach(task => {
+                    if(cols[task.status]) cols[task.status].push(task);
+                });
+
+                ['todo', 'in-progress', 'done'].forEach(status => {
+                    const container = document.getElementById(`col-${status}`);
+                    document.getElementById(`count-${status}`).textContent = cols[status].length;
+                    
+                    container.innerHTML = cols[status].map(task => `
+                        <div draggable="true" ondragstart="tasksApp.dragStart(event, '${task.id}')" ondragend="tasksApp.dragEnd(event)" 
+                             class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group transition-transform hover:-translate-y-1">
+                            
+                            <button onclick="tasksApp.deleteTask('${task.id}')" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                            
+                            ${task.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-1 block">${escapeHTML(task.subject)}</span>` : ''}
+                            <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 leading-tight mb-2 pr-6">${escapeHTML(task.title)}</h4>
+                            
+                            <div class="flex items-center justify-between mt-3">
+                                ${task.date ? `<span class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> ${new Date(task.date).toLocaleDateString('fr-FR', {month:'short', day:'numeric'})}</span>` : '<span></span>'}
+                                
+                                <div class="flex gap-1 md:hidden opacity-100 group-hover:opacity-100">
+                                    ${status !== 'todo' ? `<button onclick="tasksApp.moveTask('${task.id}', '${status==='done'?'in-progress':'todo'}')" class="p-1 text-slate-400 hover:text-brand-500"><i class="fa-solid fa-chevron-left text-xs"></i></button>` : ''}
+                                    ${status !== 'done' ? `<button onclick="tasksApp.moveTask('${task.id}', '${status==='todo'?'in-progress':'done'}')" class="p-1 text-slate-400 hover:text-brand-500"><i class="fa-solid fa-chevron-right text-xs"></i></button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                });
+            },
+
+            // Drag & Drop API
+            dragStart(e, id) {
+                this.draggedTask = id;
+                e.target.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                // Slight delay to allow DOM to visually update
+                setTimeout(() => e.target.style.opacity = '0.5', 0);
+            },
+            dragEnd(e) {
+                e.target.classList.remove('dragging');
+                e.target.style.opacity = '1';
+                document.querySelectorAll('.kanban-column').forEach(col => col.classList.remove('drag-over'));
+            },
+            allowDrop(e) { e.preventDefault(); },
+            dragEnter(e) {
+                e.preventDefault();
+                if(e.currentTarget.classList.contains('kanban-column')) {
+                    e.currentTarget.classList.add('drag-over');
+                }
+            },
+            dragLeave(e) {
+                if(e.currentTarget.classList.contains('kanban-column')) {
+                    e.currentTarget.classList.remove('drag-over');
+                }
+            },
+            drop(e) {
+                e.preventDefault();
+                const column = e.currentTarget;
+                column.classList.remove('drag-over');
+                const newStatus = column.getAttribute('data-status');
+                
+                if(this.draggedTask && newStatus) {
+                    this.moveTask(this.draggedTask, newStatus);
+                }
+            }
+        };
+
+        const scheduleApp = {
+            toggleAddForm() {
+                const form = document.getElementById('add-class-form');
+                form.classList.toggle('hidden');
+            },
+
+            addClass(e) {
+                e.preventDefault();
+                const day = document.getElementById('class-day').value;
+                const subject = document.getElementById('class-subject').value;
+                const start = document.getElementById('class-start').value;
+                const end = document.getElementById('class-end').value;
+                const room = document.getElementById('class-room').value;
+
+                if(!subject || !start || !end) return;
+
+                state.schedule[day].push({ id: generateId(), subject, start, end, room });
+                // Sort by start time
+                state.schedule[day].sort((a, b) => a.start.localeCompare(b.start));
+
+                saveData();
+                this.render();
+                e.target.reset();
+                this.toggleAddForm();
+            },
+
+            deleteClass(day, id) {
+                state.schedule[day] = state.schedule[day].filter(c => c.id !== id);
+                saveData();
+                this.render();
+            },
+
+            render() {
+                ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'].forEach(day => {
+                    const container = document.querySelector(`.schedule-list[data-day="${day}"]`);
+                    
+                    if(state.schedule[day].length === 0) {
+                        container.innerHTML = `<div class="h-full flex items-center justify-center text-sm text-slate-400 dark:text-slate-600 italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Libre</div>`;
+                        return;
+                    }
+
+                    container.innerHTML = state.schedule[day].map(c => `
+                        <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 relative group">
+                            <button onclick="scheduleApp.deleteClass('${day}', '${c.id}')" class="absolute top-1 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
+                            <h4 class="font-semibold text-slate-800 dark:text-slate-200 text-sm mb-1">${escapeHTML(c.subject)}</h4>
+                            <div class="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                                <i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}
+                            </div>
+                            ${c.room ? `<div class="text-xs text-slate-500 dark:text-slate-500 mt-1"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
+                        </div>
+                    `).join('');
+                });
+            }
+        };
+
+        const notesApp = {
+            addNote() {
+                const title = document.getElementById('note-title').value.trim();
+                const content = document.getElementById('note-content').value.trim();
+
+                if(!content && !title) return; // Prevent empty notes
+
+                state.notes.unshift({
+                    id: generateId(),
+                    title: title || 'Note sans titre',
+                    content,
+                    date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+                });
+
+                saveData();
+                this.render();
+                
+                document.getElementById('note-title').value = '';
+                document.getElementById('note-content').value = '';
+            },
+
+            deleteNote(id) {
+                state.notes = state.notes.filter(n => n.id !== id);
+                saveData();
+                this.render();
+            },
+
+            render() {
+                const container = document.getElementById('notes-grid');
+                if(state.notes.length === 0) {
+                    container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500">Aucune note pour le moment.</div>`;
+                    return;
+                }
+
+                // Convert newlines to <br> for display
+                container.innerHTML = state.notes.map(note => `
+                    <div class="bg-amber-50 dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-amber-100 dark:border-slate-700 relative group flex flex-col h-full hover:shadow-md transition-shadow">
+                        <button onclick="notesApp.deleteNote('${note.id}')" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                        <h4 class="font-bold text-slate-800 dark:text-white mb-2 pr-6">${escapeHTML(note.title)}</h4>
+                        <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap flex-1 mb-4">${escapeHTML(note.content)}</p>
+                        <span class="text-xs text-slate-400 font-medium">${note.date}</span>
+                    </div>
+                `).join('');
+            }
+        };
+
+        const pomoApp = {
+            timer: null,
+            timeLeft: 25 * 60,
+            isRunning: false,
+            mode: 'work', // 'work' or 'break'
+            modes: { work: 25 * 60, break: 5 * 60 },
+
+            setMode(newMode) {
+                if(this.isRunning) this.toggleTimer(); // pause if running
+                this.mode = newMode;
+                this.timeLeft = this.modes[newMode];
+                this.updateDisplay();
+                
+                // Update UI Buttons
+                const btnWork = document.getElementById('btn-mode-work');
+                const btnBreak = document.getElementById('btn-mode-break');
+                
+                const activeClasses = ['bg-white', 'dark:bg-slate-700', 'text-brand-600', 'dark:text-brand-400', 'shadow'];
+                const inactiveClasses = ['text-slate-500', 'dark:text-slate-400'];
+
+                if(newMode === 'work') {
+                    btnWork.classList.add(...activeClasses); btnWork.classList.remove(...inactiveClasses);
+                    btnBreak.classList.remove(...activeClasses); btnBreak.classList.add(...inactiveClasses);
+                } else {
+                    btnBreak.classList.add(...activeClasses); btnBreak.classList.remove(...inactiveClasses);
+                    btnWork.classList.remove(...activeClasses); btnWork.classList.add(...inactiveClasses);
+                }
+            },
+
+            toggleTimer() {
+                const btnIcon = document.querySelector('#pomo-start-btn i');
+                const ring2 = document.getElementById('pomo-ring-2');
+
+                if (this.isRunning) {
+                    clearInterval(this.timer);
+                    this.isRunning = false;
+                    btnIcon.classList.remove('fa-pause');
+                    btnIcon.classList.add('fa-play');
+                    btnIcon.classList.add('ml-1'); // adjust play icon alignment
+                    ring2.style.opacity = '0';
+                    ring2.classList.remove('animate-spin');
+                } else {
+                    this.isRunning = true;
+                    btnIcon.classList.remove('fa-play', 'ml-1');
+                    btnIcon.classList.add('fa-pause');
+                    ring2.style.opacity = '1';
+                    ring2.classList.add('animate-spin');
+                    
+                    this.timer = setInterval(() => {
+                        if (this.timeLeft > 0) {
+                            this.timeLeft--;
+                            this.updateDisplay();
+                        } else {
+                            this.playAlarm();
+                            this.toggleTimer(); // auto pause
+                            this.setMode(this.mode === 'work' ? 'break' : 'work'); // auto switch mode
+                        }
+                    }, 1000);
+                }
+            },
+
+            resetTimer() {
+                if (this.isRunning) this.toggleTimer();
+                this.timeLeft = this.modes[this.mode];
+                this.updateDisplay();
+            },
+
+            updateDisplay() {
+                const min = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
+                const sec = (this.timeLeft % 60).toString().padStart(2, '0');
+                document.getElementById('pomo-time').textContent = `${min}:${sec}`;
+                
+                // Update title tag if running
+                if(this.isRunning) {
+                    document.title = `(${min}:${sec}) EduFlow`;
+                } else {
+                    document.title = "EduFlow - Espace Étudiant";
+                }
+            },
+
+            playAlarm() {
+                // Audio synthesis to avoid external asset dependency issues
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.setValueAtTime(1046, ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 1);
+            }
+        };
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => app.init());
+
+    </script>
+</body>
+</html>

@@ -39,11 +39,11 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
         /* Drag & Drop */
-        .drag-over { border: 2px dashed #6366f1 !important; background-color: rgba(99, 102, 241, 0.05) !important; }
+        .drag-over { border: 2px dashed #4f46e5 !important; background-color: rgba(79, 70, 229, 0.05) !important; }
         .dragging { opacity: 0.5; transform: scale(0.98); }
 
         /* SPA Navigation Transitions */
-        .app-section { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .app-section { display: none; opacity: 0; }
         .app-section.active { display: block; animation: fadeIn 0.3s forwards; }
         
         @keyframes fadeIn {
@@ -58,6 +58,9 @@
         .rotate-y-180 { transform: rotateY(180deg); }
         .card-back { transform: rotateY(180deg); }
         
+        /* Slider */
+        input[type=range] { accent-color: #4f46e5; }
+        
         /* Toast Notifications */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
         .toast { transform: translateY(100%); opacity: 0; transition: all 0.3s ease; }
@@ -69,34 +72,29 @@
 
     <aside class="w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 transition-colors duration-300">
         <div class="flex-1 overflow-y-auto">
-            <!-- Logo -->
             <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
                 <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3"></i>
                 <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">EduFlow</h1>
             </div>
             
-            <!-- Navigation -->
             <nav class="p-4 space-y-1" id="nav-menu">
-                <button data-target="dashboard" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
-                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Vue d'ensemble
+                <button data-target="home" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Accueil
                 </button>
                 <button data-target="tasks" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-kanban w-6 text-center mr-2"></i> Tâches
+                    <i class="fa-solid fa-list-check w-6 text-center mr-2"></i> Tâches
                 </button>
                 <button data-target="schedule" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <i class="fa-regular fa-calendar-days w-6 text-center mr-2"></i> Emploi du temps
                 </button>
                 <button data-target="notes" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-book w-6 text-center mr-2"></i> Notes & Flashcards
+                    <i class="fa-solid fa-book w-6 text-center mr-2"></i> Bloc-notes & Flashcards
                 </button>
                 <button data-target="pomodoro" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <i class="fa-solid fa-stopwatch w-6 text-center mr-2"></i> Pomodoro
                 </button>
                 <button data-target="grades" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-graduation-cap w-6 text-center mr-2"></i> Moyennes
-                </button>
-                <button data-target="habits" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-check-double w-6 text-center mr-2"></i> Habitudes
+                    <i class="fa-solid fa-chart-pie w-6 text-center mr-2"></i> Résultats & Moyennes
                 </button>
                 <button data-target="settings" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <i class="fa-solid fa-gear w-6 text-center mr-2"></i> Paramètres
@@ -104,10 +102,9 @@
             </nav>
         </div>
 
-        <!-- Footer / Dark Mode Toggle -->
         <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
             <button id="theme-toggle-btn" class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2"></i> Thème sombre</span>
+                <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2"></i> Sombre</span>
                 <div class="w-10 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors duration-300">
                     <div id="theme-toggle-dot" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-transform duration-300 shadow-sm"></div>
                 </div>
@@ -117,49 +114,37 @@
 
     <main class="flex-1 overflow-y-auto relative scroll-smooth h-full">
         <!-- V1 decorative background -->
-        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10"></div>
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10 pointer-events-none"></div>
 
         <div class="p-8 max-w-7xl mx-auto min-h-full flex flex-col">
             
-            <!-- VIEW: DASHBOARD -->
-            <section id="dashboard-view" class="app-section active">
+            <section id="home-view" class="app-section active">
                 <header class="mb-10">
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="home-greeting">Bonjour !</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Prêt à organiser ta journée ?</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <!-- Clock Widget -->
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
-                        <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
-                        <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
+                        <div id="home-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
+                        <div id="home-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
                     </div>
-
-                    <!-- Stats Widget -->
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-semibold text-slate-700 dark:text-slate-200">Tâches urgentes</h3>
-                            <div class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-lg"><i class="fa-solid fa-fire"></i></div>
-                        </div>
-                        <div class="flex items-end gap-2">
-                            <span class="text-4xl font-bold text-slate-900 dark:text-white" id="dash-todo-count">0</span>
-                            <span class="text-slate-500 dark:text-slate-400 mb-1">à faire</span>
-                        </div>
-                        <div class="mt-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                            <div id="dash-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Quote Widget (V1 style purple gradient) -->
+                    <!-- Quote Widget -->
                     <div class="bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl p-6 shadow-sm text-white flex flex-col justify-center relative overflow-hidden">
                         <i class="fa-solid fa-quote-right absolute -bottom-4 -right-2 text-6xl opacity-20"></i>
-                        <p class="font-medium text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
-                        <span class="text-brand-100 text-sm mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
+                        <p class="font-medium text-lg leading-snug italic relative z-10" id="home-quote-text">"Le succès est la somme de petits efforts."</p>
+                        <span class="text-brand-100 text-sm mt-4 font-semibold block" id="home-quote-author">- Collier</span>
                     </div>
+                </div>
+
+                <!-- Modular Widgets Container -->
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Aperçu rapide</h3>
+                <div id="home-widgets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Widgets will be injected here by JS based on Settings -->
                 </div>
             </section>
 
-            <!-- VIEW: TASKS -->
             <section id="tasks-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
                 <header class="mb-6 flex justify-between items-center">
                     <div>
@@ -171,7 +156,6 @@
                     </button>
                 </header>
 
-                <!-- Task Form -->
                 <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 transition-all">
                     <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
@@ -183,23 +167,19 @@
                     </form>
                 </div>
 
-                <!-- Kanban Grid -->
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-8 min-h-0">
-                    <!-- TODO -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
                             <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-todo">0</span>
                         </h3>
                         <div class="flex-1 overflow-y-auto space-y-3 kanban-column" data-status="todo" id="col-todo"></div>
                     </div>
-                    <!-- IN PROGRESS -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
                             <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-inprogress">0</span>
                         </h3>
                         <div class="flex-1 overflow-y-auto space-y-3 kanban-column" data-status="inprogress" id="col-inprogress"></div>
                     </div>
-                    <!-- DONE -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
                             <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-done">0</span>
@@ -209,7 +189,6 @@
                 </div>
             </section>
 
-            <!-- VIEW: SCHEDULE -->
             <section id="schedule-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
                 <header class="mb-6 flex justify-between items-center">
                     <div>
@@ -252,32 +231,28 @@
                 </div>
 
                 <div class="flex-1 overflow-x-auto pb-4">
-                    <div class="min-w-[800px] grid grid-cols-5 gap-4 h-full" id="schedule-grid">
-                        <!-- Populated by JS -->
-                    </div>
+                    <div class="min-w-[800px] grid grid-cols-5 gap-4 h-full" id="schedule-grid"></div>
                 </div>
             </section>
 
-            <!-- VIEW: NOTES & FLASHCARDS -->
             <section id="notes-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
                 <header class="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Bloc-notes & Flashcards</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Garde tes idées et révise activement.</p>
                     </div>
-                    <!-- Tabs -->
                     <div class="flex bg-slate-200 dark:bg-slate-700 rounded-xl p-1 w-max">
                         <button id="tab-notes" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all">Notes</button>
                         <button id="tab-flashcards" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Flashcards</button>
                     </div>
                 </header>
 
-                <!-- Notes Sub-view -->
                 <div id="subview-notes" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
                     <div class="w-full md:w-1/3">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                             <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Nouvelle note</h3>
                             <input type="text" id="input-note-title" placeholder="Titre..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white">
+                            <input type="text" id="input-note-subject" placeholder="Matière (optionnel)..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white">
                             <textarea id="input-note-content" placeholder="Contenu..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-slate-800 dark:text-white resize-none h-32 mb-4"></textarea>
                             <button id="btn-add-note" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors">Enregistrer</button>
                         </div>
@@ -287,7 +262,6 @@
                     </div>
                 </div>
 
-                <!-- Flashcards Sub-view (Hidden by default) -->
                 <div id="subview-flashcards" class="hidden flex flex-col md:flex-row gap-6 flex-1 min-h-0">
                     <div class="w-full md:w-1/3">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
@@ -303,130 +277,172 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO -->
-            <section id="pomodoro-view" class="app-section flex-1 flex flex-col h-full items-center justify-center min-h-[500px]">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément.</p>
+            <section id="pomodoro-view" class="app-section flex-1 flex flex-col h-full min-h-[600px] justify-center items-center">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi par intervalles.</p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center max-w-md w-full relative">
-                    <!-- Mode toggles -->
-                    <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-8 w-full">
-                        <button id="pomo-mode-work" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400">Travail (25m)</button>
-                        <button id="pomo-mode-break" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400">Pause (5m)</button>
-                    </div>
-
-                    <!-- Timer Display -->
-                    <div class="relative flex items-center justify-center w-56 h-56 mb-8 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
-                        <span id="pomo-time-display" class="text-6xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
-                    </div>
-
-                    <!-- Controls -->
-                    <div class="flex items-center gap-6 mb-8">
-                        <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl shadow-md transition-transform hover:scale-105">
-                            <i class="fa-solid fa-play ml-1"></i>
-                        </button>
-                        <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-12 h-12 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
-                            <i class="fa-solid fa-rotate-right"></i>
-                        </button>
-                    </div>
+                <div class="w-full max-w-2xl bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col md:flex-row gap-8 items-center">
                     
-                    <!-- Ambient Sound Toggle -->
-                    <div class="w-full border-t border-slate-100 dark:border-slate-700 pt-6">
-                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-3 text-center">Bruit de fond (Concentration)</p>
-                        <div class="flex justify-center gap-4">
-                            <button id="btn-sound-noise" class="px-4 py-2 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-wave-square mr-2"></i> Bruit Blanc</button>
-                            <button id="btn-sound-rain" class="px-4 py-2 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-cloud-rain mr-2"></i> Pluie</button>
+                    <!-- Left: Timer -->
+                    <div class="flex-1 flex flex-col items-center w-full">
+                        <div class="flex gap-2 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl mb-6 w-full overflow-x-auto">
+                            <button class="pomo-mode-btn flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 shadow" data-work="15" data-break="5">Court</button>
+                            <button class="pomo-mode-btn flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-500" data-work="25" data-break="5">Normal</button>
+                            <button class="pomo-mode-btn flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-500" data-work="50" data-break="10">Intensif</button>
+                            <button id="btn-pomo-custom" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-500"><i class="fa-solid fa-gear"></i></button>
+                        </div>
+
+                        <!-- Custom Settings (Hidden by default) -->
+                        <div id="pomo-custom-panel" class="hidden w-full flex gap-2 mb-6">
+                            <input type="number" id="input-pomo-work" placeholder="Travail (m)" class="w-1/2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-sm text-center">
+                            <input type="number" id="input-pomo-break" placeholder="Pause (m)" class="w-1/2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-sm text-center">
+                            <button id="btn-pomo-apply-custom" class="bg-brand-600 text-white rounded-lg px-3"><i class="fa-solid fa-check"></i></button>
+                        </div>
+
+                        <div class="relative flex items-center justify-center w-48 h-48 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
+                            <span id="pomo-status-label" class="absolute top-8 text-xs font-bold text-slate-400 uppercase tracking-widest">Travail</span>
+                            <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums mt-4">15:00</span>
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-md transition-transform hover:scale-105">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </button>
+                            <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-12 h-12 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Audio / Focus -->
+                    <div class="flex-1 w-full border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-700 pt-6 md:pt-0 md:pl-8 flex flex-col items-center">
+                        <i class="fa-solid fa-headphones text-3xl text-brand-500 mb-2"></i>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-1">Concentration Sonore</h4>
+                        <p class="text-xs text-slate-500 text-center mb-6">Bloque les distractions avec des sons ambiants générés en direct.</p>
+                        
+                        <div class="flex gap-3 mb-6 w-full">
+                            <button id="btn-sound-noise" class="flex-1 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition-colors flex flex-col items-center gap-2">
+                                <i class="fa-solid fa-wave-square text-lg"></i> <span class="text-xs font-medium">Bruit Blanc</span>
+                            </button>
+                            <button id="btn-sound-rain" class="flex-1 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-brand-50 hover:text-brand-600 transition-colors flex flex-col items-center gap-2">
+                                <i class="fa-solid fa-cloud-rain text-lg"></i> <span class="text-xs font-medium">Pluie</span>
+                            </button>
+                        </div>
+
+                        <div class="w-full flex items-center gap-3">
+                            <i class="fa-solid fa-volume-low text-slate-400"></i>
+                            <input type="range" id="pomo-volume-slider" min="0" max="1" step="0.05" value="0.3" class="flex-1 cursor-pointer">
+                            <i class="fa-solid fa-volume-high text-slate-400"></i>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- VIEW: GRADES (MOYENNES) -->
             <section id="grades-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
                 <header class="mb-6">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Calcule ta moyenne générale.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Résultats & Moyennes</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Tes notes sont converties automatiquement pour calculer tes moyennes.</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Average Display -->
-                    <div class="col-span-1 bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm">
-                        <span class="text-sm text-brand-200 uppercase tracking-widest font-semibold mb-2">Moyenne Générale</span>
-                        <div id="grade-average-display" class="text-6xl font-bold mb-2">--/20</div>
-                    </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                     
-                    <!-- Form & List -->
-                    <div class="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                        <form id="form-add-grade" class="flex gap-3 mb-6">
-                            <input type="text" id="input-grade-subject" required placeholder="Matière..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <input type="number" id="input-grade-val" required step="0.1" min="0" max="20" placeholder="Note (/20)" class="w-28 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" placeholder="Coeff" class="w-24 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl transition-colors"><i class="fa-solid fa-plus"></i></button>
-                        </form>
-                        
-                        <div class="overflow-y-auto max-h-64 space-y-2 pr-2" id="grades-list">
-                            <!-- Populated by JS -->
+                    <!-- Global Average -->
+                    <div class="lg:col-span-1 flex flex-col gap-6">
+                        <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm">
+                            <span class="text-sm text-brand-200 uppercase tracking-widest font-semibold mb-2">Moyenne Générale</span>
+                            <div id="grade-global-avg" class="text-6xl font-bold mb-2">--/20</div>
+                        </div>
+
+                        <!-- Add Grade Form -->
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Ajouter une note</h3>
+                            <form id="form-add-grade" class="flex flex-col gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
+                                    <input type="text" id="input-grade-subject" required placeholder="Ex: Maths" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="flex-1">
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Note</label>
+                                        <input type="number" id="input-grade-val" required step="0.1" min="0" placeholder="Valeur" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Barème</label>
+                                        <select id="input-grade-scale" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                            <option value="20">sur 20</option>
+                                            <option value="10">sur 10</option>
+                                            <option value="5">sur 5</option>
+                                            <option value="100">sur 100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Coefficient</label>
+                                    <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" value="1" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                </div>
+                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl transition-colors font-medium mt-2">Ajouter</button>
+                            </form>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            <!-- VIEW: HABITS -->
-            <section id="habits-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Habitudes</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Construis des routines quotidiennes.</p>
-                    </div>
-                </header>
-
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                    <form id="form-add-habit" class="flex gap-4 mb-8 max-w-md">
-                        <input type="text" id="input-habit-name" required placeholder="Nouvelle habitude (ex: Lire 10 pages)..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-6 rounded-xl font-medium">Ajouter</button>
-                    </form>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[600px]">
-                            <thead>
-                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700">
-                                    <!-- Populated by JS -->
-                                </tr>
-                            </thead>
-                            <tbody id="habits-body" class="divide-y divide-slate-100 dark:divide-slate-700">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
+                    <!-- Subjects Breakdown -->
+                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="grades-subjects-grid">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
             </section>
 
-            <!-- VIEW: SETTINGS -->
             <section id="settings-view" class="app-section flex-1 flex flex-col h-full">
                 <header class="mb-6">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Paramètres & Données</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes sauvegardes (LocalStorage).</p>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Paramètres</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Personnalise ton expérience EduFlow.</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6">
-                    <div>
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Sauvegarde (Export)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Télécharge toutes tes données au format JSON pour ne pas les perdre.</p>
-                        <button id="btn-export-data" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm transition-colors"><i class="fa-solid fa-download mr-2"></i> Exporter mes données</button>
-                    </div>
-                    
-                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Restauration (Import)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Restaure tes données depuis un fichier JSON. <strong>Attention : écrase les données actuelles.</strong></p>
-                        <input type="file" id="input-import-data" accept=".json" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 mb-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                    <!-- Home Customization -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Personnalisation de l'Accueil</h3>
+                        <p class="text-sm text-slate-500 mb-4">Choisis les widgets affichés sur ta page d'accueil.</p>
+                        
+                        <div class="space-y-3" id="settings-widgets-toggles">
+                            <label class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300"><i class="fa-solid fa-list-check w-5 text-brand-500 mr-2"></i> Tâches</span>
+                                <input type="checkbox" id="toggle-w-tasks" class="w-5 h-5 accent-brand-600 rounded">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300"><i class="fa-regular fa-calendar-days w-5 text-brand-500 mr-2"></i> Emploi du temps</span>
+                                <input type="checkbox" id="toggle-w-schedule" class="w-5 h-5 accent-brand-600 rounded">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300"><i class="fa-solid fa-book w-5 text-brand-500 mr-2"></i> Notes</span>
+                                <input type="checkbox" id="toggle-w-notes" class="w-5 h-5 accent-brand-600 rounded">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300"><i class="fa-solid fa-stopwatch w-5 text-brand-500 mr-2"></i> Pomodoro</span>
+                                <input type="checkbox" id="toggle-w-pomodoro" class="w-5 h-5 accent-brand-600 rounded">
+                            </label>
+                        </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-red-600 mb-2">Zone de danger</h3>
-                        <p class="text-sm text-slate-500 mb-3">Efface toutes les données de l'application définitivement.</p>
-                        <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
+                    <!-- Data Management -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Gestion des données</h3>
+                            <p class="text-sm text-slate-500 mb-6">EduFlow sauvegarde tout dans ton navigateur. Tu peux exporter tes données pour ne pas les perdre.</p>
+                            
+                            <button id="btn-export-data" class="w-full mb-3 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i> Exporter mes données (JSON)</button>
+                            
+                            <label class="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm transition-colors cursor-pointer">
+                                <i class="fa-solid fa-upload"></i> Importer des données
+                                <input type="file" id="input-import-data" accept=".json" class="hidden">
+                            </label>
+                        </div>
+
+                        <div class="pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
+                            <button id="btn-clear-data" class="w-full bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 px-4 py-2.5 rounded-xl text-sm transition-colors font-medium flex items-center justify-center gap-2"><i class="fa-solid fa-trash-can"></i> Réinitialiser l'application</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -435,25 +451,19 @@
     </main>
 
     <!-- Global Toast Notification -->
-    <div id="toast-container" class="flex flex-col gap-2"></div>
+    <div id="toast-container" class="flex flex-col gap-2 pointer-events-none"></div>
 
     <script>
-        /**
-         * EDUFLOW V1-REMASTERED JAVASCRIPT
-         * Strictly modular, error-proof, pure Vanilla JS.
-         */
-
-        // --- STATE & STORAGE ---
-        const STORAGE_KEY = 'eduflow_v1_data';
+        const STORAGE_KEY = 'eduflow_vfinal_data';
         
         const defaultState = {
             theme: 'light',
-            tasks: [], // { id, title, subject, date, status: 'todo'|'inprogress'|'done' }
-            schedule: [], // { id, day, subject, start, end, room }
-            notes: [], // { id, title, content, date }
-            flashcards: [], // { id, q, a, isFlipped } (isFlipped is UI state, but harmless here)
-            grades: [], // { id, subject, val, coeff }
-            habits: [] // { id, name, days: { 'YYYY-MM-DD': boolean } }
+            homeWidgets: { tasks: true, schedule: true, notes: true, pomodoro: true },
+            tasks: [], 
+            schedule: [], 
+            notes: [], 
+            flashcards: [], 
+            grades: []
         };
 
         let AppState = JSON.parse(JSON.stringify(defaultState));
@@ -468,8 +478,9 @@
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    // Merge robustly to prevent missing properties if upgrading from older version
                     AppState = { ...defaultState, ...parsed };
+                    // Ensure nested objects are merged if missing
+                    if(!AppState.homeWidgets) AppState.homeWidgets = { ...defaultState.homeWidgets };
                 }
             } catch (e) { console.error("Load Error", e); }
         }
@@ -488,16 +499,10 @@
             toast.className = `toast px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center ${bgClass}`;
             toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-circle-exclamation'} mr-2"></i> ${message}`;
             container.appendChild(toast);
-            
-            // Trigger animation
             setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // --- STREAMING_CHUNK:Core UI (Navigation & Theme) ---
         const CoreUI = {
             init() {
                 loadState();
@@ -506,18 +511,16 @@
                 this.startClock();
                 this.initQuotes();
                 
-                // Init Modules safely
-                try { TasksModule.init(); } catch (e) { console.error("Tasks init failed", e); }
-                try { ScheduleModule.init(); } catch (e) { console.error("Schedule init failed", e); }
-                try { NotesModule.init(); } catch (e) { console.error("Notes init failed", e); }
-                try { PomodoroModule.init(); } catch (e) { console.error("Pomodoro init failed", e); }
-                try { GradesModule.init(); } catch (e) { console.error("Grades init failed", e); }
-                try { HabitsModule.init(); } catch (e) { console.error("Habits init failed", e); }
-                try { SettingsModule.init(); } catch (e) { console.error("Settings init failed", e); }
+                // Init submodules
+                TasksModule.init();
+                ScheduleModule.init();
+                NotesModule.init();
+                PomodoroModule.init();
+                GradesModule.init();
+                SettingsModule.init();
 
-                this.updateDashboardStats();
-                // Show default view
-                this.navigate('dashboard');
+                this.renderHomeWidgets();
+                this.navigate('home');
             },
 
             setupTheme() {
@@ -529,18 +532,17 @@
                 });
                 this.applyTheme();
             },
-
             applyTheme() {
                 const html = document.documentElement;
                 const dot = document.getElementById('theme-toggle-dot');
                 if (AppState.theme === 'dark') {
                     html.classList.add('dark');
                     dot.style.transform = 'translateX(20px)';
-                    dot.classList.remove('bg-white'); dot.classList.add('bg-slate-200');
+                    dot.classList.replace('bg-white', 'bg-slate-200');
                 } else {
                     html.classList.remove('dark');
                     dot.style.transform = 'translateX(0)';
-                    dot.classList.add('bg-white'); dot.classList.remove('bg-slate-200');
+                    dot.classList.replace('bg-slate-200', 'bg-white');
                 }
             },
 
@@ -548,21 +550,17 @@
                 const navBtns = document.querySelectorAll('.nav-btn');
                 navBtns.forEach(btn => {
                     btn.addEventListener('click', (e) => {
-                        const target = e.currentTarget.getAttribute('data-target');
-                        if (target) this.navigate(target);
+                        this.navigate(e.currentTarget.getAttribute('data-target'));
                     });
                 });
             },
 
             navigate(viewId) {
-                // Hide all sections
+                // strict routing
                 document.querySelectorAll('.app-section').forEach(el => el.classList.remove('active'));
-                
-                // Show target safely
                 const targetView = document.getElementById(`${viewId}-view`);
                 if(targetView) targetView.classList.add('active');
 
-                // Update Nav UI
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700";
                 });
@@ -571,367 +569,264 @@
                     activeBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
                 }
                 
-                if(viewId === 'dashboard') this.updateDashboardStats();
+                if(viewId === 'home') this.renderHomeWidgets();
             },
 
             startClock() {
-                const timeEl = document.getElementById('dash-time');
-                const dateEl = document.getElementById('dash-date');
-                const greetingEl = document.getElementById('dash-greeting');
-                
                 const update = () => {
                     const now = new Date();
-                    timeEl.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                    dateEl.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    document.getElementById('home-time').textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                    document.getElementById('home-date').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
                     const hour = now.getHours();
-                    greetingEl.textContent = (hour >= 18 || hour < 5) ? "Bonsoir !" : "Bonjour !";
+                    document.getElementById('home-greeting').textContent = (hour >= 18 || hour < 5) ? "Bonsoir !" : "Bonjour !";
                 };
-                update();
-                setInterval(update, 60000);
+                update(); setInterval(update, 60000);
             },
-
             initQuotes() {
                 const quotes = [
                     { t: "Le succès est la somme de petits efforts, répétés jour après jour.", a: "R. Collier" },
                     { t: "L'éducation est l'arme la plus puissante pour changer le monde.", a: "N. Mandela" },
-                    { t: "Croyez en vous et en tout ce que vous êtes.", a: "C. Larson" },
-                    { t: "Ne limite pas tes défis, défie tes limites.", a: "Inconnu" }
+                    { t: "Croyez en vous et en tout ce que vous êtes.", a: "C. Larson" }
                 ];
                 const q = quotes[Math.floor(Math.random() * quotes.length)];
-                document.getElementById('dash-quote-text').textContent = `"${q.t}"`;
-                document.getElementById('dash-quote-author').textContent = `- ${q.a}`;
+                document.getElementById('home-quote-text').textContent = `"${q.t}"`;
+                document.getElementById('home-quote-author').textContent = `- ${q.a}`;
             },
 
-            updateDashboardStats() {
-                try {
-                    const total = AppState.tasks.length;
-                    const done = AppState.tasks.filter(t => t.status === 'done').length;
-                    const todo = total - done;
-                    
-                    document.getElementById('dash-todo-count').textContent = todo;
-                    const progress = total === 0 ? 0 : Math.round((done / total) * 100);
-                    document.getElementById('dash-progress-bar').style.width = `${progress}%`;
-                } catch(e) {}
+            renderHomeWidgets() {
+                const grid = document.getElementById('home-widgets-grid');
+                let html = '';
+                const W = AppState.homeWidgets;
+
+                if (W.tasks) {
+                    const urgents = AppState.tasks.filter(t => t.status !== 'done').slice(0,3);
+                    html += `
+                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="CoreUI.navigate('tasks')">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center"><i class="fa-solid fa-list-check mr-2 text-brand-500"></i> À faire</h4>
+                        ${urgents.length ? urgents.map(t => `<div class="text-sm text-slate-600 dark:text-slate-400 mb-2 truncate">- ${escapeHTML(t.title)}</div>`).join('') : '<div class="text-sm text-slate-400 italic">Tout est terminé !</div>'}
+                    </div>`;
+                }
+                if (W.schedule) {
+                    // Quick view for today
+                    const todayStr = new Date().toLocaleDateString('fr-FR', {weekday: 'long'});
+                    const capitalizedToday = todayStr.charAt(0).toUpperCase() + todayStr.slice(1);
+                    const classes = AppState.schedule.filter(c => c.day === capitalizedToday).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,3);
+                    html += `
+                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="CoreUI.navigate('schedule')">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center"><i class="fa-regular fa-calendar-days mr-2 text-brand-500"></i> Aujourd'hui</h4>
+                        ${classes.length ? classes.map(c => `<div class="text-sm text-slate-600 dark:text-slate-400 mb-2 truncate"><b>${c.start}</b> - ${escapeHTML(c.subject)}</div>`).join('') : `<div class="text-sm text-slate-400 italic">Aucun cours.</div>`}
+                    </div>`;
+                }
+                if (W.notes) {
+                    const recent = AppState.notes.slice(0,2);
+                    html += `
+                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="CoreUI.navigate('notes')">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center"><i class="fa-solid fa-book mr-2 text-brand-500"></i> Notes récentes</h4>
+                        ${recent.length ? recent.map(n => `<div class="text-sm text-slate-600 dark:text-slate-400 mb-2 truncate font-medium">📝 ${escapeHTML(n.title)}</div>`).join('') : '<div class="text-sm text-slate-400 italic">Aucune note.</div>'}
+                    </div>`;
+                }
+                if (W.pomodoro) {
+                    html += `
+                    <div class="bg-brand-600 p-5 rounded-2xl shadow-sm flex flex-col cursor-pointer hover:bg-brand-700 transition-colors text-white items-center justify-center text-center" onclick="CoreUI.navigate('pomodoro')">
+                        <i class="fa-solid fa-stopwatch text-3xl mb-2 text-brand-200"></i>
+                        <h4 class="font-bold mb-1">Pomodoro</h4>
+                        <p class="text-xs text-brand-100">Lancer une session</p>
+                    </div>`;
+                }
+
+                if(!html) html = `<div class="col-span-full text-slate-400 text-sm italic py-4">Aucun widget activé. Va dans les Paramètres pour personnaliser cet espace.</div>`;
+                grid.innerHTML = html;
             }
         };
 
-        // --- STREAMING_CHUNK:Tasks Module (Kanban) ---
         const TasksModule = {
             draggedId: null,
-
             init() {
-                // Form toggle
                 document.getElementById('btn-toggle-task-form').addEventListener('click', () => {
-                    const form = document.getElementById('task-form-container');
-                    form.classList.toggle('hidden');
+                    document.getElementById('task-form-container').classList.toggle('hidden');
                 });
-
-                // Add task
                 document.getElementById('form-add-task').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.addTask();
+                    e.preventDefault(); this.addTask();
                 });
 
-                // Drag and drop setup on columns
-                document.querySelectorAll('.kanban-column').forEach(col => {
-                    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
-                    col.addEventListener('dragleave', e => col.classList.remove('drag-over'));
-                    col.addEventListener('drop', e => this.handleDrop(e, col));
+                ['todo', 'inprogress', 'done'].forEach(col => {
+                    const el = document.getElementById(`col-${col}`);
+                    el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+                    el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+                    el.addEventListener('drop', e => {
+                        e.preventDefault(); el.classList.remove('drag-over');
+                        if (this.draggedId) this.moveTask(this.draggedId, col);
+                    });
                 });
-
-                // Global event delegation for dynamically created buttons
-                document.getElementById('tasks-view').addEventListener('click', (e) => {
-                    const btnMove = e.target.closest('.btn-move-task');
-                    if (btnMove) {
-                        const id = btnMove.getAttribute('data-id');
-                        const targetStatus = btnMove.getAttribute('data-target-status');
-                        if (id && targetStatus) this.updateStatus(id, targetStatus);
-                    }
-                    const btnDel = e.target.closest('.btn-del-task');
-                    if (btnDel) {
-                        const id = btnDel.getAttribute('data-id');
-                        if (id) this.deleteTask(id);
-                    }
-                });
-
                 this.render();
             },
-
             addTask() {
-                const title = document.getElementById('input-task-title').value.trim();
-                const subject = document.getElementById('input-task-subject').value.trim();
+                const title = document.getElementById('input-task-title').value;
+                const subject = document.getElementById('input-task-subject').value;
                 const date = document.getElementById('input-task-date').value;
-                if (!title) return;
-
                 AppState.tasks.push({ id: generateId(), title, subject, date, status: 'todo' });
-                saveState();
-                
+                saveState(); this.render();
                 document.getElementById('form-add-task').reset();
-                document.getElementById('task-form-container').classList.add('hidden');
-                this.render();
-                CoreUI.updateDashboardStats();
-                showToast('Tâche ajoutée');
+                showToast("Tâche ajoutée");
             },
-
-            updateStatus(id, newStatus) {
-                const task = AppState.tasks.find(t => t.id === id);
-                if (task) {
-                    task.status = newStatus;
-                    saveState();
-                    this.render();
-                    CoreUI.updateDashboardStats();
-                }
-            },
-
             deleteTask(id) {
                 AppState.tasks = AppState.tasks.filter(t => t.id !== id);
-                saveState();
-                this.render();
-                CoreUI.updateDashboardStats();
+                saveState(); this.render();
             },
-
-            handleDragStart(e, id) {
-                this.draggedId = id;
-                e.target.classList.add('dragging');
-                setTimeout(() => e.target.style.opacity = '0.5', 0);
+            moveTask(id, newStatus) {
+                const t = AppState.tasks.find(t => t.id === id);
+                if (t) { t.status = newStatus; saveState(); this.render(); }
             },
-
-            handleDragEnd(e) {
-                e.target.classList.remove('dragging');
-                e.target.style.opacity = '1';
-                document.querySelectorAll('.kanban-column').forEach(c => c.classList.remove('drag-over'));
-            },
-
-            handleDrop(e, column) {
-                e.preventDefault();
-                column.classList.remove('drag-over');
-                const newStatus = column.getAttribute('data-status');
-                if (this.draggedId && newStatus) {
-                    this.updateStatus(this.draggedId, newStatus);
-                    this.draggedId = null;
-                }
-            },
-
             render() {
-                const cols = { todo: [], inprogress: [], done: [] };
-                AppState.tasks.forEach(t => { if(cols[t.status]) cols[t.status].push(t); });
+                ['todo', 'inprogress', 'done'].forEach(s => {
+                    document.getElementById(`col-${s}`).innerHTML = '';
+                    document.getElementById(`count-${s}`).innerText = '0';
+                });
 
-                ['todo', 'inprogress', 'done'].forEach(status => {
-                    const col = document.getElementById(`col-${status}`);
-                    document.getElementById(`count-${status}`).textContent = cols[status].length;
+                AppState.tasks.forEach(t => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-move relative group";
+                    card.draggable = true;
+                    card.addEventListener('dragstart', () => { this.draggedId = t.id; card.classList.add('dragging'); });
+                    card.addEventListener('dragend', () => { this.draggedId = null; card.classList.remove('dragging'); });
                     
-                    col.innerHTML = cols[status].map(t => {
-                        let dateStr = '';
-                        if (t.date) {
-                            const d = new Date(t.date);
-                            dateStr = `${d.getDate()} ${d.toLocaleString('fr', {month:'short'})}`;
-                        }
-                        
-                        return `
-                        <div draggable="true" ondragstart="TasksModule.handleDragStart(event, '${t.id}')" ondragend="TasksModule.handleDragEnd(event)"
-                             class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group">
-                            
-                            <button class="btn-del-task absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                            
-                            ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 block mb-1">${escapeHTML(t.subject)}</span>` : ''}
-                            <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 pr-6 break-words">${escapeHTML(t.title)}</h4>
-                            
-                            <div class="flex items-center justify-between mt-3">
-                                <span class="text-xs text-slate-500"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>
-                                <div class="flex gap-1">
-                                    ${status !== 'todo' ? `<button class="btn-move-task p-1 text-slate-400 hover:text-brand-500" data-id="${t.id}" data-target-status="${status === 'done' ? 'inprogress' : 'todo'}"><i class="fa-solid fa-chevron-left text-xs"></i></button>` : ''}
-                                    ${status !== 'done' ? `<button class="btn-move-task p-1 text-slate-400 hover:text-brand-500" data-id="${t.id}" data-target-status="${status === 'todo' ? 'inprogress' : 'done'}"><i class="fa-solid fa-chevron-right text-xs"></i></button>` : ''}
-                                </div>
-                            </div>
-                        </div>`;
-                    }).join('');
+                    card.innerHTML = `
+                        <button onclick="TasksModule.deleteTask('${t.id}')" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-200 pr-4">${escapeHTML(t.title)}</h4>
+                        ${t.subject ? `<span class="inline-block mt-2 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${escapeHTML(t.subject)}</span>` : ''}
+                        ${t.date ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-regular fa-calendar mr-1"></i>${t.date}</div>` : ''}
+                    `;
+                    document.getElementById(`col-${t.status}`).appendChild(card);
+                });
+                
+                ['todo', 'inprogress', 'done'].forEach(s => {
+                    document.getElementById(`count-${s}`).innerText = AppState.tasks.filter(t => t.status === s).length;
                 });
             }
         };
 
-        // --- STREAMING_CHUNK:Schedule Module ---
         const ScheduleModule = {
             days: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'],
-
             init() {
                 document.getElementById('btn-toggle-schedule-form').addEventListener('click', () => {
                     document.getElementById('schedule-form-container').classList.toggle('hidden');
                 });
-
-                document.getElementById('form-add-schedule').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.addClass();
+                document.getElementById('form-add-schedule').addEventListener('submit', (e) => {
+                    e.preventDefault(); this.add();
                 });
-
-                document.getElementById('schedule-grid').addEventListener('click', e => {
-                    const btnDel = e.target.closest('.btn-del-sched');
-                    if (btnDel) this.deleteClass(btnDel.getAttribute('data-id'));
-                });
-
                 this.render();
             },
-
-            addClass() {
+            add() {
                 const day = document.getElementById('input-sched-day').value;
-                const subject = document.getElementById('input-sched-subject').value.trim();
+                const subject = document.getElementById('input-sched-subject').value;
                 const start = document.getElementById('input-sched-start').value;
                 const end = document.getElementById('input-sched-end').value;
-                const room = document.getElementById('input-sched-room').value.trim();
-
-                if(!subject || !start || !end) return;
-
+                const room = document.getElementById('input-sched-room').value;
+                if(start >= end) { showToast("Heure de fin invalide", "error"); return; }
                 AppState.schedule.push({ id: generateId(), day, subject, start, end, room });
-                saveState();
-                
-                document.getElementById('form-add-schedule').reset();
-                this.render();
-                showToast('Cours ajouté');
+                saveState(); this.render();
+                showToast("Cours ajouté");
             },
-
-            deleteClass(id) {
-                AppState.schedule = AppState.schedule.filter(c => c.id !== id);
-                saveState();
-                this.render();
+            delete(id) {
+                AppState.schedule = AppState.schedule.filter(s => s.id !== id);
+                saveState(); this.render();
             },
-
             render() {
                 const grid = document.getElementById('schedule-grid');
-                grid.innerHTML = this.days.map(day => {
-                    // Sort classes for this day by start time
-                    const classes = AppState.schedule
-                        .filter(c => c.day === day)
-                        .sort((a, b) => a.start.localeCompare(b.start));
-
-                    return `
-                    <div class="flex flex-col gap-3">
-                        <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">${day}</div>
-                        <div class="flex-1 space-y-3">
-                            ${classes.length === 0 ? `<div class="h-full flex items-center justify-center text-sm text-slate-400 italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl min-h-[100px]">Libre</div>` 
-                            : classes.map(c => `
-                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 relative group text-sm">
-                                    <button class="btn-del-sched absolute top-1 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100" data-id="${c.id}"><i class="fa-solid fa-times"></i></button>
-                                    <div class="font-semibold text-slate-800 dark:text-slate-200 mb-1">${escapeHTML(c.subject)}</div>
-                                    <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}</div>
-                                    ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>`;
-                }).join('');
+                grid.innerHTML = '';
+                this.days.forEach(day => {
+                    const col = document.createElement('div');
+                    col.className = "flex flex-col gap-2";
+                    col.innerHTML = `<div class="font-semibold text-center text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 py-2 rounded-xl border border-slate-200 dark:border-slate-700 mb-2 sticky top-0 z-10">${day}</div>`;
+                    
+                    const classes = AppState.schedule.filter(s => s.day === day).sort((a,b) => a.start.localeCompare(b.start));
+                    classes.forEach(c => {
+                        col.innerHTML += `
+                            <div class="bg-white dark:bg-slate-800 p-3 rounded-xl border-l-4 border-l-brand-500 shadow-sm relative group">
+                                <button onclick="ScheduleModule.delete('${c.id}')" class="absolute top-1 right-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100"><i class="fa-solid fa-xmark text-xs"></i></button>
+                                <div class="text-xs font-bold text-slate-500 mb-1">${c.start} - ${c.end}</div>
+                                <div class="text-sm font-semibold text-slate-800 dark:text-slate-200">${escapeHTML(c.subject)}</div>
+                                ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>${escapeHTML(c.room)}</div>` : ''}
+                            </div>
+                        `;
+                    });
+                    grid.appendChild(col);
+                });
             }
         };
 
-        // --- STREAMING_CHUNK:Notes & Flashcards Module ---
         const NotesModule = {
             init() {
-                // Tabs
-                const tabN = document.getElementById('tab-notes');
-                const tabF = document.getElementById('tab-flashcards');
-                const vN = document.getElementById('subview-notes');
-                const vF = document.getElementById('subview-flashcards');
-
-                const switchTab = (activeTab, inactiveTab, activeView, inactiveView) => {
-                    activeTab.className = "px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all";
-                    inactiveTab.className = "px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
-                    inactiveView.classList.add('hidden');
-                    activeView.classList.remove('hidden');
-                };
-
-                tabN.addEventListener('click', () => switchTab(tabN, tabF, vN, vF));
-                tabF.addEventListener('click', () => switchTab(tabF, tabN, vF, vN));
-
-                // Notes Events
+                document.getElementById('tab-notes').addEventListener('click', () => this.switchTab('notes'));
+                document.getElementById('tab-flashcards').addEventListener('click', () => this.switchTab('flashcards'));
+                
                 document.getElementById('btn-add-note').addEventListener('click', () => this.addNote());
-                document.getElementById('notes-grid').addEventListener('click', e => {
-                    const btn = e.target.closest('.btn-del-note');
-                    if (btn) this.deleteNote(btn.getAttribute('data-id'));
-                });
-
-                // Flashcards Events
                 document.getElementById('btn-add-fc').addEventListener('click', () => this.addFC());
-                document.getElementById('fc-grid').addEventListener('click', e => {
-                    const btnDel = e.target.closest('.btn-del-fc');
-                    if (btnDel) {
-                        e.stopPropagation(); // prevent flip
-                        this.deleteFC(btnDel.getAttribute('data-id'));
-                        return;
-                    }
-                    const cardInner = e.target.closest('.fc-inner');
-                    if (cardInner) {
-                        cardInner.classList.toggle('rotate-y-180');
-                    }
-                });
-
-                this.renderNotes();
-                this.renderFC();
+                
+                this.renderNotes(); this.renderFC();
             },
-
+            switchTab(tab) {
+                document.getElementById('subview-notes').classList.toggle('hidden', tab !== 'notes');
+                document.getElementById('subview-flashcards').classList.toggle('hidden', tab !== 'flashcards');
+                
+                const actClass = "px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all";
+                const inactClass = "px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
+                
+                document.getElementById('tab-notes').className = tab === 'notes' ? actClass : inactClass;
+                document.getElementById('tab-flashcards').className = tab === 'flashcards' ? actClass : inactClass;
+            },
             addNote() {
-                const title = document.getElementById('input-note-title').value.trim();
-                const content = document.getElementById('input-note-content').value.trim();
-                if(!title && !content) return;
-
-                AppState.notes.unshift({ 
-                    id: generateId(), 
-                    title: title || 'Sans titre', 
-                    content, 
-                    date: new Date().toLocaleDateString('fr') 
-                });
-                saveState();
+                const title = document.getElementById('input-note-title').value;
+                const subj = document.getElementById('input-note-subject').value;
+                const content = document.getElementById('input-note-content').value;
+                if(!title || !content) { showToast("Titre et contenu requis", "error"); return; }
+                AppState.notes.unshift({ id: generateId(), title, subject: subj, content, date: new Date().toLocaleDateString() });
+                saveState(); this.renderNotes();
                 document.getElementById('input-note-title').value = '';
+                document.getElementById('input-note-subject').value = '';
                 document.getElementById('input-note-content').value = '';
-                this.renderNotes();
+                showToast("Note sauvegardée");
             },
-            deleteNote(id) {
-                AppState.notes = AppState.notes.filter(n => n.id !== id);
-                saveState();
-                this.renderNotes();
-            },
+            deleteNote(id) { AppState.notes = AppState.notes.filter(n => n.id !== id); saveState(); this.renderNotes(); },
             renderNotes() {
                 const grid = document.getElementById('notes-grid');
                 grid.innerHTML = AppState.notes.map(n => `
-                    <div class="bg-amber-50/50 dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-amber-100 dark:border-slate-700 relative group flex flex-col h-max">
-                        <button class="btn-del-note absolute top-3 right-3 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${n.id}"><i class="fa-solid fa-trash-can"></i></button>
-                        <h4 class="font-bold text-slate-800 dark:text-white mb-2 pr-6">${escapeHTML(n.title)}</h4>
-                        <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap mb-4 flex-1">${escapeHTML(n.content)}</p>
-                        <span class="text-xs text-slate-400">${n.date}</span>
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-2xl shadow-sm border border-yellow-100 dark:border-yellow-800/50 relative group">
+                        <button onclick="NotesModule.deleteNote('${n.id}')" class="absolute top-2 right-2 text-yellow-600/50 hover:text-red-500 opacity-0 group-hover:opacity-100"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-200">${escapeHTML(n.title)}</h4>
+                        ${n.subject ? `<div class="text-[10px] font-bold text-yellow-700 dark:text-yellow-500 uppercase mt-1 mb-2">${escapeHTML(n.subject)}</div>` : ''}
+                        <p class="text-sm text-slate-600 dark:text-slate-400 whitespace-pre-wrap mt-2">${escapeHTML(n.content)}</p>
+                        <div class="text-[10px] text-slate-400 mt-3 text-right">${n.date}</div>
                     </div>
                 `).join('');
             },
-
+            
             addFC() {
-                const q = document.getElementById('input-fc-q').value.trim();
-                const a = document.getElementById('input-fc-a').value.trim();
-                if(!q || !a) return;
-
+                const q = document.getElementById('input-fc-q').value;
+                const a = document.getElementById('input-fc-a').value;
+                if(!q || !a) { showToast("Question et réponse requises", "error"); return; }
                 AppState.flashcards.unshift({ id: generateId(), q, a });
-                saveState();
+                saveState(); this.renderFC();
                 document.getElementById('input-fc-q').value = '';
                 document.getElementById('input-fc-a').value = '';
-                this.renderFC();
+                showToast("Flashcard créée");
             },
-            deleteFC(id) {
-                AppState.flashcards = AppState.flashcards.filter(f => f.id !== id);
-                saveState();
-                this.renderFC();
-            },
+            deleteFC(id) { AppState.flashcards = AppState.flashcards.filter(f => f.id !== id); saveState(); this.renderFC(); },
             renderFC() {
                 const grid = document.getElementById('fc-grid');
                 grid.innerHTML = AppState.flashcards.map(f => `
-                    <div class="perspective-1000 w-full h-48 cursor-pointer group">
-                        <div class="fc-inner relative w-full h-full transform-style-3d shadow-sm hover:shadow-md transition-shadow rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <!-- FRONT -->
-                            <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
-                                <button class="btn-del-fc absolute top-3 right-3 text-slate-300 hover:text-red-500 z-10 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${f.id}"><i class="fa-solid fa-trash-can"></i></button>
-                                <span class="text-xs text-brand-500 font-bold uppercase tracking-widest absolute top-4">Question</span>
-                                <p class="font-medium text-slate-800 dark:text-white">${escapeHTML(f.q)}</p>
+                    <div class="perspective-1000 h-40 cursor-pointer group relative" onclick="this.querySelector('.transform-style-3d').classList.toggle('rotate-y-180')">
+                        <button onclick="event.stopPropagation(); NotesModule.deleteFC('${f.id}')" class="absolute -top-2 -right-2 z-10 bg-white dark:bg-slate-700 text-slate-400 hover:text-red-500 rounded-full w-6 h-6 shadow flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        <div class="transform-style-3d w-full h-full relative rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                            <!-- Front -->
+                            <div class="backface-hidden absolute w-full h-full bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                                <span class="text-xs text-brand-500 font-bold mb-2 absolute top-3 left-3"><i class="fa-regular fa-circle-question"></i> Recto</span>
+                                <p class="font-semibold text-slate-800 dark:text-slate-200">${escapeHTML(f.q)}</p>
                             </div>
-                            <!-- BACK -->
-                            <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
-                                <span class="text-xs text-brand-600 font-bold uppercase tracking-widest absolute top-4">Réponse</span>
-                                <p class="text-slate-800 dark:text-white font-medium whitespace-pre-wrap">${escapeHTML(f.a)}</p>
+                            <!-- Back -->
+                            <div class="card-back backface-hidden absolute w-full h-full bg-brand-50 dark:bg-brand-900/30 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                                <span class="text-xs text-brand-600 dark:text-brand-400 font-bold mb-2 absolute top-3 left-3"><i class="fa-regular fa-lightbulb"></i> Verso</span>
+                                <p class="font-medium text-brand-900 dark:text-brand-100">${escapeHTML(f.a)}</p>
                             </div>
                         </div>
                     </div>
@@ -939,308 +834,300 @@
             }
         };
 
-        // --- STREAMING_CHUNK:Pomodoro Module ---
         const PomodoroModule = {
-            timer: null, timeLeft: 25 * 60, isRunning: false, mode: 'work',
-            audioCtx: null, noiseNode: null, noiseSource: null,
-            activeSound: null,
-
+            time: 15 * 60, mode: 'work', timer: null,
+            wTime: 15, bTime: 5,
+            audioCtx: null, whiteNoiseNode: null, rainNode: null, gainNode: null,
+            
             init() {
-                document.getElementById('pomo-btn-play').addEventListener('click', () => this.toggle());
-                document.getElementById('pomo-btn-reset').addEventListener('click', () => this.reset());
-                document.getElementById('pomo-mode-work').addEventListener('click', () => this.setMode('work'));
-                document.getElementById('pomo-mode-break').addEventListener('click', () => this.setMode('break'));
+                this.display = document.getElementById('pomo-time-display');
+                this.label = document.getElementById('pomo-status-label');
+                this.btnPlay = document.getElementById('pomo-btn-play');
                 
+                document.querySelectorAll('.pomo-mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.getElementById('pomo-custom-panel').classList.add('hidden');
+                        document.querySelectorAll('.pomo-mode-btn').forEach(b => {
+                            b.className = "pomo-mode-btn flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-500";
+                        });
+                        e.target.className = "pomo-mode-btn flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all bg-white dark:bg-slate-700 text-brand-600 shadow";
+                        this.wTime = parseInt(e.target.dataset.work);
+                        this.bTime = parseInt(e.target.dataset.break);
+                        this.reset();
+                    });
+                });
+
+                document.getElementById('btn-pomo-custom').addEventListener('click', () => {
+                    document.getElementById('pomo-custom-panel').classList.remove('hidden');
+                });
+                document.getElementById('btn-pomo-apply-custom').addEventListener('click', () => {
+                    const w = parseInt(document.getElementById('input-pomo-work').value);
+                    const b = parseInt(document.getElementById('input-pomo-break').value);
+                    if(w>0 && b>0) { this.wTime = w; this.bTime = b; this.reset(); }
+                });
+
+                this.btnPlay.addEventListener('click', () => this.toggle());
+                document.getElementById('pomo-btn-reset').addEventListener('click', () => this.reset());
+
+                // Audio setup
+                const volSlider = document.getElementById('pomo-volume-slider');
+                volSlider.addEventListener('input', (e) => {
+                    if(this.gainNode && this.audioCtx) {
+                        this.gainNode.gain.setValueAtTime(parseFloat(e.target.value), this.audioCtx.currentTime);
+                    }
+                });
+
                 document.getElementById('btn-sound-noise').addEventListener('click', (e) => this.toggleSound('noise', e.currentTarget));
                 document.getElementById('btn-sound-rain').addEventListener('click', (e) => this.toggleSound('rain', e.currentTarget));
 
                 this.updateDisplay();
             },
-
-            setMode(newMode) {
-                if(this.isRunning) this.toggle();
-                this.mode = newMode;
-                this.timeLeft = newMode === 'work' ? 25 * 60 : 5 * 60;
-                this.updateDisplay();
-
-                const btnW = document.getElementById('pomo-mode-work');
-                const btnB = document.getElementById('pomo-mode-break');
-                const activeCls = ['bg-white', 'dark:bg-slate-700', 'text-brand-600', 'dark:text-brand-400', 'shadow'];
-                
-                if(newMode === 'work') {
-                    btnW.classList.add(...activeCls); btnW.classList.remove('text-slate-500');
-                    btnB.classList.remove(...activeCls); btnB.classList.add('text-slate-500');
-                } else {
-                    btnB.classList.add(...activeCls); btnB.classList.remove('text-slate-500');
-                    btnW.classList.remove(...activeCls); btnW.classList.add('text-slate-500');
-                }
-            },
-
             toggle() {
-                const icon = document.querySelector('#pomo-btn-play i');
-                if (this.isRunning) {
-                    clearInterval(this.timer);
-                    this.isRunning = false;
-                    icon.className = "fa-solid fa-play ml-1";
+                if (this.timer) {
+                    clearInterval(this.timer); this.timer = null;
+                    this.btnPlay.innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
                 } else {
-                    this.isRunning = true;
-                    icon.className = "fa-solid fa-pause";
-                    this.timer = setInterval(() => {
-                        if (this.timeLeft > 0) {
-                            this.timeLeft--;
-                            this.updateDisplay();
-                        } else {
-                            this.playBeep();
-                            this.setMode(this.mode === 'work' ? 'break' : 'work'); // Auto transition
-                        }
-                    }, 1000);
+                    this.timer = setInterval(() => this.tick(), 1000);
+                    this.btnPlay.innerHTML = '<i class="fa-solid fa-pause"></i>';
                 }
             },
-
             reset() {
-                if (this.isRunning) this.toggle();
-                this.timeLeft = this.mode === 'work' ? 25 * 60 : 5 * 60;
+                if (this.timer) { clearInterval(this.timer); this.timer = null; }
+                this.mode = 'work';
+                this.time = this.wTime * 60;
+                this.btnPlay.innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
                 this.updateDisplay();
             },
-
-            updateDisplay() {
-                const m = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
-                const s = (this.timeLeft % 60).toString().padStart(2, '0');
-                document.getElementById('pomo-time-display').textContent = `${m}:${s}`;
-                if(this.isRunning) document.title = `(${m}:${s}) EduFlow`;
-                else document.title = "EduFlow - Organisation Étudiante";
+            tick() {
+                if (this.time > 0) {
+                    this.time--;
+                    this.updateDisplay();
+                } else {
+                    // Auto transition
+                    this.playBeep();
+                    if(this.mode === 'work') {
+                        this.mode = 'break';
+                        this.time = this.bTime * 60;
+                        showToast("Session terminée ! Pause.", "success");
+                    } else {
+                        this.mode = 'work';
+                        this.time = this.wTime * 60;
+                        showToast("Pause terminée ! Au travail.", "success");
+                    }
+                    this.updateDisplay();
+                }
             },
-
+            updateDisplay() {
+                const m = Math.floor(this.time / 60).toString().padStart(2, '0');
+                const s = (this.time % 60).toString().padStart(2, '0');
+                this.display.textContent = `${m}:${s}`;
+                
+                if (this.mode === 'work') {
+                    this.label.textContent = "TRAVAIL";
+                    this.label.className = "absolute top-8 text-xs font-bold text-brand-500 uppercase tracking-widest";
+                } else {
+                    this.label.textContent = "PAUSE";
+                    this.label.className = "absolute top-8 text-xs font-bold text-emerald-500 uppercase tracking-widest";
+                }
+            },
             playBeep() {
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
                     const osc = ctx.createOscillator();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
                     osc.connect(ctx.destination);
-                    osc.frequency.setValueAtTime(800, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.5);
+                    osc.start(); osc.stop(ctx.currentTime + 0.3);
                 } catch(e) {}
             },
 
-            toggleSound(type, btnNode) {
-                // Stop current sound
-                if (this.noiseSource) {
-                    this.noiseSource.stop();
-                    this.noiseSource = null;
+            // Web Audio Synthesis for Focus Sounds
+            initAudio() {
+                if(!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.gainNode = this.audioCtx.createGain();
+                    this.gainNode.gain.value = document.getElementById('pomo-volume-slider').value;
+                    this.gainNode.connect(this.audioCtx.destination);
                 }
+                if(this.audioCtx.state === 'suspended') this.audioCtx.resume();
+            },
+            createWhiteNoise() {
+                const bufferSize = 2 * this.audioCtx.sampleRate;
+                const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+                const node = this.audioCtx.createBufferSource();
+                node.buffer = buffer; node.loop = true;
+                const filter = this.audioCtx.createBiquadFilter();
+                filter.type = 'lowpass'; filter.frequency.value = 1000;
+                node.connect(filter); filter.connect(this.gainNode);
+                return node;
+            },
+            createRain() {
+                const bufferSize = 2 * this.audioCtx.sampleRate;
+                const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) output[i] = (Math.random() * 2 - 1) * 0.5; // softer
+                const node = this.audioCtx.createBufferSource();
+                node.buffer = buffer; node.loop = true;
+                const filter1 = this.audioCtx.createBiquadFilter();
+                filter1.type = 'lowpass'; filter1.frequency.value = 400;
+                node.connect(filter1); filter1.connect(this.gainNode);
+                return node;
+            },
+            toggleSound(type, btn) {
+                this.initAudio();
                 
-                // Reset buttons visually
-                document.querySelectorAll('#pomodoro-view button[id^="btn-sound"]').forEach(b => {
-                    b.classList.remove('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30');
-                    b.classList.add('border-transparent');
+                // reset buttons UI
+                document.querySelectorAll('#btn-sound-noise, #btn-sound-rain').forEach(b => {
+                    if(b !== btn) b.classList.remove('bg-brand-100', 'dark:bg-brand-900', 'border-brand-500');
                 });
 
-                if (this.activeSound === type) {
-                    this.activeSound = null; // Just toggle off
-                    return;
-                }
-
-                this.activeSound = type;
-                btnNode.classList.remove('border-transparent');
-                btnNode.classList.add('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30');
-
-                try {
-                    if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    const bufferSize = this.audioCtx.sampleRate * 2; 
-                    const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
-                    const output = buffer.getChannelData(0);
-                    for (let i = 0; i < bufferSize; i++) {
-                        output[i] = Math.random() * 2 - 1;
-                    }
-
-                    this.noiseSource = this.audioCtx.createBufferSource();
-                    this.noiseSource.buffer = buffer;
-                    this.noiseSource.loop = true;
-
-                    // Filter for rain effect
-                    if (type === 'rain') {
-                        const filter = this.audioCtx.createBiquadFilter();
-                        filter.type = 'lowpass';
-                        filter.frequency.value = 1000;
-                        this.noiseSource.connect(filter);
-                        filter.connect(this.audioCtx.destination);
+                if(type === 'noise') {
+                    if(this.rainNode) { this.rainNode.stop(); this.rainNode = null; }
+                    if(this.whiteNoiseNode) {
+                        this.whiteNoiseNode.stop(); this.whiteNoiseNode = null;
+                        btn.classList.remove('bg-brand-100', 'dark:bg-brand-900', 'border-brand-500');
                     } else {
-                        // White noise, lower volume
-                        const gain = this.audioCtx.createGain();
-                        gain.gain.value = 0.2;
-                        this.noiseSource.connect(gain);
-                        gain.connect(this.audioCtx.destination);
+                        this.whiteNoiseNode = this.createWhiteNoise(); this.whiteNoiseNode.start();
+                        btn.classList.add('bg-brand-100', 'dark:bg-brand-900', 'border-brand-500');
                     }
-                    this.noiseSource.start();
-                } catch(e) {
-                    console.error("Audio API non supportée", e);
+                } else if(type === 'rain') {
+                    if(this.whiteNoiseNode) { this.whiteNoiseNode.stop(); this.whiteNoiseNode = null; }
+                    if(this.rainNode) {
+                        this.rainNode.stop(); this.rainNode = null;
+                        btn.classList.remove('bg-brand-100', 'dark:bg-brand-900', 'border-brand-500');
+                    } else {
+                        this.rainNode = this.createRain(); this.rainNode.start();
+                        btn.classList.add('bg-brand-100', 'dark:bg-brand-900', 'border-brand-500');
+                    }
                 }
             }
         };
 
-        // --- STREAMING_CHUNK:Grades Module ---
         const GradesModule = {
             init() {
-                document.getElementById('form-add-grade').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.addGrade();
-                });
-                document.getElementById('grades-list').addEventListener('click', e => {
-                    const btn = e.target.closest('.btn-del-grade');
-                    if(btn) this.deleteGrade(btn.getAttribute('data-id'));
+                document.getElementById('form-add-grade').addEventListener('submit', (e) => {
+                    e.preventDefault(); this.addGrade();
                 });
                 this.render();
             },
             addGrade() {
-                const subject = document.getElementById('input-grade-subject').value.trim();
+                const subj = document.getElementById('input-grade-subject').value.trim();
                 const val = parseFloat(document.getElementById('input-grade-val').value);
+                const scale = parseFloat(document.getElementById('input-grade-scale').value);
                 const coeff = parseFloat(document.getElementById('input-grade-coeff').value);
-                if(!subject || isNaN(val) || isNaN(coeff)) return;
                 
-                AppState.grades.push({ id: generateId(), subject, val, coeff });
-                saveState();
-                document.getElementById('form-add-grade').reset();
-                this.render();
-            },
-            deleteGrade(id) {
-                AppState.grades = AppState.grades.filter(g => g.id !== id);
-                saveState();
-                this.render();
-            },
-            render() {
-                const list = document.getElementById('grades-list');
-                let sum = 0, sumCoeff = 0;
-                
-                list.innerHTML = AppState.grades.map(g => {
-                    sum += g.val * g.coeff;
-                    sumCoeff += g.coeff;
-                    return `
-                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
-                        <div class="font-medium text-slate-800 dark:text-slate-200 text-sm w-1/3 truncate">${escapeHTML(g.subject)}</div>
-                        <div class="font-bold text-brand-600 dark:text-brand-400 w-1/4 text-center">${g.val}<span class="text-xs font-normal text-slate-400">/20</span></div>
-                        <div class="text-xs text-slate-500 w-1/4 text-center">Coeff ${g.coeff}</div>
-                        <button class="btn-del-grade text-slate-400 hover:text-red-500" data-id="${g.id}"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>`;
-                }).join('');
+                if(!subj || isNaN(val) || isNaN(scale) || isNaN(coeff)) return;
 
-                const avg = sumCoeff > 0 ? (sum / sumCoeff).toFixed(2) : '--';
-                document.getElementById('grade-average-display').textContent = `${avg}/20`;
-            }
-        };
-
-        // --- STREAMING_CHUNK:Habits Module ---
-        const HabitsModule = {
-            init() {
-                document.getElementById('form-add-habit').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.addHabit();
-                });
-                document.getElementById('habits-body').addEventListener('change', e => {
-                    if (e.target.classList.contains('habit-checkbox')) {
-                        this.toggleHabit(e.target.getAttribute('data-id'), e.target.getAttribute('data-date'), e.target.checked);
-                    }
-                });
-                document.getElementById('habits-body').addEventListener('click', e => {
-                    const btn = e.target.closest('.btn-del-habit');
-                    if (btn) this.deleteHabit(btn.getAttribute('data-id'));
-                });
-                this.render();
+                AppState.grades.push({ id: generateId(), subject: subj, value: val, scale: scale, coeff: coeff });
+                saveState(); this.render();
+                document.getElementById('input-grade-val').value = '';
+                showToast("Note ajoutée et convertie sur 20");
             },
+            deleteGrade(id) { AppState.grades = AppState.grades.filter(g => g.id !== id); saveState(); this.render(); },
             
-            getDates() {
-                const dates = [];
-                for(let i=6; i>=0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    dates.push(d.toISOString().split('T')[0]); // YYYY-MM-DD
-                }
-                return dates;
+            calculateSubjectAverages() {
+                const subjects = {};
+                AppState.grades.forEach(g => {
+                    if(!subjects[g.subject]) subjects[g.subject] = { sum: 0, coeffs: 0, list: [] };
+                    // Normalize to 20
+                    const valOn20 = (g.value / g.scale) * 20;
+                    subjects[g.subject].sum += (valOn20 * g.coeff);
+                    subjects[g.subject].coeffs += g.coeff;
+                    subjects[g.subject].list.push(g);
+                });
+                return subjects;
             },
 
-            addHabit() {
-                const name = document.getElementById('input-habit-name').value.trim();
-                if(!name) return;
-                AppState.habits.push({ id: generateId(), name, days: {} });
-                saveState();
-                document.getElementById('input-habit-name').value = '';
-                this.render();
-            },
-            deleteHabit(id) {
-                AppState.habits = AppState.habits.filter(h => h.id !== id);
-                saveState();
-                this.render();
-            },
-            toggleHabit(id, date, checked) {
-                const h = AppState.habits.find(h => h.id === id);
-                if (h) {
-                    if(!h.days) h.days = {};
-                    h.days[date] = checked;
-                    saveState();
-                }
-            },
             render() {
-                const dates = this.getDates();
-                
-                // Headers
-                const headerHtml = `<th class="py-3 px-4 w-1/3">Habitude</th>` + 
-                    dates.map(d => `<th class="py-3 px-2 text-center w-[10%]">${d.substring(8,10)}/${d.substring(5,7)}</th>`).join('') +
-                    `<th class="py-3 px-2 w-[5%]"></th>`;
-                document.getElementById('habits-header').innerHTML = headerHtml;
+                const subs = this.calculateSubjectAverages();
+                const grid = document.getElementById('grades-subjects-grid');
+                grid.innerHTML = '';
 
-                // Body
-                const bodyHtml = AppState.habits.map(h => `
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200 text-sm truncate">${escapeHTML(h.name)}</td>
-                        ${dates.map(d => `
-                            <td class="py-3 px-2 text-center">
-                                <input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded focus:ring-brand-500 cursor-pointer" 
-                                    data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}>
-                            </td>
-                        `).join('')}
-                        <td class="py-3 px-2 text-center">
-                            <button class="btn-del-habit text-slate-400 hover:text-red-500" data-id="${h.id}"><i class="fa-solid fa-trash-can"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-                document.getElementById('habits-body').innerHTML = bodyHtml || `<tr><td colspan="9" class="py-4 text-center text-slate-500 text-sm">Aucune habitude suivie.</td></tr>`;
+                let totalSum = 0, totalCoeffs = 0;
+
+                Object.keys(subs).sort().forEach(subName => {
+                    const data = subs[subName];
+                    const avg = data.coeffs > 0 ? (data.sum / data.coeffs) : 0;
+                    
+                    totalSum += data.sum;
+                    totalCoeffs += data.coeffs;
+
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700";
+                    
+                    let colorClass = "text-emerald-500";
+                    if(avg < 10) colorClass = "text-red-500";
+                    else if(avg < 12) colorClass = "text-yellow-500";
+
+                    let listHTML = data.list.map(g => `
+                        <div class="flex justify-between items-center text-xs py-1 border-b border-slate-100 dark:border-slate-700/50 last:border-0 group relative">
+                            <span class="text-slate-600 dark:text-slate-400">Note: ${g.value}/${g.scale} <span class="opacity-50">(x${g.coeff})</span></span>
+                            <button onclick="GradesModule.deleteGrade('${g.id}')" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-end mb-3">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200">${escapeHTML(subName)}</h4>
+                            <span class="text-xl font-bold ${colorClass}">${avg.toFixed(2)}</span>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/50 max-h-24 overflow-y-auto">
+                            ${listHTML}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                const globAvg = totalCoeffs > 0 ? (totalSum / totalCoeffs).toFixed(2) : '--';
+                document.getElementById('grade-global-avg').innerText = globAvg !== '--' ? `${globAvg}/20` : '--/20';
             }
         };
 
-        // --- STREAMING_CHUNK:Settings Module ---
         const SettingsModule = {
             init() {
+                // Widget Toggles
+                const toggles = ['tasks', 'schedule', 'notes', 'pomodoro'];
+                toggles.forEach(t => {
+                    const el = document.getElementById(`toggle-w-${t}`);
+                    if(el) {
+                        el.checked = AppState.homeWidgets[t];
+                        el.addEventListener('change', (e) => {
+                            AppState.homeWidgets[t] = e.target.checked;
+                            saveState();
+                            CoreUI.renderHomeWidgets();
+                        });
+                    }
+                });
+
+                // Export/Import/Clear
                 document.getElementById('btn-export-data').addEventListener('click', () => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState));
-                    const node = document.createElement('a');
-                    node.setAttribute("href", dataStr);
-                    node.setAttribute("download", `eduflow_backup_${new Date().toISOString().split('T')[0]}.json`);
-                    document.body.appendChild(node);
-                    node.click();
-                    node.remove();
+                    const dlAnchorElem = document.createElement('a');
+                    dlAnchorElem.setAttribute("href", dataStr);
+                    dlAnchorElem.setAttribute("download", `eduflow_backup_${new Date().toISOString().slice(0,10)}.json`);
+                    dlAnchorElem.click();
                 });
 
                 document.getElementById('input-import-data').addEventListener('change', (e) => {
                     const file = e.target.files[0];
-                    if (!file) return;
+                    if(!file) return;
                     const reader = new FileReader();
-                    reader.onload = (event) => {
+                    reader.onload = (ev) => {
                         try {
-                            const parsed = JSON.parse(event.target.result);
-                            if(parsed && typeof parsed === 'object') {
+                            const parsed = JSON.parse(ev.target.result);
+                            if(parsed && parsed.tasks) {
                                 AppState = { ...defaultState, ...parsed };
                                 saveState();
-                                showToast("Données restaurées ! Rechargement...");
-                                setTimeout(() => window.location.reload(), 1500);
-                            }
-                        } catch(err) {
-                            showToast("Fichier JSON invalide.", "error");
-                        }
+                                window.location.reload();
+                            } else { showToast("Fichier invalide", "error"); }
+                        } catch(err) { showToast("Erreur de lecture", "error"); }
                     };
                     reader.readAsText(file);
                 });
 
                 document.getElementById('btn-clear-data').addEventListener('click', () => {
-                    if (confirm("Attention, cette action va effacer TOUTES tes données. Es-tu sûr ?")) {
+                    if(confirm("Attention ! Cela effacera TOUTES tes données (tâches, notes, résultats...). Continuer ?")) {
                         localStorage.removeItem(STORAGE_KEY);
                         window.location.reload();
                     }
@@ -1248,9 +1135,11 @@
             }
         };
 
-        // INITIALIZE APP
-        window.addEventListener('DOMContentLoaded', () => CoreUI.init());
-        
+        // Boot Application
+        document.addEventListener('DOMContentLoaded', () => {
+            CoreUI.init();
+        });
+
     </script>
 </body>
 </html>

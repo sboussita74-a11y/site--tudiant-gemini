@@ -42,12 +42,12 @@
         .drag-over { border: 2px dashed #6366f1 !important; background-color: rgba(99, 102, 241, 0.05) !important; }
         .dragging { opacity: 0.5; transform: scale(0.98); }
 
-        /* SPA Navigation Transitions */
-        .app-section { display: none; opacity: 0; transition: opacity 0.3s ease; }
-        .app-section.active { display: block; animation: fadeIn 0.3s forwards; }
+        /* SPA Navigation Transitions & Strict Viewport Containment */
+        .app-section { display: none; opacity: 0; transition: opacity 0.3s ease; height: 100%; flex-direction: column; overflow: hidden; }
+        .app-section.active { display: flex; animation: fadeIn 0.3s forwards; }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -115,20 +115,21 @@
         </div>
     </aside>
 
-    <main class="flex-1 overflow-y-auto relative scroll-smooth h-full">
+    <!-- Main Content Area with Strict Viewport Framing -->
+    <main class="flex-1 overflow-hidden relative flex flex-col h-full">
         <!-- V1 decorative background -->
-        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10"></div>
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10 pointer-events-none"></div>
 
-        <div class="p-8 max-w-7xl mx-auto min-h-full flex flex-col">
+        <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
             
             <!-- VIEW: DASHBOARD -->
-            <section id="dashboard-view" class="app-section active">
-                <header class="mb-10">
+            <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
+                <header class="mb-8 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Prêt à organiser ta journée ?</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-6 flex-shrink-0">
                     <!-- Clock Widget -->
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
                         <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
@@ -160,8 +161,8 @@
             </section>
 
             <!-- VIEW: TASKS -->
-            <section id="tasks-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6 flex justify-between items-center">
+            <section id="tasks-view" class="app-section">
+                <header class="mb-6 flex justify-between items-center flex-shrink-0">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Gère ton travail avec la méthode Kanban.</p>
@@ -172,7 +173,7 @@
                 </header>
 
                 <!-- Task Form -->
-                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 transition-all">
+                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0 transition-all">
                     <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
                         <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
@@ -184,34 +185,34 @@
                 </div>
 
                 <!-- Kanban Grid -->
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-8 min-h-0">
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-4 min-h-0 overflow-hidden">
                     <!-- TODO -->
-                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-todo">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" data-status="todo" id="col-todo"></div>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="todo" id="col-todo"></div>
                     </div>
                     <!-- IN PROGRESS -->
-                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-inprogress">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" data-status="inprogress" id="col-inprogress"></div>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="inprogress" id="col-inprogress"></div>
                     </div>
                     <!-- DONE -->
-                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center">
+                    <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-done">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column" data-status="done" id="col-done"></div>
+                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="done" id="col-done"></div>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: SCHEDULE -->
-            <section id="schedule-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6 flex justify-between items-center">
+            <section id="schedule-view" class="app-section">
+                <header class="mb-6 flex justify-between items-center flex-shrink-0">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Emploi du temps</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Organise ta semaine de cours.</p>
@@ -221,7 +222,7 @@
                     </button>
                 </header>
 
-                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6">
+                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0">
                     <form id="form-add-schedule" class="flex flex-wrap gap-4 items-end">
                         <div class="flex-1 min-w-[120px]">
                             <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Jour</label>
@@ -251,7 +252,7 @@
                     </form>
                 </div>
 
-                <div class="flex-1 overflow-x-auto pb-4">
+                <div class="flex-1 overflow-x-auto pb-4 min-h-0">
                     <div class="min-w-[800px] grid grid-cols-5 gap-4 h-full" id="schedule-grid">
                         <!-- Populated by JS -->
                     </div>
@@ -259,8 +260,8 @@
             </section>
 
             <!-- VIEW: NOTES & FLASHCARDS -->
-            <section id="notes-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <section id="notes-view" class="app-section">
+                <header class="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 flex-shrink-0">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Garde tes idées et révise activement.</p>
@@ -273,8 +274,8 @@
                 </header>
 
                 <!-- Notes Sub-view -->
-                <div id="subview-notes" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
-                    <div class="w-full md:w-1/3">
+                <div id="subview-notes" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+                    <div class="w-full md:w-1/3 flex-shrink-0">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                             <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Nouvelle note</h3>
                             <input type="text" id="input-note-title" placeholder="Titre..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white">
@@ -282,14 +283,14 @@
                             <button id="btn-add-note" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors">Enregistrer</button>
                         </div>
                     </div>
-                    <div class="w-full md:w-2/3 overflow-y-auto pr-2">
-                        <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                    <div class="w-full md:w-2/3 overflow-y-auto pr-2 flex-1 min-h-0">
+                        <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4"></div>
                     </div>
                 </div>
 
                 <!-- Flashcards Sub-view (Hidden by default) -->
-                <div id="subview-flashcards" class="hidden flex flex-col md:flex-row gap-6 flex-1 min-h-0">
-                    <div class="w-full md:w-1/3">
+                <div id="subview-flashcards" class="hidden flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+                    <div class="w-full md:w-1/3 flex-shrink-0">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                             <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4">Nouvelle Flashcard</h3>
                             <input type="text" id="input-fc-q" placeholder="Question (Recto)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white">
@@ -297,76 +298,76 @@
                             <button id="btn-add-fc" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors">Créer carte</button>
                         </div>
                     </div>
-                    <div class="w-full md:w-2/3 overflow-y-auto pr-2">
-                        <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+                    <div class="w-full md:w-2/3 overflow-y-auto pr-2 flex-1 min-h-0">
+                        <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-4"></div>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: POMODORO -->
-            <section id="pomodoro-view" class="app-section flex-1 flex flex-col h-full items-center justify-center min-h-[500px]">
-                <div class="text-center mb-8">
+            <section id="pomodoro-view" class="app-section items-center justify-center">
+                <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément.</p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center max-w-md w-full relative">
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center max-w-md w-full relative flex-shrink-0">
                     <!-- Mode toggles -->
-                    <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-8 w-full">
+                    <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full">
                         <button id="pomo-mode-work" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400">Travail (25m)</button>
                         <button id="pomo-mode-break" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400">Pause (5m)</button>
                     </div>
 
                     <!-- Timer Display -->
-                    <div class="relative flex items-center justify-center w-56 h-56 mb-8 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
-                        <span id="pomo-time-display" class="text-6xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
+                    <div class="relative flex items-center justify-center w-48 h-48 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
+                        <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
                     </div>
 
                     <!-- Controls -->
-                    <div class="flex items-center gap-6 mb-8">
-                        <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl shadow-md transition-transform hover:scale-105">
+                    <div class="flex items-center gap-6 mb-6">
+                        <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-md transition-transform hover:scale-105">
                             <i class="fa-solid fa-play ml-1"></i>
                         </button>
-                        <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-12 h-12 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                        <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
                             <i class="fa-solid fa-rotate-right"></i>
                         </button>
                     </div>
                     
                     <!-- Ambient Sound Toggle -->
-                    <div class="w-full border-t border-slate-100 dark:border-slate-700 pt-6">
-                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-3 text-center">Bruit de fond (Concentration)</p>
+                    <div class="w-full border-t border-slate-100 dark:border-slate-700 pt-4">
+                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 text-center">Bruit de fond (Concentration)</p>
                         <div class="flex justify-center gap-4">
-                            <button id="btn-sound-noise" class="px-4 py-2 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-wave-square mr-2"></i> Bruit Blanc</button>
-                            <button id="btn-sound-rain" class="px-4 py-2 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-cloud-rain mr-2"></i> Pluie</button>
+                            <button id="btn-sound-noise" class="px-3 py-1.5 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-wave-square mr-2"></i> Bruit Blanc</button>
+                            <button id="btn-sound-rain" class="px-3 py-1.5 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-cloud-rain mr-2"></i> Pluie</button>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: GRADES (MOYENNES) -->
-            <section id="grades-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6">
+            <section id="grades-view" class="app-section">
+                <header class="mb-6 flex-shrink-0">
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
                     <p class="text-slate-500 dark:text-slate-400 text-sm">Calcule ta moyenne générale.</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden pb-4">
                     <!-- Average Display -->
-                    <div class="col-span-1 bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm">
+                    <div class="col-span-1 bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm flex-shrink-0">
                         <span class="text-sm text-brand-200 uppercase tracking-widest font-semibold mb-2">Moyenne Générale</span>
                         <div id="grade-average-display" class="text-6xl font-bold mb-2">--/20</div>
                     </div>
                     
                     <!-- Form & List -->
-                    <div class="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                        <form id="form-add-grade" class="flex gap-3 mb-6">
+                    <div class="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-0 overflow-hidden">
+                        <form id="form-add-grade" class="flex gap-3 mb-4 flex-shrink-0">
                             <input type="text" id="input-grade-subject" required placeholder="Matière..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none text-slate-800 dark:text-white text-sm">
                             <input type="number" id="input-grade-val" required step="0.1" min="0" max="20" placeholder="Note (/20)" class="w-28 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
                             <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" placeholder="Coeff" class="w-24 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
                             <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl transition-colors"><i class="fa-solid fa-plus"></i></button>
                         </form>
                         
-                        <div class="overflow-y-auto max-h-64 space-y-2 pr-2" id="grades-list">
+                        <div class="overflow-y-auto flex-1 space-y-2 pr-2" id="grades-list">
                             <!-- Populated by JS -->
                         </div>
                     </div>
@@ -374,24 +375,24 @@
             </section>
 
             <!-- VIEW: HABITS -->
-            <section id="habits-view" class="app-section flex-1 flex flex-col h-full min-h-[600px]">
-                <header class="mb-6 flex justify-between items-center">
+            <section id="habits-view" class="app-section">
+                <header class="mb-6 flex justify-between items-center flex-shrink-0">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Habitudes</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Construis des routines quotidiennes.</p>
                     </div>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700">
-                    <form id="form-add-habit" class="flex gap-4 mb-8 max-w-md">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0 overflow-hidden pb-4">
+                    <form id="form-add-habit" class="flex gap-4 mb-6 max-w-md flex-shrink-0">
                         <input type="text" id="input-habit-name" required placeholder="Nouvelle habitude (ex: Lire 10 pages)..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
                         <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-6 rounded-xl font-medium">Ajouter</button>
                     </form>
                     
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
-                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700">
+                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
                                     <!-- Populated by JS -->
                                 </tr>
                             </thead>
@@ -404,13 +405,13 @@
             </section>
 
             <!-- VIEW: SETTINGS -->
-            <section id="settings-view" class="app-section flex-1 flex flex-col h-full">
-                <header class="mb-6">
+            <section id="settings-view" class="app-section overflow-y-auto pr-1">
+                <header class="mb-6 flex-shrink-0">
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Paramètres & Données</h2>
                     <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes sauvegardes (LocalStorage).</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6 flex-shrink-0 mb-6">
                     <div>
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Sauvegarde (Export)</h3>
                         <p class="text-sm text-slate-500 mb-3">Télécharge toutes tes données au format JSON pour ne pas les perdre.</p>
@@ -448,12 +449,12 @@
         
         const defaultState = {
             theme: 'light',
-            tasks: [], // { id, title, subject, date, status: 'todo'|'inprogress'|'done' }
-            schedule: [], // { id, day, subject, start, end, room }
-            notes: [], // { id, title, content, date }
-            flashcards: [], // { id, q, a, isFlipped }
-            grades: [], // { id, subject, val, coeff }
-            habits: [] // { id, name, days: { 'YYYY-MM-DD': boolean } }
+            tasks: [], 
+            schedule: [], 
+            notes: [], 
+            flashcards: [], 
+            grades: [], 
+            habits: [] 
         };
 
         let AppState = JSON.parse(JSON.stringify(defaultState));
@@ -718,7 +719,7 @@
                         
                         return `
                         <div draggable="true" ondragstart="TasksModule.handleDragStart(event, '${t.id}')" ondragend="TasksModule.handleDragEnd(event)"
-                             class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group">
+                             class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group flex-shrink-0">
                             
                             <button class="btn-del-task absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}">
                                 <i class="fa-solid fa-trash-can"></i>
@@ -793,12 +794,12 @@
                         .sort((a, b) => a.start.localeCompare(b.start));
 
                     return `
-                    <div class="flex flex-col gap-3">
-                        <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200">${day}</div>
-                        <div class="flex-1 space-y-3">
-                            ${classes.length === 0 ? `<div class="h-full flex items-center justify-center text-sm text-slate-400 italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl min-h-[100px]">Libre</div>` 
+                    <div class="flex flex-col gap-3 h-full">
+                        <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200 flex-shrink-0">${day}</div>
+                        <div class="flex-1 space-y-3 overflow-y-auto pr-1 min-h-0">
+                            ${classes.length === 0 ? `<div class="h-24 flex items-center justify-center text-sm text-slate-400 italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Libre</div>` 
                             : classes.map(c => `
-                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 relative group text-sm">
+                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 relative group text-sm flex-shrink-0">
                                     <button class="btn-del-sched absolute top-1 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100" data-id="${c.id}"><i class="fa-solid fa-times"></i></button>
                                     <div class="font-semibold text-slate-800 dark:text-slate-200 mb-1">${escapeHTML(c.subject)}</div>
                                     <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}</div>${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
@@ -904,7 +905,7 @@
             renderFC() {
                 const grid = document.getElementById('fc-grid');
                 grid.innerHTML = AppState.flashcards.map(f => `
-                    <div class="perspective-1000 w-full h-48 cursor-pointer group">
+                    <div class="perspective-1000 w-full h-48 cursor-pointer group flex-shrink-0">
                         <div class="fc-inner relative w-full h-full transform-style-3d shadow-sm hover:shadow-md transition-shadow rounded-2xl border border-slate-200 dark:border-slate-700">
                             <!-- FRONT -->
                             <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
@@ -1094,7 +1095,7 @@
                     sum += g.val * g.coeff;
                     sumCoeff += g.coeff;
                     return `
-                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 flex-shrink-0">
                         <div class="font-medium text-slate-800 dark:text-slate-200 text-sm w-1/3 truncate">${escapeHTML(g.subject)}</div>
                         <div class="font-bold text-brand-600 dark:text-brand-400 w-1/4 text-center">${g.val}<span class="text-xs font-normal text-slate-400">/20</span></div>
                         <div class="text-xs text-slate-500 w-1/4 text-center">Coeff ${g.coeff}</div>

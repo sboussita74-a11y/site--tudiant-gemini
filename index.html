@@ -115,9 +115,8 @@
         </div>
     </aside>
 
-    <!-- Main Content Area with Strict Viewport Framing -->
+    <!-- Main Content Area -->
     <main class="flex-1 overflow-hidden relative flex flex-col h-full">
-        <!-- V1 decorative background -->
         <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10 pointer-events-none"></div>
 
         <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
@@ -130,13 +129,11 @@
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-6 flex-shrink-0">
-                    <!-- Clock Widget -->
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
                         <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
                         <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
                     </div>
 
-                    <!-- Stats Widget -->
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="font-semibold text-slate-700 dark:text-slate-200">Tâches urgentes</h3>
@@ -151,7 +148,6 @@
                         </div>
                     </div>
 
-                    <!-- Quote Widget (V1 style purple gradient) -->
                     <div class="bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl p-6 shadow-sm text-white flex flex-col justify-center relative overflow-hidden">
                         <i class="fa-solid fa-quote-right absolute -bottom-4 -right-2 text-6xl opacity-20"></i>
                         <p class="font-medium text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
@@ -172,7 +168,6 @@
                     </button>
                 </header>
 
-                <!-- Task Form -->
                 <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0 transition-all">
                     <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
@@ -184,23 +179,19 @@
                     </form>
                 </div>
 
-                <!-- Kanban Grid -->
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-4 min-h-0 overflow-hidden">
-                    <!-- TODO -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-todo">0</span>
                         </h3>
                         <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="todo" id="col-todo"></div>
                     </div>
-                    <!-- IN PROGRESS -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-inprogress">0</span>
                         </h3>
                         <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="inprogress" id="col-inprogress"></div>
                     </div>
-                    <!-- DONE -->
                     <div class="flex flex-col bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
                             <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-done">0</span>
@@ -266,14 +257,12 @@
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-sm">Garde tes idées et révise activement.</p>
                     </div>
-                    <!-- Tabs -->
                     <div class="flex bg-slate-200 dark:bg-slate-700 rounded-xl p-1 w-max">
                         <button id="tab-notes" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all">Notes</button>
                         <button id="tab-flashcards" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Flashcards</button>
                     </div>
                 </header>
 
-                <!-- Notes Sub-view -->
                 <div id="subview-notes" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
                     <div class="w-full md:w-1/3 flex-shrink-0">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
@@ -288,7 +277,6 @@
                     </div>
                 </div>
 
-                <!-- Flashcards Sub-view (Hidden by default) -->
                 <div id="subview-flashcards" class="hidden flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
                     <div class="w-full md:w-1/3 flex-shrink-0">
                         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
@@ -304,47 +292,84 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO -->
+            <!-- VIEW: POMODORO (REFACED & OPTIMIZED) -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément.</p>
                 </div>
 
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center max-w-md w-full relative flex-shrink-0">
-                    <!-- Mode toggles -->
-                    <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full">
-                        <button id="pomo-mode-work" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400">Travail (25m)</button>
-                        <button id="pomo-mode-break" class="flex-1 py-2 rounded-lg font-medium text-sm transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400">Pause (5m)</button>
-                    </div>
-
-                    <!-- Timer Display -->
-                    <div class="relative flex items-center justify-center w-48 h-48 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
-                        <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
-                    </div>
-
-                    <!-- Controls -->
-                    <div class="flex items-center gap-6 mb-6">
-                        <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-md transition-transform hover:scale-105">
-                            <i class="fa-solid fa-play ml-1"></i>
-                        </button>
-                        <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
-                            <i class="fa-solid fa-rotate-right"></i>
-                        </button>
-                    </div>
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative flex-shrink-0">
                     
-                    <!-- Ambient Sound Toggle -->
-                    <div class="w-full border-t border-slate-100 dark:border-slate-700 pt-4">
-                        <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 text-center">Bruit de fond (Concentration)</p>
-                        <div class="flex justify-center gap-4">
-                            <button id="btn-sound-noise" class="px-3 py-1.5 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-wave-square mr-2"></i> Bruit Blanc</button>
-                            <button id="btn-sound-rain" class="px-3 py-1.5 rounded-lg text-sm bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 transition-colors border border-transparent"><i class="fa-solid fa-cloud-rain mr-2"></i> Pluie</button>
+                    <!-- GAUCHE : Chronomètre et Sessions (Sans icônes) -->
+                    <div class="md:col-span-6 flex flex-col items-center">
+                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-4 w-full text-xs font-medium">
+                            <button data-session="court" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Court</button>
+                            <button data-session="normal" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
+                            <button data-session="intensif" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Intensif</button>
+                            <button data-session="surmesure" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Sur mesure</button>
+                        </div>
+
+                        <!-- Custom duration input (Hidden by default) -->
+                        <div id="pomo-custom-container" class="hidden mb-4 w-full flex items-center gap-2 justify-center">
+                            <span class="text-xs text-slate-500">Durée (min) :</span>
+                            <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-sm text-center outline-none text-slate-800 dark:text-white">
+                            <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
+                        </div>
+
+                        <!-- Timer Display -->
+                        <div class="relative flex items-center justify-center w-48 h-48 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
+                            <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="flex items-center gap-6">
+                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-md transition-transform hover:scale-105">
+                                <i class="fa-solid fa-play ml-1"></i>
+                            </button>
+                            <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
                         </div>
                     </div>
+
+                    <!-- CENTRE : Espace / Séparateur -->
+                    <div class="hidden md:block md:col-span-1 h-48 border-r border-slate-100 dark:border-slate-700 mx-auto"></div>
+
+                    <!-- DROITE : Partie Son & Volume plus complète -->
+                    <div class="md:col-span-5 flex flex-col w-full bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 text-center">Ambiance sonore</p>
+                        
+                        <!-- 4 Sound Choices -->
+                        <div class="grid grid-cols-2 gap-2 mb-6">
+                            <button data-sound="noise" class="pomo-sound-btn px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-wave-square"></i> Bruit Blanc
+                            </button>
+                            <button data-sound="rain" class="pomo-sound-btn px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cloud-rain"></i> Pluie
+                            </button>
+                            <button data-sound="waves" class="pomo-sound-btn px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-water"></i> Vagues
+                            </button>
+                            <button data-sound="forest" class="pomo-sound-btn px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-tree"></i> Forêt
+                            </button>
+                        </div>
+
+                        <!-- Volume Slider -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
+                                <span>Volume</span>
+                                <span id="pomo-volume-val">50%</span>
+                            </div>
+                            <input type="range" id="pomo-volume-slider" min="0" max="100" value="50" class="w-full accent-brand-600 cursor-pointer">
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
-            <!-- VIEW: GRADES (MOYENNES) -->
+            <!-- VIEW: GRADES -->
             <section id="grades-view" class="app-section">
                 <header class="mb-6 flex-shrink-0">
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
@@ -352,13 +377,11 @@
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden pb-4">
-                    <!-- Average Display -->
                     <div class="col-span-1 bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm flex-shrink-0">
                         <span class="text-sm text-brand-200 uppercase tracking-widest font-semibold mb-2">Moyenne Générale</span>
                         <div id="grade-average-display" class="text-6xl font-bold mb-2">--/20</div>
                     </div>
                     
-                    <!-- Form & List -->
                     <div class="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-0 overflow-hidden">
                         <form id="form-add-grade" class="flex gap-3 mb-4 flex-shrink-0">
                             <input type="text" id="input-grade-subject" required placeholder="Matière..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none text-slate-800 dark:text-white text-sm">
@@ -367,9 +390,7 @@
                             <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl transition-colors"><i class="fa-solid fa-plus"></i></button>
                         </form>
                         
-                        <div class="overflow-y-auto flex-1 space-y-2 pr-2" id="grades-list">
-                            <!-- Populated by JS -->
-                        </div>
+                        <div class="overflow-y-auto flex-1 space-y-2 pr-2" id="grades-list"></div>
                     </div>
                 </div>
             </section>
@@ -392,13 +413,9 @@
                     <div class="overflow-x-auto overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
-                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
-                                    <!-- Populated by JS -->
-                                </tr>
+                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800"></tr>
                             </thead>
-                            <tbody id="habits-body" class="divide-y divide-slate-100 dark:divide-slate-700">
-                                <!-- Populated by JS -->
-                            </tbody>
+                            <tbody id="habits-body" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -444,7 +461,6 @@
          * Strictly modular, error-proof, pure Vanilla JS.
          */
 
-        // --- STATE & STORAGE ---
         const STORAGE_KEY = 'eduflow_v1_data';
         
         const defaultState = {
@@ -924,39 +940,78 @@
             }
         };
 
-        // --- POMODORO MODULE ---
+        // --- POMODORO MODULE (REFACED & FLEXIBLE) ---
         const PomodoroModule = {
-            timer: null, timeLeft: 25 * 60, isRunning: false, mode: 'work',
-            audioCtx: null, noiseSource: null, activeSound: null,
+            timer: null, timeLeft: 25 * 60, isRunning: false, sessionType: 'normal',
+            audioCtx: null, noiseSource: null, gainNode: null, activeSound: null, volume: 0.5,
 
             init() {
                 document.getElementById('pomo-btn-play').addEventListener('click', () => this.toggle());
                 document.getElementById('pomo-btn-reset').addEventListener('click', () => this.reset());
-                document.getElementById('pomo-mode-work').addEventListener('click', () => this.setMode('work'));
-                document.getElementById('pomo-mode-break').addEventListener('click', () => this.setMode('break'));
                 
-                document.getElementById('btn-sound-noise').addEventListener('click', (e) => this.toggleSound('noise', e.currentTarget));
-                document.getElementById('btn-sound-rain').addEventListener('click', (e) => this.toggleSound('rain', e.currentTarget));
+                // Session choices selection
+                document.querySelectorAll('.pomo-session-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const session = e.currentTarget.getAttribute('data-session');
+                        this.setSession(session);
+                    });
+                });
+
+                document.getElementById('pomo-custom-set').addEventListener('click', () => {
+                    const val = parseInt(document.getElementById('pomo-custom-input').value);
+                    if (!isNaN(val) && val > 0) {
+                        this.timeLeft = val * 60;
+                        this.updateDisplay();
+                        showToast(`Durée personnalisée définie à ${val} minutes`);
+                    }
+                });
+
+                // Sound choices
+                document.querySelectorAll('.pomo-sound-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const soundType = e.currentTarget.getAttribute('data-sound');
+                        this.toggleSound(soundType, e.currentTarget);
+                    });
+                });
+
+                // Volume slider
+                const volSlider = document.getElementById('pomo-volume-slider');
+                volSlider.addEventListener('input', (e) => {
+                    this.volume = e.target.value / 100;
+                    document.getElementById('pomo-volume-val').textContent = `${e.target.value}%`;
+                    if (this.gainNode) {
+                        this.gainNode.gain.setValueAtTime(this.volume * 0.3, this.audioCtx.currentTime);
+                    }
+                });
 
                 this.updateDisplay();
             },
 
-            setMode(newMode) {
-                if(this.isRunning) this.toggle();
-                this.mode = newMode;
-                this.timeLeft = newMode === 'work' ? 25 * 60 : 5 * 60;
+            setSession(type) {
+                if (this.isRunning) this.toggle();
+                this.sessionType = type;
+
+                const customContainer = document.getElementById('pomo-custom-container');
+                if (type === 'surmesure') {
+                    customContainer.classList.remove('hidden');
+                    const val = parseInt(document.getElementById('pomo-custom-input').value) || 30;
+                    this.timeLeft = val * 60;
+                } else {
+                    customContainer.classList.add('hidden');
+                    if (type === 'court') this.timeLeft = 15 * 60;
+                    else if (type === 'normal') this.timeLeft = 25 * 60;
+                    else if (type === 'intensif') this.timeLeft = 50 * 60;
+                }
+
                 this.updateDisplay();
 
-                const btnW = document.getElementById('pomo-mode-work');
-                const btnB = document.getElementById('pomo-mode-break');
-                const activeCls = ['bg-white', 'dark:bg-slate-700', 'text-brand-600', 'dark:text-brand-400', 'shadow'];
-                
-                if(newMode === 'work') {
-                    btnW.classList.add(...activeCls); btnW.classList.remove('text-slate-500');
-                    btnB.classList.remove(...activeCls); btnB.classList.add('text-slate-500');
-                } else {
-                    btnB.classList.add(...activeCls); btnB.classList.remove('text-slate-500');
-                    btnW.classList.remove(...activeCls); btnW.classList.add('text-slate-500');
+                // Update session button visual styles (text only, no icons)
+                document.querySelectorAll('.pomo-session-btn').forEach(b => {
+                    b.className = "pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center";
+                });
+                const activeBtn = document.querySelector(`.pomo-session-btn[data-session="${type}"]`);
+                if (activeBtn) {
+                    activeBtn.className = "pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center";
                 }
             },
 
@@ -975,7 +1030,8 @@
                             this.updateDisplay();
                         } else {
                             this.playBeep();
-                            this.setMode(this.mode === 'work' ? 'break' : 'work');
+                            this.toggle();
+                            showToast("Session de concentration terminée !");
                         }
                     }, 1000);
                 }
@@ -983,8 +1039,7 @@
 
             reset() {
                 if (this.isRunning) this.toggle();
-                this.timeLeft = this.mode === 'work' ? 25 * 60 : 5 * 60;
-                this.updateDisplay();
+                this.setSession(this.sessionType);
             },
 
             updateDisplay() {
@@ -1007,13 +1062,12 @@
 
             toggleSound(type, btnNode) {
                 if (this.noiseSource) {
-                    this.noiseSource.stop();
+                    try { this.noiseSource.stop(); } catch(e){}
                     this.noiseSource = null;
                 }
                 
-                document.querySelectorAll('#pomodoro-view button[id^="btn-sound"]').forEach(b => {
+                document.querySelectorAll('.pomo-sound-btn').forEach(b => {
                     b.classList.remove('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30');
-                    b.classList.add('border-transparent');
                 });
 
                 if (this.activeSound === type) {
@@ -1022,7 +1076,6 @@
                 }
 
                 this.activeSound = type;
-                btnNode.classList.remove('border-transparent');
                 btnNode.classList.add('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30');
 
                 try {
@@ -1039,18 +1092,33 @@
                     this.noiseSource.buffer = buffer;
                     this.noiseSource.loop = true;
 
+                    this.gainNode = this.audioCtx.createGain();
+                    this.gainNode.gain.value = this.volume * 0.3;
+
                     if (type === 'rain') {
                         const filter = this.audioCtx.createBiquadFilter();
                         filter.type = 'lowpass';
                         filter.frequency.value = 1000;
                         this.noiseSource.connect(filter);
-                        filter.connect(this.audioCtx.destination);
+                        filter.connect(this.gainNode);
+                    } else if (type === 'waves') {
+                        const filter = this.audioCtx.createBiquadFilter();
+                        filter.type = 'lowpass';
+                        filter.frequency.value = 400;
+                        this.noiseSource.connect(filter);
+                        filter.connect(this.gainNode);
+                    } else if (type === 'forest') {
+                        const filter = this.audioCtx.createBiquadFilter();
+                        filter.type = 'bandpass';
+                        filter.frequency.value = 2000;
+                        this.noiseSource.connect(filter);
+                        filter.connect(this.gainNode);
                     } else {
-                        const gain = this.audioCtx.createGain();
-                        gain.gain.value = 0.2;
-                        this.noiseSource.connect(gain);
-                        gain.connect(this.audioCtx.destination);
+                        // White noise
+                        this.noiseSource.connect(this.gainNode);
                     }
+
+                    this.gainNode.connect(this.audioCtx.destination);
                     this.noiseSource.start();
                 } catch(e) {
                     console.error("Audio API non supportée", e);

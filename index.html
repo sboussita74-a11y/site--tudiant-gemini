@@ -292,46 +292,48 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO (TWO DISTINCT BLOCKS WITH AUTO BREAKS) -->
+            <!-- VIEW: POMODORO (DEUX BLOCS DISTINCTS & INDÉPENDANTS) -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément et gère tes pauses automatiquement.</p>
                 </div>
 
-                <!-- Deux blocs distincts et séparés -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full flex-shrink-0 items-start">
+                <!-- Conteneur global avec DEUX blocs complètement séparés -->
+                <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
                     
-                    <!-- BLOC 1 : Chronomètre & Sessions (Gauche) -->
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center">
+                    <!-- BLOC 1 : Le Chronomètre et les Sessions -->
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-md">
+                        <h3 class="font-bold text-slate-800 dark:text-white text-base mb-4 w-full text-left">Chronomètre & Sessions</h3>
+                        
                         <!-- Session choices (Text only, no icons) -->
-                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-3 w-full text-xs font-medium">
+                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-4 w-full text-xs font-medium">
                             <button data-session="court" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Court</button>
                             <button data-session="normal" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
                             <button data-session="intensif" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Intensif</button>
                             <button data-session="surmesure" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Sur mesure</button>
                         </div>
 
-                        <!-- Custom duration input (Hidden by default) -->
-                        <div id="pomo-custom-container" class="hidden mb-3 w-full flex items-center gap-2 justify-center">
+                        <!-- Custom duration input -->
+                        <div id="pomo-custom-container" class="hidden mb-4 w-full flex items-center gap-2 justify-center">
                             <span class="text-xs text-slate-500">Travail (min) :</span>
                             <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-sm text-center outline-none text-slate-800 dark:text-white">
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
                         </div>
 
-                        <!-- Status Indicator (Travail / Pause automatique) -->
-                        <div id="pomo-status-badge" class="mb-3 text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+                        <!-- Status Badge -->
+                        <div id="pomo-status-badge" class="mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
                             Travail (25 min)
                         </div>
 
                         <!-- Timer Display -->
-                        <div class="relative flex items-center justify-center w-40 h-40 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
+                        <div class="relative flex items-center justify-center w-44 h-44 mb-6 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
                             <span id="pomo-time-display" class="text-4xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
                         </div>
 
                         <!-- Controls -->
                         <div class="flex items-center gap-4">
-                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-12 h-12 rounded-full flex items-center justify-center text-lg shadow-md transition-transform hover:scale-105">
+                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-md transition-transform hover:scale-105">
                                 <i class="fa-solid fa-play ml-1"></i>
                             </button>
                             <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
@@ -340,10 +342,10 @@
                         </div>
                     </div>
 
-                    <!-- BLOC 2 : Ambiance Sonore & Volume (Droite) -->
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-[2rem] shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col w-full h-full justify-between">
+                    <!-- BLOC 2 : L'Ambiance Sonore & Volume -->
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-md h-[460px]">
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 text-center">Ambiance sonore naturelle</p>
+                            <h3 class="font-bold text-slate-800 dark:text-white text-base mb-4">Ambiance Sonore & Volume</h3>
                             
                             <!-- Sound Choices -->
                             <div class="grid grid-cols-2 gap-3 mb-6">
@@ -946,7 +948,7 @@
             }
         };
 
-        // --- POMODORO MODULE (TWO BLOCKS + AUTO BREAKS + HIGH QUALITY SOUNDS) ---
+        // --- POMODORO MODULE (DEUX BLOCS DISTINCTS + SONS NATURELS + CARILLON DE FIN) ---
         const PomodoroModule = {
             timer: null, timeLeft: 25 * 60, isRunning: false, sessionType: 'normal',
             phase: 'work', // 'work' or 'break'
@@ -968,7 +970,7 @@
                     const val = parseInt(document.getElementById('pomo-custom-input').value);
                     if (!isNaN(val) && val > 0) {
                         this.workDuration = val * 60;
-                        this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60; // 20% break auto
+                        this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
                         this.timeLeft = this.workDuration;
                         this.phase = 'work';
                         this.updateDisplay();
@@ -1046,14 +1048,12 @@
                             this.timeLeft--;
                             this.updateDisplay();
                         } else {
-                            this.playBeep();
+                            this.playChime();
                             if (this.phase === 'work') {
-                                // Switch automatically to break phase
                                 this.phase = 'break';
                                 this.timeLeft = this.breakDuration;
-                                showToast("Temps de travail terminé ! Début de la pause automatique.");
+                                showToast("Travail terminé ! Début de la pause.");
                             } else {
-                                // Switch back to work phase
                                 this.phase = 'work';
                                 this.timeLeft = this.workDuration;
                                 showToast("Pause terminée ! Reprise du travail.");
@@ -1078,23 +1078,34 @@
                 const badge = document.getElementById('pomo-status-badge');
                 if (this.phase === 'work') {
                     badge.textContent = `Travail en cours (${Math.round(this.workDuration/60)} min)`;
-                    badge.className = "mb-3 text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
+                    badge.className = "mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
                 } else {
                     badge.textContent = `Pause automatique (${Math.round(this.breakDuration/60)} min)`;
-                    badge.className = "mb-3 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400";
+                    badge.className = "mb-4 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400";
                 }
 
                 if(this.isRunning) document.title = `(${m}:${s}) EduFlow`;
                 else document.title = "EduFlow - Organisation Étudiante";
             },
 
-            playBeep() {
+            // Carillon harmonieux de fin de session (remplace le bip brut)
+            playChime() {
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = ctx.createOscillator();
-                    osc.connect(ctx.destination);
-                    osc.frequency.setValueAtTime(800, ctx.currentTime);
-                    osc.start(); osc.stop(ctx.currentTime + 0.6);
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // Accord mélodique (Do, Mi, Sol, Do)
+                    notes.forEach((freq, index) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, ctx.currentTime + index * 0.15);
+                        gain.gain.setValueAtTime(0, ctx.currentTime + index * 0.15);
+                        gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + index * 0.15 + 0.05);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + index * 0.15 + 1.5);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(ctx.currentTime + index * 0.15);
+                        osc.stop(ctx.currentTime + index * 0.15 + 1.6);
+                    });
                 } catch(e) {}
             },
 
@@ -1119,21 +1130,16 @@
                 try {
                     if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                     
-                    const bufferSize = this.audioCtx.sampleRate * 3; 
+                    const bufferSize = this.audioCtx.sampleRate * 4; 
                     const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
                     const output = buffer.getChannelData(0);
                     
-                    // High quality procedural noise synthesis (Brownian/Pink base for natural sound)
+                    // Génération de bruit brun/rose lissé pour un rendu naturel haut de gamme
                     let lastOut = 0.0;
                     for (let i = 0; i < bufferSize; i++) {
                         const white = Math.random() * 2 - 1;
-                        if (type === 'rain' || type === 'waves' || type === 'forest') {
-                            // Brown noise integration for softer, natural sound
-                            lastOut = (lastOut + (0.02 * white)) / 1.02;
-                            output[i] = lastOut * 3.5;
-                        } else {
-                            output[i] = white * 0.15;
-                        }
+                        lastOut = (lastOut + (0.02 * white)) / 1.02;
+                        output[i] = lastOut * 3.5;
                     }
 
                     this.noiseSource = this.audioCtx.createBufferSource();
@@ -1143,33 +1149,25 @@
                     this.gainNode = this.audioCtx.createGain();
                     this.gainNode.gain.setValueAtTime(this.volume * 0.25, this.audioCtx.currentTime);
 
+                    const filter = this.audioCtx.createBiquadFilter();
                     if (type === 'rain') {
-                        const filter = this.audioCtx.createBiquadFilter();
                         filter.type = 'lowpass';
-                        filter.frequency.value = 800;
-                        this.noiseSource.connect(filter);
-                        filter.connect(this.gainNode);
+                        filter.frequency.value = 650;
                     } else if (type === 'waves') {
-                        const filter = this.audioCtx.createBiquadFilter();
                         filter.type = 'lowpass';
-                        filter.frequency.value = 350;
-                        this.noiseSource.connect(filter);
-                        filter.connect(this.gainNode);
+                        filter.frequency.value = 300;
                     } else if (type === 'forest') {
-                        const filter = this.audioCtx.createBiquadFilter();
                         filter.type = 'bandpass';
-                        filter.frequency.value = 1500;
-                        filter.Q.value = 1.2;
-                        this.noiseSource.connect(filter);
-                        filter.connect(this.gainNode);
-                    } else {
-                        const filter = this.audioCtx.createBiquadFilter();
-                        filter.type = 'lowpass';
                         filter.frequency.value = 1200;
-                        this.noiseSource.connect(filter);
-                        filter.connect(this.gainNode);
+                        filter.Q.value = 1.5;
+                    } else {
+                        // Bruit blanc pur et feutré
+                        filter.type = 'lowpass';
+                        filter.frequency.value = 1500;
                     }
 
+                    this.noiseSource.connect(filter);
+                    filter.connect(this.gainNode);
                     this.gainNode.connect(this.audioCtx.destination);
                     this.noiseSource.start();
                 } catch(e) {

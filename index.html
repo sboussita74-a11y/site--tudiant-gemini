@@ -292,20 +292,18 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO (LARGER TIMER BLOCK, FULLY ANIMATED & SOUNDS) -->
+            <!-- VIEW: POMODORO -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément et gère tes pauses automatiquement.</p>
                 </div>
 
-                <!-- Deux blocs distincts et équilibrés -->
                 <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
                     
-                    <!-- BLOC 1 : Chronomètre & Sessions (Agrandit) -->
+                    <!-- BLOC 1 : Chronomètre & Sessions -->
                     <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-lg">
                         
-                        <!-- Session choices (No icons) -->
                         <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full text-xs font-medium">
                             <button data-session="court" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Court</button>
                             <button data-session="normal" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
@@ -313,28 +311,22 @@
                             <button data-session="surmesure" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Sur mesure</button>
                         </div>
 
-                        <!-- Custom duration container (Collapsible) -->
                         <div id="pomo-custom-container" class="hidden mb-6 w-full flex items-center gap-2 justify-center transition-all">
                             <span class="text-xs text-slate-500">Durée (min) :</span>
                             <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-sm text-center outline-none text-slate-800 dark:text-white">
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
                         </div>
 
-                        <!-- Timer Display with Larger Animated Circular Progress -->
                         <div class="relative flex items-center justify-center w-60 h-60 mb-8">
                             <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <!-- Background track -->
                                 <circle id="pomo-bg-ring" cx="50" cy="50" r="45.5" class="text-brand-900 transition-colors duration-500" stroke-width="5" stroke="currentColor" fill="none"/>
-                                <!-- Animated Progress ring -->
                                 <circle id="pomo-progress-ring" cx="50" cy="50" r="45.5" class="text-brand-400" stroke-width="5" stroke="currentColor" stroke-dasharray="285.88" stroke-dashoffset="285.88" stroke-linecap="round" fill="none"/>
                             </svg>
-                            <!-- Inner dark circle matching larger size -->
                             <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-800 bg-slate-900" style="width: 216px; height: 216px;">
                                 <span id="pomo-time-display" class="text-5xl font-bold text-white tracking-tighter tabular-nums">25:00</span>
                             </div>
                         </div>
 
-                        <!-- Controls -->
                         <div class="flex items-center gap-5">
                             <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-md transition-transform hover:scale-105">
                                 <i class="fa-solid fa-play ml-1"></i>
@@ -345,10 +337,8 @@
                         </div>
                     </div>
 
-                    <!-- BLOC 2 : Ambiance Sonore & Volume -->
+                    <!-- BLOC 2 : Ambiance Sonore -->
                     <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[515px]">
-                        
-                        <!-- Sound Choices -->
                         <div class="grid grid-cols-2 gap-4">
                             <button data-sound="noise" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
                                 <i class="fa-solid fa-wave-square text-xl text-brand-600 dark:text-brand-400"></i> Bruit Blanc
@@ -363,11 +353,7 @@
                                 <i class="fa-solid fa-tree text-xl text-brand-600 dark:text-brand-400"></i> Forêt apaisante
                             </button>
                         </div>
-
-                        <!-- Small separation line -->
                         <div class="w-full border-t border-slate-100 dark:border-slate-700 my-4"></div>
-
-                        <!-- Volume Slider -->
                         <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
                             <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-volume-high text-brand-600"></i> Volume</span>
@@ -376,32 +362,64 @@
                             <input type="range" id="pomo-volume-slider" min="0" max="100" value="50" class="w-full accent-brand-600 cursor-pointer">
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- VIEW: GRADES -->
+            <!-- VIEW: GRADES (MODERNIZED & AUTO-NORMALIZED) -->
             <section id="grades-view" class="app-section">
                 <header class="mb-6 flex-shrink-0">
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Calcule ta moyenne générale.</p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes notes avec barèmes personnalisés et suivi par matière.</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden pb-4">
-                    <div class="col-span-1 bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-48 shadow-sm flex-shrink-0">
-                        <span class="text-sm text-brand-200 uppercase tracking-widest font-semibold mb-2">Moyenne Générale</span>
-                        <div id="grade-average-display" class="text-6xl font-bold mb-2">--/20</div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden pb-4">
+                    <!-- Colonne de gauche : Résumé & Formulaire -->
+                    <div class="col-span-1 flex flex-col gap-6 flex-shrink-0 overflow-y-auto pr-1">
+                        <!-- Carte Moyenne Générale -->
+                        <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center shadow-sm">
+                            <span class="text-xs text-brand-200 uppercase tracking-widest font-semibold mb-1">Moyenne Générale</span>
+                            <div id="grade-average-display" class="text-5xl font-bold mb-1">--/20</div>
+                            <span class="text-xs text-brand-100 opacity-80">Calculée sur toutes les matières</span>
+                        </div>
+
+                        <!-- Formulaire d'ajout de note -->
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-plus-circle text-brand-600"></i> Ajouter une note
+                            </h3>
+                            <form id="form-add-grade" class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
+                                    <input type="text" id="input-grade-subject" required placeholder="ex: Mathématiques" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Note obtenue</label>
+                                        <input type="number" id="input-grade-val" required step="0.01" min="0" placeholder="ex: 14" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Barème (Sur)</label>
+                                        <input type="number" id="input-grade-max" required step="0.5" min="1" value="20" placeholder="ex: 20, 10, 15..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Coefficient</label>
+                                    <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" value="1" placeholder="ex: 1 ou 2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                </div>
+                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors mt-2">Enregistrer la note</button>
+                            </form>
+                        </div>
                     </div>
                     
-                    <div class="col-span-1 md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-0 overflow-hidden">
-                        <form id="form-add-grade" class="flex gap-3 mb-4 flex-shrink-0">
-                            <input type="text" id="input-grade-subject" required placeholder="Matière..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <input type="number" id="input-grade-val" required step="0.1" min="0" max="20" placeholder="Note (/20)" class="w-28 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" placeholder="Coeff" class="w-24 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl transition-colors"><i class="fa-solid fa-plus"></i></button>
-                        </form>
-                        
-                        <div class="overflow-y-auto flex-1 space-y-2 pr-2" id="grades-list"></div>
+                    <!-- Colonne de droite : Liste triée et groupée par matière -->
+                    <div class="col-span-1 lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-0 overflow-hidden">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 flex-shrink-0 flex items-center justify-between">
+                            <span>Détail par matière</span>
+                            <span class="text-xs font-normal text-slate-400">Barèmes convertis automatiquement sur /20</span>
+                        </h3>
+                        <div class="overflow-y-auto flex-1 space-y-4 pr-2" id="grades-subjects-container">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -496,6 +514,10 @@
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
+                    // Rétrocompatibilité : si maxVal n'existe pas sur les anciennes notes, on met 20 par défaut
+                    if (parsed.grades) {
+                        parsed.grades = parsed.grades.map(g => ({ ...g, maxVal: g.maxVal || 20 }));
+                    }
                     AppState = { ...defaultState, ...parsed };
                 }
             } catch (e) { console.error("Load Error", e); }
@@ -951,14 +973,14 @@
             }
         };
 
-        // --- POMODORO MODULE (LARGER TIMER BLOCK, SMOOTH ANIMATION & SOUNDS) ---
+        // --- POMODORO MODULE ---
         const PomodoroModule = {
             timerId: null, 
             timeLeft: 25 * 60, 
             totalDuration: 25 * 60, 
             isRunning: false, 
             sessionType: 'normal',
-            phase: 'work', // 'work' or 'break'
+            phase: 'work',
             workDuration: 25 * 60, 
             breakDuration: 5 * 60,
             endTime: null,
@@ -1115,7 +1137,6 @@
                 const s = (this.timeLeft % 60).toString().padStart(2, '0');
                 document.getElementById('pomo-time-display').textContent = `${m}:${s}`;
                 
-                // Precise Clockwise Animated Progress Ring (Radius 45.5 => Circumference ~285.88)
                 const radius = 45.5;
                 const circumference = 2 * Math.PI * radius;
                 const elapsed = this.totalDuration > 0 ? (1 - (this.timeLeft / this.totalDuration)) : 0;
@@ -1247,53 +1268,128 @@
             }
         };
 
-        // --- GRADES MODULE ---
+        // --- GRADES MODULE (AUTO-NORMALIZATION & SUBJECT SORTING) ---
         const GradesModule = {
             init() {
                 document.getElementById('form-add-grade').addEventListener('submit', e => {
                     e.preventDefault();
                     this.addGrade();
                 });
-                document.getElementById('grades-list').addEventListener('click', e => {
+                document.getElementById('grades-subjects-container').addEventListener('click', e => {
                     const btn = e.target.closest('.btn-del-grade');
                     if(btn) this.deleteGrade(btn.getAttribute('data-id'));
                 });
                 this.render();
             },
+
             addGrade() {
-                const subject = document.getElementById('input-grade-subject').value.trim();
+                const subjectInput = document.getElementById('input-grade-subject').value.trim();
                 const val = parseFloat(document.getElementById('input-grade-val').value);
+                const maxVal = parseFloat(document.getElementById('input-grade-max').value);
                 const coeff = parseFloat(document.getElementById('input-grade-coeff').value);
-                if(!subject || isNaN(val) || isNaN(coeff)) return;
+
+                if(!subjectInput || isNaN(val) || isNaN(maxVal) || maxVal <= 0 || isNaN(coeff)) return;
                 
-                AppState.grades.push({ id: generateId(), subject, val, coeff });
+                // Capitalize properly or clean subject name
+                const subject = subjectInput.charAt(0).toUpperCase() + subjectInput.slice(1);
+
+                AppState.grades.push({ id: generateId(), subject, val, maxVal, coeff });
                 saveState();
                 document.getElementById('form-add-grade').reset();
+                document.getElementById('input-grade-max').value = '20'; // reset default scale
+                document.getElementById('input-grade-coeff').value = '1';
                 this.render();
+                showToast("Note ajoutée avec succès !");
             },
+
             deleteGrade(id) {
                 AppState.grades = AppState.grades.filter(g => g.id !== id);
                 saveState();
                 this.render();
+                showToast("Note supprimée.");
             },
-            render() {
-                const list = document.getElementById('grades-list');
-                let sum = 0, sumCoeff = 0;
-                
-                list.innerHTML = AppState.grades.map(g => {
-                    sum += g.val * g.coeff;
-                    sumCoeff += g.coeff;
-                    return `
-                    <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 flex-shrink-0">
-                        <div class="font-medium text-slate-800 dark:text-slate-200 text-sm w-1/3 truncate">${escapeHTML(g.subject)}</div>
-                        <div class="font-bold text-brand-600 dark:text-brand-400 w-1/4 text-center">${g.val}<span class="text-xs font-normal text-slate-400">/20</span></div>
-                        <div class="text-xs text-slate-500 w-1/4 text-center">Coeff ${g.coeff}</div>
-                        <button class="btn-del-grade text-slate-400 hover:text-red-500" data-id="${g.id}"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>`;
-                }).join('');
 
-                const avg = sumCoeff > 0 ? (sum / sumCoeff).toFixed(2) : '--';
-                document.getElementById('grade-average-display').textContent = `${avg}/20`;
+            render() {
+                const container = document.getElementById('grades-subjects-container');
+                
+                if (AppState.grades.length === 0) {
+                    container.innerHTML = `
+                        <div class="h-48 flex flex-col items-center justify-center text-slate-400 text-sm border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
+                            <i class="fa-solid fa-graduation-cap text-3xl mb-2 opacity-40"></i>
+                            Aucune note enregistrée pour le moment.
+                        </div>`;
+                    document.getElementById('grade-average-display').textContent = '--/20';
+                    return;
+                }
+
+                // 1. Grouper et trier les notes par matière (par ordre alphabétique)
+                const grouped = {};
+                AppState.grades.forEach(g => {
+                    if (!grouped[g.subject]) grouped[g.subject] = [];
+                    grouped[g.subject].push(g);
+                });
+
+                const sortedSubjects = Object.keys(grouped).sort();
+
+                let totalWeightedSum = 0;
+                let totalCoeffSum = 0;
+
+                let htmlCards = '';
+
+                sortedSubjects.forEach(subject => {
+                    const gradesList = grouped[subject];
+                    
+                    let subjectWeightedSum = 0;
+                    let subjectCoeffSum = 0;
+
+                    let itemsHtml = gradesList.map(g => {
+                        const max = g.maxVal || 20;
+                        // Conversion automatique / normalisation sur 20 en interne
+                        const normalizedVal = (g.val / max) * 20;
+                        
+                        subjectWeightedSum += normalizedVal * g.coeff;
+                        subjectCoeffSum += g.coeff;
+
+                        return `
+                        <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="font-bold text-slate-800 dark:text-slate-100">${g.val}<span class="text-xs font-normal text-slate-400">/${max}</span></span>
+                                ${max !== 20 ? `<span class="text-[11px] bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-md font-medium">soit ${normalizedVal.toFixed(1)}/20</span>` : ''}
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs text-slate-500">Coeff. ${g.coeff}</span>
+                                <button class="btn-del-grade text-slate-400 hover:text-red-500 transition-colors p-1" data-id="${g.id}">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    }).join('');
+
+                    const subjectAverage = subjectCoeffSum > 0 ? (subjectWeightedSum / subjectCoeffSum).toFixed(2) : '--';
+
+                    totalWeightedSum += subjectWeightedSum;
+                    totalCoeffSum += subjectCoeffSum;
+
+                    htmlCards += `
+                    <div class="bg-slate-50/70 dark:bg-slate-900/40 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/80">
+                        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200 dark:border-slate-800">
+                            <h4 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-book-open text-brand-600 dark:text-brand-400 text-xs"></i> ${escapeHTML(subject)}
+                            </h4>
+                            <div class="text-sm font-bold bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 px-3 py-1 rounded-xl">
+                                Moyenne : ${subjectAverage}/20
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            ${itemsHtml}
+                        </div>
+                    </div>`;
+                });
+
+                container.innerHTML = htmlCards;
+
+                const generalAverage = totalCoeffSum > 0 ? (totalWeightedSum / totalCoeffSum).toFixed(2) : '--';
+                document.getElementById('grade-average-display').textContent = `${generalAverage}/20`;
             }
         };
 

@@ -292,36 +292,43 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO (SANS SOUS-TITRES & BOUTONS DE SONS AGRANDIS) -->
+            <!-- VIEW: POMODORO (OPTIMIZED LAYOUT, CIRCULAR ANIMATED PROGRESS & REAL AUDIO) -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément et gère tes pauses automatiquement.</p>
                 </div>
 
-                <!-- Deux blocs distincts et épurés (sans aucun sous-titre) -->
+                <!-- Deux blocs distincts et équilibrés -->
                 <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
                     
-                    <!-- BLOC 1 : Chronomètre & Sessions -->
+                    <!-- BLOC 1 : Chronomètre & Sessions avec Cercle Animé -->
                     <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-md">
-                        <!-- Session choices (Text only, no icons) -->
-                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full text-xs font-medium">
+                        
+                        <!-- Session choices (No icons) -->
+                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-4 w-full text-xs font-medium">
                             <button data-session="court" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Court</button>
                             <button data-session="normal" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
                             <button data-session="intensif" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Intensif</button>
                             <button data-session="surmesure" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Sur mesure</button>
                         </div>
 
-                        <!-- Custom duration input -->
-                        <div id="pomo-custom-container" class="hidden mb-6 w-full flex items-center gap-2 justify-center">
-                            <span class="text-xs text-slate-500">Travail (min) :</span>
+                        <!-- Custom duration container (Collapsible) -->
+                        <div id="pomo-custom-container" class="hidden mb-4 w-full flex items-center gap-2 justify-center transition-all">
+                            <span class="text-xs text-slate-500">Durée (min) :</span>
                             <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-sm text-center outline-none text-slate-800 dark:text-white">
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
                         </div>
 
-                        <!-- Timer Display -->
-                        <div class="relative flex items-center justify-center w-48 h-48 mb-8 bg-slate-50 dark:bg-slate-900 rounded-full border-[6px] border-brand-100 dark:border-brand-900">
-                            <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
+                        <!-- Timer Display with SVG Circular Progress -->
+                        <div class="relative flex items-center justify-center w-48 h-48 mb-6">
+                            <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <!-- Background track -->
+                                <circle cx="50" cy="50" r="44" class="text-slate-100 dark:text-slate-900" stroke-width="6" stroke="currentColor" fill="transparent"/>
+                                <!-- Animated Progress ring -->
+                                <circle id="pomo-progress-ring" cx="50" cy="50" r="44" class="text-brand-500 transition-all duration-1000 ease-linear" stroke-width="6" stroke-dasharray="276.46" stroke-dashoffset="0" stroke-linecap="round" fill="transparent"/>
+                            </svg>
+                            <span id="pomo-time-display" class="text-4xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums z-10">25:00</span>
                         </div>
 
                         <!-- Controls -->
@@ -335,31 +342,33 @@
                         </div>
                     </div>
 
-                    <!-- BLOC 2 : Ambiance Sonore & Volume (Boutons agrandis) -->
-                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-md h-[460px]">
-                        <div>
-                            <!-- Sound Choices (Agrandis et bien remplis) -->
-                            <div class="grid grid-cols-2 gap-4 mb-8">
-                                <button data-sound="noise" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                    <i class="fa-solid fa-wave-square text-xl text-brand-600 dark:text-brand-400"></i> Bruit Blanc
-                                </button>
-                                <button data-sound="rain" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                    <i class="fa-solid fa-cloud-rain text-xl text-brand-600 dark:text-brand-400"></i> Pluie douce
-                                </button>
-                                <button data-sound="waves" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                    <i class="fa-solid fa-water text-xl text-brand-600 dark:text-brand-400"></i> Vagues d'océan
-                                </button>
-                                <button data-sound="forest" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                    <i class="fa-solid fa-tree text-xl text-brand-600 dark:text-brand-400"></i> Forêt apaisante
-                                </button>
-                            </div>
+                    <!-- BLOC 2 : Ambiance Sonore & Volume (Compact & Équilibré) -->
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-md h-[430px]">
+                        
+                        <!-- Sound Choices (Enlarged buttons) -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <button data-sound="noise" class="pomo-sound-btn px-4 py-4 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-wave-square text-lg text-brand-600 dark:text-brand-400"></i> Bruit Blanc
+                            </button>
+                            <button data-sound="rain" class="pomo-sound-btn px-4 py-4 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-cloud-rain text-lg text-brand-600 dark:text-brand-400"></i> Pluie douce
+                            </button>
+                            <button data-sound="waves" class="pomo-sound-btn px-4 py-4 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-water text-lg text-brand-600 dark:text-brand-400"></i> Vagues d'océan
+                            </button>
+                            <button data-sound="forest" class="pomo-sound-btn px-4 py-4 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-tree text-lg text-brand-600 dark:text-brand-400"></i> Forêt apaisante
+                            </button>
                         </div>
 
-                        <!-- Volume Slider -->
-                        <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <!-- Small separation line -->
+                        <div class="w-full border-t border-slate-100 dark:border-slate-700 my-2"></div>
+
+                        <!-- Volume Slider (Refined UI) -->
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
                             <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
-                                <span>Volume de l'ambiance</span>
-                                <span id="pomo-volume-val">50%</span>
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-volume-high text-brand-600"></i> Volume</span>
+                                <span id="pomo-volume-val" class="font-bold text-slate-700 dark:text-slate-300">50%</span>
                             </div>
                             <input type="range" id="pomo-volume-slider" min="0" max="100" value="50" class="w-full accent-brand-600 cursor-pointer">
                         </div>
@@ -939,13 +948,12 @@
             }
         };
 
-        // --- POMODORO MODULE (DEUX BLOCS ÉPURÉS + SONS RÉALISTES + CARILLON DE FIN) ---
+        // --- POMODORO MODULE (CIRCULAR PROGRESS, SUR MESURE DYNAMIC, REAL AUDIO & CHIME) ---
         const PomodoroModule = {
-            timer: null, timeLeft: 25 * 60, isRunning: false, sessionType: 'normal',
+            timer: null, timeLeft: 25 * 60, totalDuration: 25 * 60, isRunning: false, sessionType: 'normal',
             phase: 'work', // 'work' or 'break'
             workDuration: 25 * 60, breakDuration: 5 * 60,
-            audioCtx: null, soundNodes: [], activeSound: null, volume: 0.5,
-            audioInterval: null,
+            audioEl: null, activeSound: null, volume: 0.5,
 
             init() {
                 document.getElementById('pomo-btn-play').addEventListener('click', () => this.toggle());
@@ -963,6 +971,7 @@
                     if (!isNaN(val) && val > 0) {
                         this.workDuration = val * 60;
                         this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
+                        this.totalDuration = this.workDuration;
                         this.timeLeft = this.workDuration;
                         this.phase = 'work';
                         this.updateDisplay();
@@ -981,8 +990,8 @@
                 volSlider.addEventListener('input', (e) => {
                     this.volume = e.target.value / 100;
                     document.getElementById('pomo-volume-val').textContent = `${e.target.value}%`;
-                    if (this.masterGain && this.audioCtx) {
-                        this.masterGain.gain.setValueAtTime(this.volume * 0.4, this.audioCtx.currentTime);
+                    if (this.audioEl) {
+                        this.audioEl.volume = this.volume;
                     }
                 });
 
@@ -1014,6 +1023,7 @@
                     }
                 }
 
+                this.totalDuration = this.workDuration;
                 this.timeLeft = this.workDuration;
                 this.updateDisplay();
 
@@ -1028,13 +1038,21 @@
 
             toggle() {
                 const icon = document.querySelector('#pomo-btn-play i');
+                const customContainer = document.getElementById('pomo-custom-container');
+
                 if (this.isRunning) {
                     clearInterval(this.timer);
                     this.isRunning = false;
                     icon.className = "fa-solid fa-play ml-1";
+                    if (this.sessionType === 'surmesure') {
+                        customContainer.classList.remove('hidden');
+                    }
                 } else {
                     this.isRunning = true;
                     icon.className = "fa-solid fa-pause";
+                    if (this.sessionType === 'surmesure') {
+                        customContainer.classList.add('hidden');
+                    }
                     this.timer = setInterval(() => {
                         if (this.timeLeft > 0) {
                             this.timeLeft--;
@@ -1043,12 +1061,17 @@
                             this.playChime();
                             if (this.phase === 'work') {
                                 this.phase = 'break';
+                                this.totalDuration = this.breakDuration;
                                 this.timeLeft = this.breakDuration;
                                 showToast("Travail terminé ! Début de la pause.");
                             } else {
                                 this.phase = 'work';
+                                this.totalDuration = this.workDuration;
                                 this.timeLeft = this.workDuration;
                                 showToast("Pause terminée ! Reprise du travail.");
+                                if (this.sessionType === 'surmesure') {
+                                    customContainer.classList.remove('hidden');
+                                }
                             }
                             this.updateDisplay();
                         }
@@ -1067,6 +1090,22 @@
                 const s = (this.timeLeft % 60).toString().padStart(2, '0');
                 document.getElementById('pomo-time-display').textContent = `${m}:${s}`;
                 
+                // Update Circular Progress
+                const ring = document.getElementById('pomo-progress-ring');
+                const circumference = 276.46; // 2 * pi * 44
+                const progress = this.totalDuration > 0 ? (this.timeLeft / this.totalDuration) : 1;
+                const offset = circumference * (1 - progress);
+                ring.style.strokeDashoffset = offset;
+
+                // Color change: violet for work, green for break
+                if (this.phase === 'work') {
+                    ring.classList.remove('text-emerald-500');
+                    ring.classList.add('text-brand-500');
+                } else {
+                    ring.classList.remove('text-brand-500');
+                    ring.classList.add('text-emerald-500');
+                }
+
                 if(this.isRunning) document.title = `(${m}:${s}) EduFlow`;
                 else document.title = "EduFlow - Organisation Étudiante";
             },
@@ -1074,7 +1113,7 @@
             playChime() {
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const notes = [523.25, 659.25, 783.99, 1046.50]; // Do, Mi, Sol, Do
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, index) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
@@ -1091,20 +1130,12 @@
                 } catch(e) {}
             },
 
-            stopSound() {
-                if (this.audioInterval) { clearInterval(this.audioInterval); this.audioInterval = null; }
-                this.soundNodes.forEach(node => {
-                    try { node.stop(); node.disconnect(); } catch(e){}
-                });
-                this.soundNodes = [];
-                if (this.masterGain && this.audioCtx) {
-                    try { this.masterGain.disconnect(); } catch(e){}
-                }
-            },
-
             toggleSound(type, btnNode) {
-                this.stopSound();
-                
+                if (this.audioEl) {
+                    this.audioEl.pause();
+                    this.audioEl = null;
+                }
+
                 document.querySelectorAll('.pomo-sound-btn').forEach(b => {
                     b.classList.remove('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30', 'ring-2', 'ring-brand-500');
                 });
@@ -1117,116 +1148,23 @@
                 this.activeSound = type;
                 btnNode.classList.add('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30', 'ring-2', 'ring-brand-500');
 
+                // Royalty-free natural sound URLs from Wikimedia Commons
+                const soundUrls = {
+                    noise: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/White_noise.ogg',
+                    rain: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Rain_on_tin_roof.ogg',
+                    waves: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Ocean_waves.ogg',
+                    forest: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Forest_birds.ogg'
+                };
+
                 try {
-                    if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
-
-                    this.masterGain = this.audioCtx.createGain();
-                    this.masterGain.gain.setValueAtTime(this.volume * 0.4, this.audioCtx.currentTime);
-                    this.masterGain.connect(this.audioCtx.destination);
-
-                    const bufferSize = this.audioCtx.sampleRate * 4;
-                    const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
-                    const output = buffer.getChannelData(0);
-
-                    let lastOut = 0.0;
-                    for (let i = 0; i < bufferSize; i++) {
-                        const white = Math.random() * 2 - 1;
-                        lastOut = (lastOut + (0.02 * white)) / 1.02;
-                        output[i] = lastOut * 3.0;
-                    }
-
-                    const noiseSource = this.audioCtx.createBufferSource();
-                    noiseSource.buffer = buffer;
-                    noiseSource.loop = true;
-                    this.soundNodes.push(noiseSource);
-
-                    const filter = this.audioCtx.createBiquadFilter();
-
-                    if (type === 'rain') {
-                        filter.type = 'lowpass';
-                        filter.frequency.value = 800;
-                        noiseSource.connect(filter);
-                        filter.connect(this.masterGain);
-
-                        // Simulate gentle rain droplets
-                        this.audioInterval = setInterval(() => {
-                            if (!this.isRunning && Math.random() > 0.5) return;
-                            try {
-                                const dropOsc = this.audioCtx.createOscillator();
-                                const dropGain = this.audioCtx.createGain();
-                                dropOsc.type = 'sine';
-                                const freq = 1200 + Math.random() * 800;
-                                dropOsc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
-                                dropOsc.frequency.exponentialRampToValueAtTime(freq * 0.5, this.audioCtx.currentTime + 0.08);
-                                dropGain.gain.setValueAtTime(0.03 * this.volume, this.audioCtx.currentTime);
-                                dropGain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 0.08);
-                                dropOsc.connect(dropGain);
-                                dropGain.connect(this.masterGain);
-                                dropOsc.start();
-                                dropOsc.stop(this.audioCtx.currentTime + 0.09);
-                            } catch(e) {}
-                        }, 120);
-
-                    } else if (type === 'waves') {
-                        filter.type = 'lowpass';
-                        filter.frequency.value = 350;
-                        
-                        const waveGain = this.audioCtx.createGain();
-                        waveGain.gain.setValueAtTime(0.2, this.audioCtx.currentTime);
-
-                        // LFO for wave swelling (every ~6 seconds)
-                        const lfo = this.audioCtx.createOscillator();
-                        const lfoGain = this.audioCtx.createGain();
-                        lfo.frequency.value = 0.16; // ~6s cycle
-                        lfoGain.gain.value = 300;
-                        lfo.connect(filter.frequency);
-                        lfo.start();
-                        this.soundNodes.push(lfo);
-
-                        noiseSource.connect(filter);
-                        filter.connect(waveGain);
-                        waveGain.connect(this.masterGain);
-
-                    } else if (type === 'forest') {
-                        filter.type = 'bandpass';
-                        filter.frequency.value = 1400;
-                        filter.Q.value = 1.0;
-                        noiseSource.connect(filter);
-                        filter.connect(this.masterGain);
-
-                        // Gentle bird chirps occasionally
-                        this.audioInterval = setInterval(() => {
-                            if (Math.random() > 0.3) {
-                                try {
-                                    const bird = this.audioCtx.createOscillator();
-                                    const bGain = this.audioCtx.createGain();
-                                    bird.type = 'sine';
-                                    const startFreq = 2500 + Math.random() * 1500;
-                                    bird.frequency.setValueAtTime(startFreq, this.audioCtx.currentTime);
-                                    bird.frequency.linearRampToValueAtTime(startFreq + 600, this.audioCtx.currentTime + 0.1);
-                                    bird.frequency.linearRampToValueAtTime(startFreq - 200, this.audioCtx.currentTime + 0.2);
-                                    bGain.gain.setValueAtTime(0.02 * this.volume, this.audioCtx.currentTime);
-                                    bGain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + 0.25);
-                                    bird.connect(bGain);
-                                    bGain.connect(this.masterGain);
-                                    bird.start();
-                                    bird.stop(this.audioCtx.currentTime + 0.26);
-                                } catch(e) {}
-                            }
-                        }, 3500);
-
-                    } else {
-                        // White / Pink noise relaxed
-                        filter.type = 'lowpass';
-                        filter.frequency.value = 1500;
-                        noiseSource.connect(filter);
-                        filter.connect(this.masterGain);
-                    }
-
-                    noiseSource.start();
+                    this.audioEl = new Audio(soundUrls[type]);
+                    this.audioEl.loop = true;
+                    this.audioEl.volume = this.volume;
+                    this.audioEl.play().catch(err => {
+                        console.warn("Lecture audio bloquée ou échouée", err);
+                    });
                 } catch(e) {
-                    console.error("Audio API error", e);
+                    console.error("Erreur chargement audio", e);
                 }
             }
         };

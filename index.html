@@ -292,7 +292,7 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO (WORKING ANIMATED PROGRESS RING & SOUNDS) -->
+            <!-- VIEW: POMODORO (COMPACT, THIN RING, ZERO GAP, WORKING ANIMATION) -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
@@ -302,7 +302,7 @@
                 <!-- Deux blocs distincts et équilibrés -->
                 <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
                     
-                    <!-- BLOC 1 : Chronomètre & Sessions (Anneau équilibré & Animation dynamique) -->
+                    <!-- BLOC 1 : Chronomètre & Sessions -->
                     <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-lg">
                         
                         <!-- Session choices (No icons) -->
@@ -320,17 +320,17 @@
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
                         </div>
 
-                        <!-- Timer Display with Working Animated Circular Progress -->
-                        <div class="relative flex items-center justify-center w-60 h-60 mb-8">
+                        <!-- Timer Display with Compact, Tight, Thin Animated Circular Progress -->
+                        <div class="relative flex items-center justify-center w-48 h-48 mb-8">
                             <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <!-- Background track (Dark purple / Dark green) -->
-                                <circle id="pomo-bg-ring" cx="50" cy="50" r="40" class="text-brand-900 transition-colors duration-500" stroke-width="7" stroke="currentColor" fill="transparent"/>
-                                <!-- Animated Progress ring (Light purple / Light green) -->
-                                <circle id="pomo-progress-ring" cx="50" cy="50" r="40" class="text-brand-400 transition-all duration-1000 ease-linear" stroke-width="7" stroke-dasharray="251.33" stroke-dashoffset="251.33" stroke-linecap="round" fill="transparent"/>
+                                <!-- Background track -->
+                                <circle id="pomo-bg-ring" cx="50" cy="50" r="46" class="text-brand-900 transition-colors duration-500" stroke-width="4" stroke="currentColor" fill="none"/>
+                                <!-- Animated Progress ring -->
+                                <circle id="pomo-progress-ring" cx="50" cy="50" r="46" class="text-brand-400 transition-all duration-1000 ease-linear" stroke-width="4" stroke-dasharray="289.02" stroke-dashoffset="289.02" stroke-linecap="round" fill="none"/>
                             </svg>
-                            <!-- Original dark interior timer face -->
-                            <div class="w-40 h-40 bg-slate-900 rounded-full flex items-center justify-center shadow-inner border border-slate-800">
-                                <span id="pomo-time-display" class="text-5xl font-bold text-white tracking-tighter tabular-nums">25:00</span>
+                            <!-- Inner dark circle tightly hugging the ring with zero gap -->
+                            <div class="absolute inset-0 m-auto w-44 h-44 bg-slate-900 rounded-full flex items-center justify-center shadow-inner border border-slate-800">
+                                <span id="pomo-time-display" class="text-4xl font-bold text-white tracking-tighter tabular-nums">25:00</span>
                             </div>
                         </div>
 
@@ -346,7 +346,7 @@
                     </div>
 
                     <!-- BLOC 2 : Ambiance Sonore & Volume -->
-                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[495px]">
+                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[475px]">
                         
                         <!-- Sound Choices -->
                         <div class="grid grid-cols-2 gap-4">
@@ -951,7 +951,7 @@
             }
         };
 
-        // --- POMODORO MODULE (WORKING ANIMATED RING & SOUNDS) ---
+        // --- POMODORO MODULE (COMPACT, THIN RING, WORKING ANIMATION) ---
         const PomodoroModule = {
             timer: null, timeLeft: 25 * 60, totalDuration: 25 * 60, isRunning: false, sessionType: 'normal',
             phase: 'work', // 'work' or 'break'
@@ -1094,9 +1094,9 @@
                 const s = (this.timeLeft % 60).toString().padStart(2, '0');
                 document.getElementById('pomo-time-display').textContent = `${m}:${s}`;
                 
-                // Clockwise animated progress ring
-                const radius = 40;
-                const circumference = 2 * Math.PI * radius; // ~251.33
+                // Precise Clockwise Animated Progress Ring
+                const radius = 46;
+                const circumference = 2 * Math.PI * radius; // ~289.02
                 const elapsed = this.totalDuration > 0 ? (1 - (this.timeLeft / this.totalDuration)) : 0;
                 const offset = circumference * (1 - elapsed);
                 

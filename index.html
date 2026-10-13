@@ -78,10 +78,10 @@
             <!-- Navigation -->
             <nav class="p-4 space-y-1" id="nav-menu">
                 <button data-target="dashboard" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
-                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Vue d'ensemble
+                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Accueil
                 </button>
                 <button data-target="tasks" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
-                    <i class="fa-solid fa-kanban w-6 text-center mr-2"></i> Tâches
+                    <i class="fa-solid fa-list-check w-6 text-center mr-2"></i> Tâches
                 </button>
                 <button data-target="schedule" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
                     <i class="fa-regular fa-calendar-days w-6 text-center mr-2"></i> Emploi du temps
@@ -121,7 +121,7 @@
 
         <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
             
-            <!-- VIEW: DASHBOARD -->
+            <!-- VIEW: DASHBOARD (ACCUEIL) -->
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
                 <header class="mb-8 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
@@ -292,7 +292,7 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO (WORKING ANIMATED PROGRESS RING & SOUNDS) -->
+            <!-- VIEW: POMODORO (LARGER TIMER BLOCK, FULLY ANIMATED & SOUNDS) -->
             <section id="pomodoro-view" class="app-section items-center justify-center">
                 <div class="text-center mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
@@ -302,7 +302,7 @@
                 <!-- Deux blocs distincts et équilibrés -->
                 <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
                     
-                    <!-- BLOC 1 : Chronomètre & Sessions -->
+                    <!-- BLOC 1 : Chronomètre & Sessions (Agrandit) -->
                     <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-lg">
                         
                         <!-- Session choices (No icons) -->
@@ -320,17 +320,17 @@
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
                         </div>
 
-                        <!-- Timer Display with Fully Visible Animated Circular Progress -->
-                        <div class="relative flex items-center justify-center w-48 h-48 mb-8">
+                        <!-- Timer Display with Larger Animated Circular Progress -->
+                        <div class="relative flex items-center justify-center w-60 h-60 mb-8">
                             <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <!-- Background track (Dark purple / Dark green) -->
+                                <!-- Background track -->
                                 <circle id="pomo-bg-ring" cx="50" cy="50" r="45.5" class="text-brand-900 transition-colors duration-500" stroke-width="5" stroke="currentColor" fill="none"/>
-                                <!-- Animated Progress ring (Light purple / Light green with stroke="currentColor" fixed) -->
+                                <!-- Animated Progress ring -->
                                 <circle id="pomo-progress-ring" cx="50" cy="50" r="45.5" class="text-brand-400" stroke-width="5" stroke="currentColor" stroke-dasharray="285.88" stroke-dashoffset="285.88" stroke-linecap="round" fill="none"/>
                             </svg>
-                            <!-- Inner dark circle tightly hugging the ring with zero gap -->
-                            <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-800 bg-slate-900" style="width: 172px; height: 172px;">
-                                <span id="pomo-time-display" class="text-4xl font-bold text-white tracking-tighter tabular-nums">25:00</span>
+                            <!-- Inner dark circle matching larger size -->
+                            <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-800 bg-slate-900" style="width: 216px; height: 216px;">
+                                <span id="pomo-time-display" class="text-5xl font-bold text-white tracking-tighter tabular-nums">25:00</span>
                             </div>
                         </div>
 
@@ -346,7 +346,7 @@
                     </div>
 
                     <!-- BLOC 2 : Ambiance Sonore & Volume -->
-                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[475px]">
+                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[515px]">
                         
                         <!-- Sound Choices -->
                         <div class="grid grid-cols-2 gap-4">
@@ -951,7 +951,7 @@
             }
         };
 
-        // --- POMODORO MODULE (SMOOTH REAL-TIME ANIMATION & SOUNDS) ---
+        // --- POMODORO MODULE (LARGER TIMER BLOCK, SMOOTH ANIMATION & SOUNDS) ---
         const PomodoroModule = {
             timerId: null, 
             timeLeft: 25 * 60, 

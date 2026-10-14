@@ -27,7 +27,7 @@
         }
     </script>
 
-    <!-- Custom CSS -->
+    <!-- Custom CSS & Collapsible Sidebar Styles -->
     <style>
         body { font-family: 'Inter', sans-serif; }
         
@@ -51,6 +51,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Collapsible Sidebar Styles */
+        #app-sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #app-sidebar.sidebar-collapsed { width: 5rem !important; }
+        #app-sidebar.sidebar-collapsed .sidebar-text { display: none !important; }
+        #app-sidebar.sidebar-collapsed .logo-container { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+        #app-sidebar.sidebar-collapsed .logo-container i { margin-right: 0 !important; }
+        #app-sidebar.sidebar-collapsed nav button { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+        #app-sidebar.sidebar-collapsed nav button i { margin-right: 0 !important; }
+        #app-sidebar.sidebar-collapsed .theme-footer-content { justify-content: center !important; }
+        #app-sidebar.sidebar-collapsed .theme-footer-content span,
+        #app-sidebar.sidebar-collapsed .theme-footer-content div { display: none !important; }
+
         /* 3D Flashcards */
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); }
@@ -67,52 +79,60 @@
 
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex transition-colors duration-300 relative">
 
-    <!-- FULL-SCREEN BACKGROUND LAYER (Slightly lighter at bottom in dark mode) -->
-    <div class="fixed inset-0 w-screen h-screen bg-gradient-to-b from-brand-50/70 via-slate-50 to-slate-100 dark:from-brand-950/40 dark:via-slate-900 dark:to-slate-900 pointer-events-none -z-10"></div>
+    <!-- FULL-SCREEN BACKGROUND LAYER (Enhanced top gradient contrast) -->
+    <div class="fixed inset-0 w-screen h-screen bg-gradient-to-b from-brand-100/90 via-slate-50 to-slate-100 dark:from-brand-900/60 dark:via-slate-900 dark:to-slate-900 pointer-events-none -z-10"></div>
 
-    <!-- FLOATING SIDEBAR -->
-    <aside class="w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 transition-colors duration-300 overflow-hidden">
-        <div class="flex-1 overflow-y-auto">
-            <!-- Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10">
-                <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3"></i>
-                <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">EduFlow</h1>
+    <!-- FLOATING SIDEBAR (COLLAPSIBLE VIA LOGO CLICK) -->
+    <aside id="app-sidebar" class="w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 overflow-hidden">
+        <div class="flex-1 overflow-y-auto overflow-x-hidden">
+            <!-- Logo / Toggle Trigger -->
+            <div id="sidebar-logo-btn" class="logo-container h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors" title="Réduire / Étendre la barre">
+                <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3 flex-shrink-0"></i>
+                <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight sidebar-text whitespace-nowrap">EduFlow</h1>
             </div>
             
             <!-- Navigation -->
-            <nav class="p-4 space-y-1" id="nav-menu">
+            <nav class="p-3 space-y-1" id="nav-menu">
                 <button data-target="dashboard" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
-                    <i class="fa-solid fa-house w-6 text-center mr-2"></i> Accueil
+                    <i class="fa-solid fa-house w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Accueil</span>
                 </button>
                 <button data-target="tasks" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-list-check w-6 text-center mr-2"></i> Tâches
+                    <i class="fa-solid fa-list-check w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Tâches</span>
                 </button>
                 <button data-target="schedule" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-regular fa-calendar-days w-6 text-center mr-2"></i> Emploi du temps
+                    <i class="fa-regular fa-calendar-days w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Emploi du temps</span>
                 </button>
                 <button data-target="notes" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-book w-6 text-center mr-2"></i> Notes & Flashcards
+                    <i class="fa-solid fa-book w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Notes & Flashcards</span>
                 </button>
                 <button data-target="pomodoro" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-stopwatch w-6 text-center mr-2"></i> Pomodoro
+                    <i class="fa-solid fa-stopwatch w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Pomodoro</span>
                 </button>
                 <button data-target="grades" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-graduation-cap w-6 text-center mr-2"></i> Moyennes
+                    <i class="fa-solid fa-graduation-cap w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Moyennes</span>
                 </button>
                 <button data-target="habits" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-check-double w-6 text-center mr-2"></i> Habitudes
+                    <i class="fa-solid fa-check-double w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Habitudes</span>
                 </button>
                 <button data-target="settings" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                    <i class="fa-solid fa-gear w-6 text-center mr-2"></i> Paramètres
+                    <i class="fa-solid fa-gear w-6 text-center mr-2 flex-shrink-0"></i> 
+                    <span class="sidebar-text truncate">Paramètres</span>
                 </button>
             </nav>
         </div>
 
         <!-- Footer / Dark Mode Toggle -->
-        <div class="p-4 border-t border-slate-100 dark:border-slate-700/60 bg-white dark:bg-slate-800">
-            <button id="theme-toggle-btn" class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
-                <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2"></i> Thème sombre</span>
-                <div class="w-10 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors duration-300">
+        <div class="p-3 border-t border-slate-100 dark:border-slate-700/60 bg-white dark:bg-slate-800">
+            <button id="theme-toggle-btn" class="theme-footer-content w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2 flex-shrink-0"></i> <span class="sidebar-text">Thème sombre</span></span>
+                <div class="w-10 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors duration-300 flex-shrink-0">
                     <div id="theme-toggle-dot" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-transform duration-300 shadow-sm"></div>
                 </div>
             </button>
@@ -493,6 +513,7 @@
         
         const defaultState = {
             theme: 'light',
+            sidebarCollapsed: false,
             tasks: [], 
             schedule: [], 
             notes: [], 
@@ -548,6 +569,7 @@
             init() {
                 loadState();
                 this.setupTheme();
+                this.setupSidebarToggle();
                 this.setupNav();
                 this.startClock();
                 this.initQuotes();
@@ -586,6 +608,21 @@
                     dot.style.transform = 'translateX(0)';
                     dot.classList.add('bg-white'); dot.classList.remove('bg-slate-200');
                 }
+            },
+
+            setupSidebarToggle() {
+                const logoBtn = document.getElementById('sidebar-logo-btn');
+                const sidebar = document.getElementById('app-sidebar');
+
+                if (AppState.sidebarCollapsed) {
+                    sidebar.classList.add('sidebar-collapsed');
+                }
+
+                logoBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('sidebar-collapsed');
+                    AppState.sidebarCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                    saveState();
+                });
             },
 
             setupNav() {

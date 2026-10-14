@@ -67,46 +67,47 @@
 
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex transition-colors duration-300">
 
-    <aside class="w-64 bg-white dark:bg-slate-850 border-r border-slate-200 dark:border-slate-750 flex flex-col justify-between z-20 flex-shrink-0 transition-colors duration-300">
+    <!-- FLOATING SIDEBAR (CORRECTED COLORS & FLOATING STYLE) -->
+    <aside class="w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 transition-colors duration-300 overflow-hidden">
         <div class="flex-1 overflow-y-auto">
             <!-- Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
+            <div class="h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10">
                 <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3"></i>
                 <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">EduFlow</h1>
             </div>
             
             <!-- Navigation -->
             <nav class="p-4 space-y-1" id="nav-menu">
-                <button data-target="dashboard" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
+                <button data-target="dashboard" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400">
                     <i class="fa-solid fa-house w-6 text-center mr-2"></i> Accueil
                 </button>
-                <button data-target="tasks" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="tasks" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-list-check w-6 text-center mr-2"></i> Tâches
                 </button>
-                <button data-target="schedule" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="schedule" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-regular fa-calendar-days w-6 text-center mr-2"></i> Emploi du temps
                 </button>
-                <button data-target="notes" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="notes" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-book w-6 text-center mr-2"></i> Notes & Flashcards
                 </button>
-                <button data-target="pomodoro" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="pomodoro" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-stopwatch w-6 text-center mr-2"></i> Pomodoro
                 </button>
-                <button data-target="grades" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="grades" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-graduation-cap w-6 text-center mr-2"></i> Moyennes
                 </button>
-                <button data-target="habits" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="habits" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-check-double w-6 text-center mr-2"></i> Habitudes
                 </button>
-                <button data-target="settings" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <button data-target="settings" class="nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <i class="fa-solid fa-gear w-6 text-center mr-2"></i> Paramètres
                 </button>
             </nav>
         </div>
 
         <!-- Footer / Dark Mode Toggle -->
-        <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
-            <button id="theme-toggle-btn" class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+        <div class="p-4 border-t border-slate-100 dark:border-slate-700/60 bg-white dark:bg-slate-800">
+            <button id="theme-toggle-btn" class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
                 <span class="flex items-center"><i class="fa-solid fa-moon w-6 text-center mr-2"></i> Thème sombre</span>
                 <div class="w-10 h-5 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors duration-300">
                     <div id="theme-toggle-dot" class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-transform duration-300 shadow-sm"></div>
@@ -116,7 +117,7 @@
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 overflow-hidden relative flex flex-col h-100vh">
+    <main class="flex-1 overflow-hidden relative flex flex-col h-full">
         <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-brand-50 to-transparent dark:from-brand-900/20 dark:to-transparent -z-10 pointer-events-none"></div>
 
         <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
@@ -602,11 +603,11 @@
                 if(targetView) targetView.classList.add('active');
 
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700";
+                    btn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50";
                 });
                 const activeBtn = document.querySelector(`.nav-btn[data-target="${viewId}"]`);
                 if (activeBtn) {
-                    activeBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
+                    activeBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
                 }
                 
                 if(viewId === 'dashboard') this.updateDashboardStats();

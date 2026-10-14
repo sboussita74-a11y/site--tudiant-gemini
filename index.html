@@ -27,9 +27,9 @@
         }
     </script>
 
-    <!-- Custom CSS & Collapsible Sidebar Styles -->
+    <!-- Custom CSS & Mobile Adaptations -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -51,7 +51,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Collapsible Sidebar Styles */
+        /* Collapsible Sidebar Styles (Desktop) */
         #app-sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         #app-sidebar.sidebar-collapsed { width: 4.25rem !important; }
         #app-sidebar.sidebar-collapsed .sidebar-text { display: none !important; }
@@ -72,19 +72,19 @@
         .card-back { transform: rotateY(180deg); }
         
         /* Toast Notifications */
-        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        #toast-container { position: fixed; bottom: 80px; right: 20px; z-index: 1000; }
         .toast { transform: translateY(100%); opacity: 0; transition: all 0.3s ease; }
         .toast.show { transform: translateY(0); opacity: 1; }
     </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex transition-colors duration-300 relative">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex flex-col md:flex-row transition-colors duration-300 relative">
 
     <!-- FULL-SCREEN BACKGROUND LAYER -->
     <div class="fixed inset-0 w-screen h-screen bg-gradient-to-b from-brand-100/60 via-slate-50 to-slate-100 dark:from-brand-900/40 dark:via-slate-900 dark:to-slate-900 pointer-events-none -z-10"></div>
 
-    <!-- FLOATING SIDEBAR -->
-    <aside id="app-sidebar" class="w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between z-20 flex-shrink-0 overflow-hidden">
+    <!-- FLOATING SIDEBAR (Desktop Only) -->
+    <aside id="app-sidebar" class="hidden md:flex w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex-col justify-between z-20 flex-shrink-0 overflow-hidden">
         <div class="flex-1 overflow-y-auto overflow-x-hidden">
             <!-- Logo / Toggle Trigger -->
             <div id="sidebar-logo-btn" class="logo-container h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors" title="Réduire / Étendre la barre">
@@ -140,21 +140,73 @@
         </div>
     </aside>
 
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-700/80 flex justify-around items-center h-16 md:hidden z-30 px-2 shadow-lg">
+        <button data-target="dashboard" class="mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-brand-600 dark:text-brand-400">
+            <i class="fa-solid fa-house text-lg mb-0.5"></i>
+            <span class="text-[10px] font-semibold">Accueil</span>
+        </button>
+        <button data-target="tasks" class="mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600">
+            <i class="fa-solid fa-list-check text-lg mb-0.5"></i>
+            <span class="text-[10px] font-medium">Tâches</span>
+        </button>
+        <button data-target="schedule" class="mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600">
+            <i class="fa-regular fa-calendar-days text-lg mb-0.5"></i>
+            <span class="text-[10px] font-medium">Planning</span>
+        </button>
+        <button data-target="notes" class="mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600">
+            <i class="fa-solid fa-book text-lg mb-0.5"></i>
+            <span class="text-[10px] font-medium">Notes</span>
+        </button>
+        <button data-target="pomodoro" class="mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600">
+            <i class="fa-solid fa-stopwatch text-lg mb-0.5"></i>
+            <span class="text-[10px] font-medium">Focus</span>
+        </button>
+        <button id="mobile-menu-trigger" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600">
+            <i class="fa-solid fa-bars text-lg mb-0.5"></i>
+            <span class="text-[10px] font-medium">Plus</span>
+        </button>
+    </nav>
+
+    <!-- MOBILE MORE MENU MODAL / DRAWER -->
+    <div id="mobile-menu-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden flex items-end md:hidden transition-all">
+        <div class="bg-white dark:bg-slate-800 w-full rounded-t-3xl p-6 shadow-2xl border-t border-slate-200 dark:border-slate-700 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-700">
+                <h3 class="font-bold text-slate-900 dark:text-white text-lg flex items-center gap-2"><i class="fa-solid fa-compass text-brand-600"></i> Menu EduFlow</h3>
+                <button id="mobile-menu-close" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button data-target="grades" class="mobile-menu-item flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-medium text-sm">
+                    <i class="fa-solid fa-graduation-cap text-brand-600 text-lg w-6 text-center"></i> Moyennes
+                </button>
+                <button data-target="habits" class="mobile-menu-item flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-medium text-sm">
+                    <i class="fa-solid fa-check-double text-brand-600 text-lg w-6 text-center"></i> Habitudes
+                </button>
+                <button data-target="settings" class="mobile-menu-item flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-medium text-sm">
+                    <i class="fa-solid fa-gear text-brand-600 text-lg w-6 text-center"></i> Paramètres
+                </button>
+                <button id="mobile-theme-toggle" class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 font-medium text-sm">
+                    <i class="fa-solid fa-moon text-brand-600 text-lg w-6 text-center"></i> Thème
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Area -->
-    <main class="flex-1 overflow-hidden relative flex flex-col h-full bg-transparent">
-        <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
+    <main class="flex-1 overflow-hidden relative flex flex-col h-full bg-transparent pb-20 md:pb-0">
+        <div class="p-4 md:p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
             
             <!-- VIEW: DASHBOARD -->
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
-                <header class="mb-8 flex-shrink-0">
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-2">Prêt à organiser ta journée ?</p>
+                <header class="mb-6 md:mb-8 flex-shrink-0">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">Prêt à organiser ta journée ?</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-6 flex-shrink-0">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pb-6 flex-shrink-0">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
-                        <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
-                        <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
+                        <div id="dash-time" class="text-4xl md:text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
+                        <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize text-sm md:text-base">Lundi 1 Janvier</div>
                     </div>
 
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
@@ -163,8 +215,8 @@
                             <div class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-lg"><i class="fa-solid fa-fire"></i></div>
                         </div>
                         <div class="flex items-end gap-2">
-                            <span class="text-4xl font-bold text-slate-900 dark:text-white" id="dash-todo-count">0</span>
-                            <span class="text-slate-500 dark:text-slate-400 mb-1">à faire</span>
+                            <span class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" id="dash-todo-count">0</span>
+                            <span class="text-slate-500 dark:text-slate-400 mb-1 text-sm">à faire</span>
                         </div>
                         <div class="mt-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
                             <div id="dash-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -173,28 +225,28 @@
 
                     <div class="bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl p-6 shadow-sm text-white flex flex-col justify-center relative overflow-hidden">
                         <i class="fa-solid fa-quote-right absolute -bottom-4 -right-2 text-6xl opacity-20"></i>
-                        <p class="font-medium text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
-                        <span class="text-brand-100 text-sm mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
+                        <p class="font-medium text-base md:text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
+                        <span class="text-brand-100 text-xs md:text-sm mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: TASKS -->
             <section id="tasks-view" class="app-section">
-                <header class="mb-6 flex justify-between items-center flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Gère ton travail avec la méthode Kanban.</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Gère ton travail avec la méthode Kanban.</p>
                     </div>
-                    <button id="btn-toggle-task-form" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center gap-2">
+                    <button id="btn-toggle-task-form" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> Nouvelle tâche
                     </button>
                 </header>
 
-                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0 transition-all">
-                    <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                        <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0 transition-all">
+                    <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
+                        <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
                         <div class="flex gap-2">
                             <input type="date" id="input-task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
                             <button type="submit" class="bg-brand-600 text-white px-4 rounded-xl hover:bg-brand-700 transition"><i class="fa-solid fa-check"></i></button>
@@ -202,45 +254,45 @@
                     </form>
                 </div>
 
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 pb-4 min-h-0 overflow-hidden">
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
-                            <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-todo">0</span>
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pb-4 min-h-0 overflow-y-auto md:overflow-hidden">
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
+                            <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-todo">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="todo" id="col-todo"></div>
+                        <div class="flex-1 md:overflow-y-auto space-y-3 kanban-column pr-1" data-status="todo" id="col-todo"></div>
                     </div>
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
-                            <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-inprogress">0</span>
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
+                            <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-inprogress">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="inprogress" id="col-inprogress"></div>
+                        <div class="flex-1 md:overflow-y-auto space-y-3 kanban-column pr-1" data-status="inprogress" id="col-inprogress"></div>
                     </div>
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 overflow-hidden">
-                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between items-center flex-shrink-0">
-                            <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-1 rounded-md" id="count-done">0</span>
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
+                        <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
+                            <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-done">0</span>
                         </h3>
-                        <div class="flex-1 overflow-y-auto space-y-3 kanban-column pr-1" data-status="done" id="col-done"></div>
+                        <div class="flex-1 md:overflow-y-auto space-y-3 kanban-column pr-1" data-status="done" id="col-done"></div>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: SCHEDULE -->
             <section id="schedule-view" class="app-section">
-                <header class="mb-6 flex justify-between items-center flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Emploi du temps</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Organise ta semaine de cours.</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Emploi du temps</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Organise ta semaine de cours.</p>
                     </div>
-                    <button id="btn-toggle-schedule-form" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center gap-2">
+                    <button id="btn-toggle-schedule-form" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> Ajouter un cours
                     </button>
                 </header>
 
-                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0">
-                    <form id="form-add-schedule" class="flex flex-wrap gap-4 items-end">
+                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0">
+                    <form id="form-add-schedule" class="flex flex-wrap gap-3 items-end">
                         <div class="flex-1 min-w-[120px]">
-                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Jour</label>
-                            <select id="input-sched-day" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Jour</label>
+                            <select id="input-sched-day" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
                                 <option value="Lundi">Lundi</option><option value="Mardi">Mardi</option>
                                 <option value="Mercredi">Mercredi</option><option value="Jeudi">Jeudi</option>
                                 <option value="Vendredi">Vendredi</option>
@@ -248,101 +300,107 @@
                         </div>
                         <div class="flex-1 min-w-[150px]">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
-                            <input type="text" id="input-sched-subject" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                            <input type="text" id="input-sched-subject" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
                         </div>
                         <div class="w-24">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Début</label>
-                            <input type="time" id="input-sched-start" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2.5 outline-none text-slate-800 dark:text-white">
+                            <input type="time" id="input-sched-start" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2 text-sm outline-none text-slate-800 dark:text-white">
                         </div>
                         <div class="w-24">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Fin</label>
-                            <input type="time" id="input-sched-end" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2.5 outline-none text-slate-800 dark:text-white">
+                            <input type="time" id="input-sched-end" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-2 text-sm outline-none text-slate-800 dark:text-white">
                         </div>
                         <div class="flex-1 min-w-[100px]">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Salle</label>
-                            <input type="text" id="input-sched-room" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                            <input type="text" id="input-sched-room" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
                         </div>
-                        <button type="submit" class="bg-brand-600 text-white px-6 py-2.5 rounded-xl hover:bg-brand-700">Ajouter</button>
+                        <button type="submit" class="bg-brand-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-brand-700">Ajouter</button>
                     </form>
                 </div>
 
-                <div class="flex-1 overflow-x-auto pb-4 min-h-0">
-                    <div class="min-w-[800px] grid grid-cols-5 gap-4 h-full" id="schedule-grid"></div>
+                <!-- Mobile Day Tabs Selector -->
+                <div class="flex md:hidden bg-slate-200/80 dark:bg-slate-800 p-1 rounded-2xl mb-4 gap-1 flex-shrink-0 overflow-x-auto">
+                    <button data-mobile-day="Lundi" class="mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold bg-white dark:bg-slate-700 text-brand-600 shadow-sm whitespace-nowrap">Lundi</button>
+                    <button data-mobile-day="Mardi" class="mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">Mardi</button>
+                    <button data-mobile-day="Mercredi" class="mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">Mercredi</button>
+                    <button data-mobile-day="Jeudi" class="mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">Jeudi</button>
+                    <button data-mobile-day="Vendredi" class="mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap">Vendredi</button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto md:overflow-x-auto pb-4 min-h-0">
+                    <div class="hidden md:grid min-w-[800px] grid-cols-5 gap-4 h-full" id="schedule-grid-desktop"></div>
+                    <div class="flex md:hidden flex-col gap-3 h-full" id="schedule-container-mobile"></div>
                 </div>
             </section>
 
-            <!-- VIEW: NOTES & FLASHCARDS (OVERHAULED) -->
+            <!-- VIEW: NOTES & FLASHCARDS -->
             <section id="notes-view" class="app-section">
-                <header class="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Organise tes cours et révise activement avec les chapitres.</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Organise tes cours et révise activement.</p>
                     </div>
                     <div class="flex bg-slate-200 dark:bg-slate-700 rounded-xl p-1 w-max">
-                        <button id="tab-notes" class="px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all">Notes</button>
-                        <button id="tab-flashcards" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Flashcards & Quiz</button>
+                        <button id="tab-notes" class="px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all">Notes</button>
+                        <button id="tab-flashcards" class="px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Flashcards & Quiz</button>
                     </div>
                 </header>
 
                 <!-- SUBVIEW: NOTES -->
-                <div id="subview-notes" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
+                <div id="subview-notes" class="flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0 overflow-hidden">
                     <div class="w-full md:w-1/3 flex-shrink-0 overflow-y-auto pr-1">
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-brand-600"></i> Nouvelle note</h3>
-                            <input type="text" id="input-note-title" placeholder="Titre de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white text-sm">
+                        <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-brand-600"></i> Nouvelle note</h3>
+                            <input type="text" id="input-note-title" placeholder="Titre de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none mb-3 text-slate-800 dark:text-white text-xs md:text-sm">
                             <div class="grid grid-cols-2 gap-2 mb-3">
                                 <input type="text" id="input-note-subject" placeholder="Matière" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                                 <input type="text" id="input-note-chapter" placeholder="Chapitre" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                             </div>
-                            <textarea id="input-note-content" placeholder="Contenu de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-slate-800 dark:text-white resize-none h-32 mb-4 text-sm"></textarea>
+                            <textarea id="input-note-content" placeholder="Contenu de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none text-slate-800 dark:text-white resize-none h-24 md:h-32 mb-3 text-xs md:text-sm"></textarea>
                             <button id="btn-add-note" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors text-sm">Enregistrer</button>
                         </div>
                     </div>
                     <div class="w-full md:w-2/3 flex flex-col flex-1 min-h-0 overflow-hidden">
-                        <!-- Filters for Notes -->
-                        <div class="flex items-center gap-3 mb-4 flex-shrink-0">
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter"></i> Filtrer par matière :</span>
+                        <div class="flex items-center gap-3 mb-3 flex-shrink-0">
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter"></i> Filtrer :</span>
                             <select id="filter-notes-subject" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs outline-none text-slate-800 dark:text-white">
                                 <option value="">Toutes les matières</option>
                             </select>
                         </div>
                         <div class="overflow-y-auto pr-2 flex-1">
-                            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4"></div>
+                            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pb-4"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- SUBVIEW: FLASHCARDS & QUIZ -->
                 <div id="subview-flashcards" class="hidden flex flex-col flex-1 min-h-0 overflow-hidden">
-                    <!-- Flashcard navigation bar inside subview -->
-                    <div class="flex items-center justify-between mb-4 flex-shrink-0 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-3 flex-shrink-0 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
                         <div class="flex gap-2">
-                            <button id="fc-subtab-lib" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all"><i class="fa-solid fa-layer-group mr-1"></i> Bibliothèque de cartes</button>
-                            <button id="fc-subtab-quiz" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"><i class="fa-solid fa-play mr-1"></i> Mode Quiz interactif</button>
+                            <button id="fc-subtab-lib" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all"><i class="fa-solid fa-layer-group mr-1"></i> Cartes</button>
+                            <button id="fc-subtab-quiz" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"><i class="fa-solid fa-play mr-1"></i> Quiz</button>
                         </div>
-                        <button id="btn-open-fc-modal" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-plus"></i> Nouvelle Flashcard
+                        <button id="btn-open-fc-modal" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-plus"></i> Nouvelle carte
                         </button>
                     </div>
 
-                    <!-- TAB 1: LIBRARY / MANAGEMENT -->
-                    <div id="fc-section-lib" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
-                        <!-- Left: quick creation panel -->
+                    <!-- TAB 1: LIBRARY -->
+                    <div id="fc-section-lib" class="flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0 overflow-hidden">
                         <div class="w-full md:w-1/3 flex-shrink-0 overflow-y-auto pr-1">
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-sm flex items-center gap-2"><i class="fa-solid fa-bolt text-brand-600"></i> Création rapide</h3>
-                                <div class="grid grid-cols-2 gap-2 mb-3">
-                                    <input type="text" id="input-fc-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
+                            <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                                <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-bolt text-brand-600"></i> Création rapide</h3>
+                                <div class="grid grid-cols-2 gap-2 mb-2">
+                                    <input type="text" id="input-fc-subject" placeholder="Matière" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                                     <input type="text" id="input-fc-chapter" placeholder="Chapitre" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                                 </div>
-                                <input type="text" id="input-fc-q" placeholder="Question (Recto)..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none mb-3 text-slate-800 dark:text-white text-sm">
-                                <textarea id="input-fc-a" placeholder="Réponse (Verso)..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 outline-none text-slate-800 dark:text-white resize-none h-24 mb-4 text-sm"></textarea>
+                                <input type="text" id="input-fc-q" placeholder="Question (Recto)..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none mb-2 text-slate-800 dark:text-white text-xs md:text-sm">
+                                <textarea id="input-fc-a" placeholder="Réponse (Verso)..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white resize-none h-20 mb-3 text-xs md:text-sm"></textarea>
                                 <button id="btn-add-fc" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors text-sm">Créer la carte</button>
                             </div>
                         </div>
-                        <!-- Right: Cards Grid with Filters -->
                         <div class="w-full md:w-2/3 flex flex-col flex-1 min-h-0 overflow-hidden">
-                            <div class="flex flex-wrap items-center gap-3 mb-4 flex-shrink-0">
+                            <div class="flex flex-wrap items-center gap-2 mb-3 flex-shrink-0">
                                 <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter"></i> Filtrer :</span>
                                 <select id="filter-fc-subject" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs outline-none text-slate-800 dark:text-white">
                                     <option value="">Toutes les matières</option>
@@ -352,110 +410,89 @@
                                 </select>
                             </div>
                             <div class="overflow-y-auto pr-2 flex-1">
-                                <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4"></div>
+                                <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pb-4"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TAB 2: INTERACTIVE QUIZ MODE -->
-                    <div id="fc-section-quiz" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <!-- Step 1: Config Quiz -->
-                        <div id="quiz-setup-screen" class="max-w-md mx-auto w-full my-auto text-center space-y-6">
-                            <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner">
+                    <!-- TAB 2: QUIZ MODE -->
+                    <div id="fc-section-quiz" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-700">
+                        <div id="quiz-setup-screen" class="max-w-md mx-auto w-full my-auto text-center space-y-4 md:space-y-6">
+                            <div class="w-14 h-14 bg-brand-50 dark:bg-brand-900/40 text-brand-600 rounded-2xl mx-auto flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Lancer une session de Quiz</h3>
-                                <p class="text-sm text-slate-500 mt-1">Choisis ton périmètre de révision</p>
+                                <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white">Lancer une session de Quiz</h3>
+                                <p class="text-xs md:text-sm text-slate-500 mt-1">Choisis ton périmètre de révision</p>
                             </div>
-                            
-                            <div class="space-y-4 text-left bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <div class="space-y-3 text-left bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                                 <div>
                                     <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
-                                    <select id="quiz-select-subject" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
+                                    <select id="quiz-select-subject" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm outline-none text-slate-800 dark:text-white">
                                         <option value="">Toutes les matières (Tout mélanger)</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-slate-500 mb-1">Chapitre</label>
-                                    <select id="quiz-select-chapter" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
+                                    <select id="quiz-select-chapter" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm outline-none text-slate-800 dark:text-white">
                                         <option value="">Tous les chapitres</option>
                                     </select>
                                 </div>
                             </div>
-
-                            <button id="btn-start-quiz" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold shadow-md transition-all hover:scale-[1.02]">
+                            <button id="btn-start-quiz" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold text-sm shadow-md transition-all">
                                 Démarrer le Quiz <i class="fa-solid fa-arrow-right ml-2"></i>
                             </button>
                         </div>
 
-                        <!-- Step 2: Active Quiz Session -->
-                        <div id="quiz-active-screen" class="hidden flex flex-col h-full max-w-2xl mx-auto w-full justify-between py-2">
-                            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                        <div id="quiz-active-screen" class="hidden flex flex-col h-full max-w-2xl mx-auto w-full justify-between py-1">
+                            <div class="flex items-center justify-between mb-2 flex-shrink-0">
                                 <div class="flex items-center gap-2">
-                                    <span id="quiz-progress-badge" class="px-3 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-xl text-xs font-bold">Carte 1/5</span>
-                                    <span id="quiz-topic-badge" class="text-xs text-slate-500 font-medium">Maths • Chapitre 1</span>
+                                    <span id="quiz-progress-badge" class="px-2.5 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-xl text-[11px] font-bold">Carte 1/5</span>
+                                    <span id="quiz-topic-badge" class="text-xs text-slate-500 font-medium truncate max-w-[180px]">Maths</span>
                                 </div>
                                 <button id="quiz-btn-quit" class="text-xs text-slate-400 hover:text-red-500 font-medium"><i class="fa-solid fa-xmark mr-1"></i> Quitter</button>
                             </div>
-
-                            <!-- Progress Bar -->
-                            <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-6 flex-shrink-0">
-                                <div id="quiz-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mb-4 flex-shrink-0">
+                                <div id="quiz-progress-bar" class="bg-brand-500 h-1.5 rounded-full transition-all duration-300" style="width: 20%"></div>
                             </div>
-
-                            <!-- 3D Interactive Card Container -->
-                            <div class="perspective-1000 w-full flex-1 cursor-pointer group my-2 min-h-[280px]" id="quiz-card-container">
+                            <div class="perspective-1000 w-full flex-1 cursor-pointer group my-1 min-h-[240px]" id="quiz-card-container">
                                 <div id="quiz-card-inner" class="relative w-full h-full transform-style-3d shadow-md hover:shadow-lg transition-all rounded-3xl border border-slate-200 dark:border-slate-700">
-                                    <!-- FRONT -->
-                                    <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
-                                        <span class="text-xs text-brand-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-question-circle mr-1"></i> Question / Recto</span>
-                                        <p id="quiz-card-q" class="text-xl font-semibold text-slate-800 dark:text-white my-auto px-4">--</p>
-                                        <span class="text-xs text-slate-400 italic">Clique sur la carte pour voir la réponse</span>
+                                    <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-3xl p-6 flex flex-col justify-between items-center text-center">
+                                        <span class="text-[10px] text-brand-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-question-circle mr-1"></i> Question / Recto</span>
+                                        <p id="quiz-card-q" class="text-lg md:text-xl font-semibold text-slate-800 dark:text-white my-auto px-2">--</p>
+                                        <span class="text-[11px] text-slate-400 italic">Clique sur la carte pour voir la réponse</span>
                                     </div>
-                                    <!-- BACK -->
-                                    <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
-                                        <span class="text-xs text-brand-600 font-bold uppercase tracking-widest"><i class="fa-solid fa-lightbulb mr-1"></i> Réponse / Verso</span>
-                                        <p id="quiz-card-a" class="text-xl font-semibold text-slate-800 dark:text-white my-auto px-4 whitespace-pre-wrap">--</p>
-                                        <span class="text-xs text-brand-500 italic">Évalue ta maîtrise ci-dessous</span>
+                                    <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-3xl p-6 flex flex-col justify-between items-center text-center">
+                                        <span class="text-[10px] text-brand-600 font-bold uppercase tracking-widest"><i class="fa-solid fa-lightbulb mr-1"></i> Réponse / Verso</span>
+                                        <p id="quiz-card-a" class="text-lg md:text-xl font-semibold text-slate-800 dark:text-white my-auto px-2 whitespace-pre-wrap">--</p>
+                                        <span class="text-[11px] text-brand-500 italic">Évalue ta maîtrise ci-dessous</span>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Action buttons after flipping -->
-                            <div class="grid grid-cols-2 gap-4 mt-6 flex-shrink-0">
-                                <button id="quiz-btn-hard" class="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 py-3 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-circle-xmark"></i> Difficile / À revoir
+                            <div class="grid grid-cols-2 gap-3 mt-4 flex-shrink-0">
+                                <button id="quiz-btn-hard" class="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 py-2.5 rounded-2xl font-semibold text-xs md:text-sm flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-circle-xmark"></i> À revoir
                                 </button>
-                                <button id="quiz-btn-easy" class="bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 py-3 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-circle-check"></i> Bien maîtrisé
+                                <button id="quiz-btn-easy" class="bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 py-2.5 rounded-2xl font-semibold text-xs md:text-sm flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-circle-check"></i> Maîtrisé
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Step 3: Quiz Score Summary -->
-                        <div id="quiz-score-screen" class="hidden max-w-md mx-auto w-full my-auto text-center space-y-6">
-                            <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
+                        <div id="quiz-score-screen" class="hidden max-w-md mx-auto w-full my-auto text-center space-y-4 md:space-y-6">
+                            <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-2xl shadow-inner">
                                 <i class="fa-solid fa-trophy"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Quiz terminé !</h3>
-                                <p class="text-slate-500 mt-1">Voici ton bilan de révision</p>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Quiz terminé !</h3>
+                                <p class="text-xs md:text-sm text-slate-500 mt-1">Voici ton bilan de révision</p>
                             </div>
-
-                            <div class="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 flex justify-around">
-                                <div>
-                                    <span class="text-xs text-slate-400 block mb-1">Maîtrisées</span>
-                                    <span id="quiz-score-easy" class="text-3xl font-bold text-emerald-600">0</span>
-                                </div>
+                            <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 flex justify-around">
+                                <div><span class="text-xs text-slate-400 block mb-1">Maîtrisées</span><span id="quiz-score-easy" class="text-2xl md:text-3xl font-bold text-emerald-600">0</span></div>
                                 <div class="w-px bg-slate-200 dark:bg-slate-800"></div>
-                                <div>
-                                    <span class="text-xs text-slate-400 block mb-1">À revoir</span>
-                                    <span id="quiz-score-hard" class="text-3xl font-bold text-red-500">0</span>
-                                </div>
+                                <div><span class="text-xs text-slate-400 block mb-1">À revoir</span><span id="quiz-score-hard" class="text-2xl md:text-3xl font-bold text-red-500">0</span></div>
                             </div>
-
-                            <button id="quiz-btn-restart" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold shadow-md transition-all">
+                            <button id="quiz-btn-restart" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold text-sm shadow-md">
                                 Recommencer un Quiz <i class="fa-solid fa-rotate-right ml-2"></i>
                             </button>
                         </div>
@@ -464,64 +501,63 @@
             </section>
 
             <!-- VIEW: POMODORO -->
-            <section id="pomodoro-view" class="app-section items-center justify-center">
-                <div class="text-center mb-6 flex-shrink-0">
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-2">Concentre-toi intensément et gère tes pauses automatiquement.</p>
+            <section id="pomodoro-view" class="app-section items-center justify-center overflow-y-auto pr-1">
+                <div class="text-center mb-4 flex-shrink-0">
+                    <h2 class="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-xs md:text-sm">Concentre-toi intensément et gère tes pauses.</p>
                 </div>
 
-                <div class="flex flex-col lg:flex-row gap-8 max-w-5xl w-full flex-shrink-0 items-center justify-center">
-                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-lg">
-                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full text-xs font-medium">
-                            <button data-session="court" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Court</button>
-                            <button data-session="normal" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
-                            <button data-session="intensif" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Intensif</button>
-                            <button data-session="surmesure" class="pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center">Sur mesure</button>
+                <div class="flex flex-col lg:flex-row gap-6 max-w-4xl w-full flex-shrink-0 items-center justify-center pb-4">
+                    <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-sm">
+                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-4 w-full text-[11px] md:text-xs font-medium">
+                            <button data-session="court" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center">Court</button>
+                            <button data-session="normal" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
+                            <button data-session="intensif" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center">Intensif</button>
+                            <button data-session="surmesure" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center">Sur mesure</button>
                         </div>
 
-                        <div id="pomo-custom-container" class="hidden mb-6 w-full flex items-center gap-2 justify-center transition-all">
+                        <div id="pomo-custom-container" class="hidden mb-4 w-full flex items-center gap-2 justify-center">
                             <span class="text-xs text-slate-500">Durée (min) :</span>
-                            <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-20 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-sm text-center outline-none text-slate-800 dark:text-white">
-                            <button id="pomo-custom-set" class="bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-brand-700">Valider</button>
+                            <input type="number" id="pomo-custom-input" min="1" max="180" value="30" class="w-16 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs text-center outline-none text-slate-800 dark:text-white">
+                            <button id="pomo-custom-set" class="bg-brand-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium">Valider</button>
                         </div>
 
-                        <div class="relative flex items-center justify-center w-60 h-60 mb-8">
+                        <div class="relative flex items-center justify-center w-48 h-48 md:w-56 md:h-56 mb-6">
                             <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                                 <circle id="pomo-bg-ring" cx="50" cy="50" r="45.5" class="text-brand-100 dark:text-brand-900 transition-colors duration-500" stroke-width="5" stroke="currentColor" fill="none"/>
                                 <circle id="pomo-progress-ring" cx="50" cy="50" r="45.5" class="text-brand-500" stroke-width="5" stroke="currentColor" stroke-dasharray="285.88" stroke-dashoffset="285.88" stroke-linecap="round" fill="none"/>
                             </svg>
-                            <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900" style="width: 216px; height: 216px;">
-                                <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
+                            <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900" style="width: 172px; height: 172px;">
+                                <span id="pomo-time-display" class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-5">
-                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-md transition-transform hover:scale-105">
-                                <i class="fa-solid fa-play ml-1"></i>
+                        <div class="flex items-center gap-4">
+                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-base shadow-md">
+                                <i class="fa-solid fa-play ml-0.5"></i>
                             </button>
-                            <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-11 h-11 rounded-full flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
-                                <i class="fa-solid fa-rotate-right"></i>
+                            <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-rotate-right text-sm"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-800 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-lg h-[515px]">
-                        <div class="grid grid-cols-2 gap-4">
-                            <button data-sound="noise" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                <i class="fa-solid fa-wave-square text-xl text-brand-600 dark:text-brand-400"></i> Bruit Blanc
+                    <div class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-sm">
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <button data-sound="noise" class="pomo-sound-btn p-3 rounded-2xl text-xs font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
+                                <i class="fa-solid fa-wave-square text-lg text-brand-600"></i> Bruit Blanc
                             </button>
-                            <button data-sound="rain" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                <i class="fa-solid fa-cloud-rain text-xl text-brand-600 dark:text-brand-400"></i> Pluie douce
+                            <button data-sound="rain" class="pomo-sound-btn p-3 rounded-2xl text-xs font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
+                                <i class="fa-solid fa-cloud-rain text-lg text-brand-600"></i> Pluie douce
                             </button>
-                            <button data-sound="waves" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                <i class="fa-solid fa-water text-xl text-brand-600 dark:text-brand-400"></i> Vagues d'océan
+                            <button data-sound="waves" class="pomo-sound-btn p-3 rounded-2xl text-xs font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
+                                <i class="fa-solid fa-water text-lg text-brand-600"></i> Vagues
                             </button>
-                            <button data-sound="forest" class="pomo-sound-btn px-4 py-5 rounded-2xl text-sm font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-brand-500 transition-all border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 shadow-sm">
-                                <i class="fa-solid fa-tree text-xl text-brand-600 dark:text-brand-400"></i> Forêt apaisante
+                            <button data-sound="forest" class="pomo-sound-btn p-3 rounded-2xl text-xs font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
+                                <i class="fa-solid fa-tree text-lg text-brand-600"></i> Forêt
                             </button>
                         </div>
-                        <div class="w-full border-t border-slate-100 dark:border-slate-700 my-4"></div>
-                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
                             <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-volume-high text-brand-600"></i> Volume</span>
                                 <span id="pomo-volume-val" class="font-bold text-slate-700 dark:text-slate-300">50%</span>
@@ -534,78 +570,75 @@
 
             <!-- VIEW: GRADES -->
             <section id="grades-view" class="app-section">
-                <header class="mb-6 flex-shrink-0">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes notes avec barèmes personnalisés et suivi par matière.</p>
+                <header class="mb-4 md:mb-6 flex-shrink-0">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Moyennes</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Gère tes notes avec barèmes personnalisés.</p>
                 </header>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0 overflow-hidden pb-4">
-                    <div class="col-span-1 flex flex-col gap-6 flex-shrink-0 overflow-y-auto pr-1">
-                        <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white flex flex-col justify-center items-center shadow-sm">
-                            <span class="text-xs text-brand-200 uppercase tracking-widest font-semibold mb-1">Moyenne Générale</span>
-                            <div id="grade-average-display" class="text-5xl font-bold mb-1">--/20</div>
-                            <span class="text-xs text-brand-100 opacity-80">Calculée sur toutes les matières</span>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 flex-1 min-h-0 overflow-y-auto md:overflow-hidden pb-4">
+                    <div class="col-span-1 flex flex-col gap-4 md:gap-6 flex-shrink-0">
+                        <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-5 text-white flex flex-col justify-center items-center shadow-sm">
+                            <span class="text-[11px] text-brand-200 uppercase tracking-widest font-semibold mb-1">Moyenne Générale</span>
+                            <div id="grade-average-display" class="text-4xl font-bold mb-1">--/20</div>
+                            <span class="text-[11px] text-brand-100 opacity-80">Calculée sur toutes les matières</span>
                         </div>
 
-                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700">
-                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-sm flex items-center gap-2">
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-plus-circle text-brand-600"></i> Ajouter une note
                             </h3>
                             <form id="form-add-grade" class="space-y-3">
                                 <div>
                                     <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
-                                    <input type="text" id="input-grade-subject" required placeholder="ex: Mathématiques" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                    <input type="text" id="input-grade-subject" required placeholder="ex: Mathématiques" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs md:text-sm">
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
+                                <div class="grid grid-cols-2 gap-2">
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">Note obtenue</label>
-                                        <input type="number" id="input-grade-val" required step="0.01" min="0" placeholder="ex: 14" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Note</label>
+                                        <input type="number" id="input-grade-val" required step="0.01" min="0" placeholder="ex: 14" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs md:text-sm">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">Barème (Sur)</label>
-                                        <input type="number" id="input-grade-max" required step="0.5" min="1" value="20" placeholder="ex: 20, 10, 15..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">Barème (/)</label>
+                                        <input type="number" id="input-grade-max" required step="0.5" min="1" value="20" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs md:text-sm">
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-slate-500 mb-1">Coefficient</label>
-                                    <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" value="1" placeholder="ex: 1 ou 2" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                                    <input type="number" id="input-grade-coeff" required step="0.5" min="0.5" value="1" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs md:text-sm">
                                 </div>
-                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors mt-2">Enregistrer la note</button>
+                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-xs md:text-sm transition-colors">Enregistrer</button>
                             </form>
                         </div>
                     </div>
                     
-                    <div class="col-span-1 lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-0 overflow-hidden">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 flex-shrink-0 flex items-center justify-between">
+                    <div class="col-span-1 lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-[250px] overflow-hidden">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex-shrink-0 flex items-center justify-between">
                             <span>Détail par matière</span>
-                            <span class="text-xs font-normal text-slate-400">Barèmes convertis automatiquement sur /20</span>
                         </h3>
-                        <div class="overflow-y-auto flex-1 space-y-4 pr-2" id="grades-subjects-container"></div>
+                        <div class="overflow-y-auto flex-1 space-y-3 pr-1" id="grades-subjects-container"></div>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: HABITS -->
             <section id="habits-view" class="app-section">
-                <header class="mb-6 flex justify-between items-center flex-shrink-0">
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Habitudes</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Construis des routines quotidiennes.</p>
-                    </div>
+                <header class="mb-4 md:mb-6 flex-shrink-0">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Habitudes</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Construis des routines quotidiennes.</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0 overflow-hidden pb-4">
-                    <form id="form-add-habit" class="flex gap-4 mb-6 max-w-md flex-shrink-0">
-                        <input type="text" id="input-habit-name" required placeholder="Nouvelle habitude (ex: Lire 10 pages)..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-6 rounded-xl font-medium">Ajouter</button>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0 overflow-hidden pb-4">
+                    <form id="form-add-habit" class="flex gap-2 md:gap-4 mb-4 max-w-md flex-shrink-0">
+                        <input type="text" id="input-habit-name" required placeholder="Nouvelle habitude..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm outline-none text-slate-800 dark:text-white">
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 md:px-6 rounded-xl text-xs md:text-sm font-medium">Ajouter</button>
                     </form>
                     
                     <div class="overflow-x-auto overflow-y-auto flex-1">
-                        <table class="w-full text-left border-collapse min-w-[600px]">
+                        <table class="w-full text-left border-collapse min-w-[550px]">
                             <thead>
-                                <tr id="habits-header" class="text-xs text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800"></tr>
+                                <tr id="habits-header" class="text-[11px] text-slate-500 uppercase border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800"></tr>
                             </thead>
-                            <tbody id="habits-body" class="divide-y divide-slate-100 dark:divide-slate-700"></tbody>
+                            <tbody id="habits-body" class="divide-y divide-slate-100 dark:divide-slate-700 text-xs md:text-sm"></tbody>
                         </table>
                     </div>
                 </div>
@@ -613,28 +646,28 @@
 
             <!-- VIEW: SETTINGS -->
             <section id="settings-view" class="app-section overflow-y-auto pr-1">
-                <header class="mb-6 flex-shrink-0">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Paramètres & Données</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes sauvegardes (LocalStorage).</p>
+                <header class="mb-4 md:mb-6 flex-shrink-0">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Paramètres & Données</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Gère tes sauvegardes (LocalStorage).</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6 flex-shrink-0 mb-6">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-5 flex-shrink-0 mb-6">
                     <div>
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Sauvegarde (Export)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Télécharge toutes tes données au format JSON pour ne pas les perdre.</p>
-                        <button id="btn-export-data" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm transition-colors"><i class="fa-solid fa-download mr-2"></i> Exporter mes données</button>
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1 text-sm">Sauvegarde (Export)</h3>
+                        <p class="text-xs text-slate-500 mb-3">Télécharge toutes tes données au format JSON.</p>
+                        <button id="btn-export-data" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs md:text-sm transition-colors"><i class="fa-solid fa-download mr-2"></i> Exporter mes données</button>
                     </div>
                     
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Restauration (Import)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Restaure tes données depuis un fichier JSON. <strong>Attention : écrase les données actuelles.</strong></p>
-                        <input type="file" id="input-import-data" accept=".json" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 mb-2">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1 text-sm">Restauration (Import)</h3>
+                        <p class="text-xs text-slate-500 mb-3">Restaure tes données depuis un fichier JSON.</p>
+                        <input type="file" id="input-import-data" accept=".json" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400">
                     </div>
 
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-red-600 mb-2">Zone de danger</h3>
-                        <p class="text-sm text-slate-500 mb-3">Efface toutes les données de l'application définitivement.</p>
-                        <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
+                        <h3 class="font-semibold text-red-600 mb-1 text-sm">Zone de danger</h3>
+                        <p class="text-xs text-slate-500 mb-3">Efface toutes les données définitivement.</p>
+                        <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-xs md:text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
                     </div>
                 </div>
             </section>
@@ -695,7 +728,7 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             const bgClass = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-red-500' : 'bg-slate-800');
-            toast.className = `toast px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center ${bgClass}`;
+            toast.className = `toast px-4 py-3 rounded-xl shadow-lg text-white text-xs md:text-sm font-medium flex items-center ${bgClass}`;
             toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-circle-exclamation'} mr-2"></i> ${message}`;
             container.appendChild(toast);
             
@@ -712,17 +745,18 @@
                 loadState();
                 this.setupTheme();
                 this.setupSidebarToggle();
+                this.setupMobileMenu();
                 this.setupNav();
                 this.startClock();
                 this.initQuotes();
                 
-                try { TasksModule.init(); } catch (e) { console.error("Tasks init failed", e); }
-                try { ScheduleModule.init(); } catch (e) { console.error("Schedule init failed", e); }
-                try { NotesModule.init(); } catch (e) { console.error("Notes init failed", e); }
-                try { PomodoroModule.init(); } catch (e) { console.error("Pomodoro init failed", e); }
-                try { GradesModule.init(); } catch (e) { console.error("Grades init failed", e); }
-                try { HabitsModule.init(); } catch (e) { console.error("Habits init failed", e); }
-                try { SettingsModule.init(); } catch (e) { console.error("Settings init failed", e); }
+                try { TasksModule.init(); } catch (e) {}
+                try { ScheduleModule.init(); } catch (e) {}
+                try { NotesModule.init(); } catch (e) {}
+                try { PomodoroModule.init(); } catch (e) {}
+                try { GradesModule.init(); } catch (e) {}
+                try { HabitsModule.init(); } catch (e) {}
+                try { SettingsModule.init(); } catch (e) {}
 
                 this.updateDashboardStats();
                 this.navigate('dashboard');
@@ -730,11 +764,14 @@
 
             setupTheme() {
                 const btn = document.getElementById('theme-toggle-btn');
-                btn.addEventListener('click', () => {
+                const mobileBtn = document.getElementById('mobile-theme-toggle');
+                const toggle = () => {
                     AppState.theme = AppState.theme === 'light' ? 'dark' : 'light';
                     this.applyTheme();
                     saveState();
-                });
+                };
+                if(btn) btn.addEventListener('click', toggle);
+                if(mobileBtn) mobileBtn.addEventListener('click', toggle);
                 this.applyTheme();
             },
 
@@ -743,18 +780,23 @@
                 const dot = document.getElementById('theme-toggle-dot');
                 if (AppState.theme === 'dark') {
                     html.classList.add('dark');
-                    dot.style.transform = 'translateX(20px)';
-                    dot.classList.remove('bg-white'); dot.classList.add('bg-slate-200');
+                    if(dot) {
+                        dot.style.transform = 'translateX(20px)';
+                        dot.classList.remove('bg-white'); dot.classList.add('bg-slate-200');
+                    }
                 } else {
                     html.classList.remove('dark');
-                    dot.style.transform = 'translateX(0)';
-                    dot.classList.add('bg-white'); dot.classList.remove('bg-slate-200');
+                    if(dot) {
+                        dot.style.transform = 'translateX(0)';
+                        dot.classList.add('bg-white'); dot.classList.remove('bg-slate-200');
+                    }
                 }
             },
 
             setupSidebarToggle() {
                 const logoBtn = document.getElementById('sidebar-logo-btn');
                 const sidebar = document.getElementById('app-sidebar');
+                if(!logoBtn || !sidebar) return;
 
                 if (AppState.sidebarCollapsed) {
                     sidebar.classList.add('sidebar-collapsed');
@@ -767,12 +809,30 @@
                 });
             },
 
+            setupMobileMenu() {
+                const trigger = document.getElementById('mobile-menu-trigger');
+                const modal = document.getElementById('mobile-menu-modal');
+                const closeBtn = document.getElementById('mobile-menu-close');
+
+                if(trigger && modal && closeBtn) {
+                    trigger.addEventListener('click', () => modal.classList.remove('hidden'));
+                    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+                    modal.addEventListener('click', (e) => {
+                        if(e.target === modal) modal.classList.add('hidden');
+                    });
+                }
+            },
+
             setupNav() {
-                const navBtns = document.querySelectorAll('.nav-btn');
+                const navBtns = document.querySelectorAll('.nav-btn, .mobile-nav-btn, .mobile-menu-item');
                 navBtns.forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const target = e.currentTarget.getAttribute('data-target');
-                        if (target) this.navigate(target);
+                        if (target) {
+                            this.navigate(target);
+                            const modal = document.getElementById('mobile-menu-modal');
+                            if(modal) modal.classList.add('hidden');
+                        }
                     });
                 });
             },
@@ -783,12 +843,22 @@
                 const targetView = document.getElementById(`${viewId}-view`);
                 if(targetView) targetView.classList.add('active');
 
+                // Update desktop nav styling
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50";
                 });
-                const activeBtn = document.querySelector(`.nav-btn[data-target="${viewId}"]`);
-                if (activeBtn) {
-                    activeBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
+                const activeDesktopBtn = document.querySelector(`.nav-btn[data-target="${viewId}"]`);
+                if (activeDesktopBtn) {
+                    activeDesktopBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
+                }
+
+                // Update mobile bottom nav styling
+                document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                    btn.className = "mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 hover:text-brand-600";
+                });
+                const activeMobileBtn = document.querySelector(`.mobile-nav-btn[data-target="${viewId}"]`);
+                if (activeMobileBtn) {
+                    activeMobileBtn.className = "mobile-nav-btn flex flex-col items-center justify-center flex-1 py-1 text-brand-600 dark:text-brand-400";
                 }
                 
                 if(viewId === 'dashboard') this.updateDashboardStats();
@@ -798,6 +868,7 @@
                 const timeEl = document.getElementById('dash-time');
                 const dateEl = document.getElementById('dash-date');
                 const greetingEl = document.getElementById('dash-greeting');
+                if(!timeEl) return;
                 
                 const update = () => {
                     const now = new Date();
@@ -818,8 +889,10 @@
                     { t: "Ne limite pas tes défis, défie tes limites.", a: "Inconnu" }
                 ];
                 const q = quotes[Math.floor(Math.random() * quotes.length)];
-                document.getElementById('dash-quote-text').textContent = `"${q.t}"`;
-                document.getElementById('dash-quote-author').textContent = `- ${q.a}`;
+                const textEl = document.getElementById('dash-quote-text');
+                const authorEl = document.getElementById('dash-quote-author');
+                if(textEl) textEl.textContent = `"${q.t}"`;
+                if(authorEl) authorEl.textContent = `- ${q.a}`;
             },
 
             updateDashboardStats() {
@@ -858,14 +931,11 @@
                 document.getElementById('tasks-view').addEventListener('click', (e) => {
                     const btnMove = e.target.closest('.btn-move-task');
                     if (btnMove) {
-                        const id = btnMove.getAttribute('data-id');
-                        const targetStatus = btnMove.getAttribute('data-target-status');
-                        if (id && targetStatus) this.updateStatus(id, targetStatus);
+                        this.updateStatus(btnMove.getAttribute('data-id'), btnMove.getAttribute('data-target-status'));
                     }
                     const btnDel = e.target.closest('.btn-del-task');
                     if (btnDel) {
-                        const id = btnDel.getAttribute('data-id');
-                        if (id) this.deleteTask(id);
+                        this.deleteTask(btnDel.getAttribute('data-id'));
                     }
                 });
 
@@ -880,7 +950,6 @@
 
                 AppState.tasks.push({ id: generateId(), title, subject, date, status: 'todo' });
                 saveState();
-                
                 document.getElementById('form-add-task').reset();
                 document.getElementById('task-form-container').classList.add('hidden');
                 this.render();
@@ -908,12 +977,10 @@
             handleDragStart(e, id) {
                 this.draggedId = id;
                 e.target.classList.add('dragging');
-                setTimeout(() => e.target.style.opacity = '0.5', 0);
             },
 
             handleDragEnd(e) {
                 e.target.classList.remove('dragging');
-                e.target.style.opacity = '1';
                 document.querySelectorAll('.kanban-column').forEach(c => c.classList.remove('drag-over'));
             },
 
@@ -944,15 +1011,10 @@
                         
                         return `
                         <div draggable="true" ondragstart="TasksModule.handleDragStart(event, '${t.id}')" ondragend="TasksModule.handleDragEnd(event)"
-                             class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group flex-shrink-0">
-                            
-                            <button class="btn-del-task absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                            
+                             class="bg-white dark:bg-slate-800 p-3.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group flex-shrink-0">
+                            <button class="btn-del-task absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}"><i class="fa-solid fa-trash-can"></i></button>
                             ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 block mb-1">${escapeHTML(t.subject)}</span>` : ''}
                             <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 pr-6 break-words">${escapeHTML(t.title)}</h4>
-                            
                             <div class="flex items-center justify-between mt-3">
                                 <span class="text-xs text-slate-500"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>
                                 <div class="flex gap-1">
@@ -969,6 +1031,7 @@
         // --- SCHEDULE MODULE ---
         const ScheduleModule = {
             days: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'],
+            selectedMobileDay: 'Lundi',
 
             init() {
                 document.getElementById('btn-toggle-schedule-form').addEventListener('click', () => {
@@ -980,9 +1043,24 @@
                     this.addClass();
                 });
 
-                document.getElementById('schedule-grid').addEventListener('click', e => {
+                document.getElementById('schedule-grid-desktop').addEventListener('click', e => {
                     const btnDel = e.target.closest('.btn-del-sched');
                     if (btnDel) this.deleteClass(btnDel.getAttribute('data-id'));
+                });
+                document.getElementById('schedule-container-mobile').addEventListener('click', e => {
+                    const btnDel = e.target.closest('.btn-del-sched');
+                    if (btnDel) this.deleteClass(btnDel.getAttribute('data-id'));
+                });
+
+                document.querySelectorAll('.mobile-day-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.selectedMobileDay = e.currentTarget.getAttribute('data-mobile-day');
+                        document.querySelectorAll('.mobile-day-btn').forEach(b => {
+                            b.className = "mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap";
+                        });
+                        e.currentTarget.className = "mobile-day-btn flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold bg-white dark:bg-slate-700 text-brand-600 shadow-sm whitespace-nowrap";
+                        this.renderMobile();
+                    });
                 });
 
                 this.render();
@@ -994,12 +1072,10 @@
                 const start = document.getElementById('input-sched-start').value;
                 const end = document.getElementById('input-sched-end').value;
                 const room = document.getElementById('input-sched-room').value.trim();
-
                 if(!subject || !start || !end) return;
 
                 AppState.schedule.push({ id: generateId(), day, subject, start, end, room });
                 saveState();
-                
                 document.getElementById('form-add-schedule').reset();
                 this.render();
                 showToast('Cours ajouté');
@@ -1012,47 +1088,63 @@
             },
 
             render() {
-                const grid = document.getElementById('schedule-grid');
-                grid.innerHTML = this.days.map(day => {
-                    const classes = AppState.schedule
-                        .filter(c => c.day === day)
-                        .sort((a, b) => a.start.localeCompare(b.start));
+                this.renderDesktop();
+                this.renderMobile();
+            },
 
+            renderDesktop() {
+                const grid = document.getElementById('schedule-grid-desktop');
+                grid.innerHTML = this.days.map(day => {
+                    const classes = AppState.schedule.filter(c => c.day === day).sort((a, b) => a.start.localeCompare(b.start));
                     return `
                     <div class="flex flex-col gap-3 h-full">
-                        <div class="bg-white dark:bg-slate-800 py-3 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200 flex-shrink-0">${day}</div>
-                        <div class="flex-1 space-y-3 overflow-y-auto pr-1 min-h-0">
-                            ${classes.length === 0 ? `<div class="h-24 flex items-center justify-center text-sm text-slate-400 italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Libre</div>` 
+                        <div class="bg-white dark:bg-slate-800 py-2.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200 flex-shrink-0 text-sm">${day}</div>
+                        <div class="flex-1 space-y-2.5 overflow-y-auto pr-1 min-h-0">
+                            ${classes.length === 0 ? `<div class="h-20 flex items-center justify-center text-xs text-slate-400 italic border border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Libre</div>` 
                             : classes.map(c => `
-                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 relative group text-sm flex-shrink-0">
+                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-2.5 relative group text-xs flex-shrink-0">
                                     <button class="btn-del-sched absolute top-1 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100" data-id="${c.id}"><i class="fa-solid fa-times"></i></button>
-                                    <div class="font-semibold text-slate-800 dark:text-slate-200 mb-1">${escapeHTML(c.subject)}</div>
-                                    <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}</div>${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
+                                    <div class="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">${escapeHTML(c.subject)}</div>
+                                    <div class="text-[11px] text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}</div>
+                                    ${c.room ? `<div class="text-[11px] text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
                                 </div>
                             `).join('')}
                         </div>
                     </div>`;
                 }).join('');
+            },
+
+            renderMobile() {
+                const container = document.getElementById('schedule-container-mobile');
+                const classes = AppState.schedule.filter(c => c.day === this.selectedMobileDay).sort((a, b) => a.start.localeCompare(b.start));
+                
+                container.innerHTML = `
+                <div class="flex-1 space-y-3 overflow-y-auto pr-1">
+                    ${classes.length === 0 ? `<div class="h-32 flex flex-col items-center justify-center text-xs text-slate-400 italic border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl"><i class="fa-regular fa-calendar-days text-2xl mb-2 opacity-30"></i>Aucun cours prévu ce jour.</div>` 
+                    : classes.map(c => `
+                        <div class="bg-white dark:bg-slate-800 border-l-4 border-brand-500 rounded-2xl p-4 relative shadow-sm border border-slate-200 dark:border-slate-700 text-sm">
+                            <button class="btn-del-sched absolute top-3 right-3 text-slate-400 hover:text-red-500" data-id="${c.id}"><i class="fa-solid fa-trash-can"></i></button>
+                            <div class="font-bold text-slate-800 dark:text-white mb-1 text-base">${escapeHTML(c.subject)}</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400 mb-1"><i class="fa-regular fa-clock mr-1"></i> ${c.start} - ${c.end}</div>${c.room ? `<div class="text-xs text-slate-500"><i class="fa-solid fa-location-dot mr-1"></i> Salle : ${escapeHTML(c.room)}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>`;
             }
         };
 
-        // --- NOTES & FLASHCARDS MODULE (RESTRUCTURED) ---
+        // --- NOTES & FLASHCARDS MODULE ---
         const NotesModule = {
-            quizActiveQueue: [],
-            quizCurrentIndex: 0,
-            quizScoreEasy: 0,
-            quizScoreHard: 0,
+            quizActiveQueue: [], quizCurrentIndex: 0, quizScoreEasy: 0, quizScoreHard: 0,
 
             init() {
-                // Tab switching
                 const tabN = document.getElementById('tab-notes');
                 const tabF = document.getElementById('tab-flashcards');
                 const vN = document.getElementById('subview-notes');
                 const vF = document.getElementById('subview-flashcards');
 
                 const switchTab = (activeTab, inactiveTab, activeView, inactiveView) => {
-                    activeTab.className = "px-4 py-1.5 rounded-lg text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all";
-                    inactiveTab.className = "px-4 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
+                    activeTab.className = "px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all";
+                    inactiveTab.className = "px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all";
                     inactiveView.classList.add('hidden');
                     activeView.classList.remove('hidden');
                 };
@@ -1060,28 +1152,24 @@
                 tabN.addEventListener('click', () => switchTab(tabN, tabF, vN, vF));
                 tabF.addEventListener('click', () => switchTab(tabF, tabN, vF, vN));
 
-                // Flashcard internal sub-tabs
                 const subLib = document.getElementById('fc-subtab-lib');
                 const subQuiz = document.getElementById('fc-subtab-quiz');
                 const secLib = document.getElementById('fc-section-lib');
                 const secQuiz = document.getElementById('fc-section-quiz');
 
                 subLib.addEventListener('click', () => {
-                    subLib.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all";
-                    subQuiz.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all";
-                    secLib.classList.remove('hidden');
-                    secQuiz.classList.add('hidden');
+                    subLib.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all";
+                    subQuiz.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 transition-all";
+                    secLib.classList.remove('hidden'); secQuiz.classList.add('hidden');
                 });
 
                 subQuiz.addEventListener('click', () => {
-                    subQuiz.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all";
-                    subLib.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all";
-                    secQuiz.classList.remove('hidden');
-                    secLib.classList.add('hidden');
-                    this.initQuizSetup();
+                    subQuiz.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all";
+                    subLib.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 transition-all";
+                    secQuiz.classList.remove('hidden'); secLib.classList.add('hidden');
+                    this.updateFilterDropdowns();
                 });
 
-                // Notes creation & filter
                 document.getElementById('btn-add-note').addEventListener('click', () => this.addNote());
                 document.getElementById('filter-notes-subject').addEventListener('change', () => this.renderNotes());
                 document.getElementById('notes-grid').addEventListener('click', e => {
@@ -1089,38 +1177,21 @@
                     if (btn) this.deleteNote(btn.getAttribute('data-id'));
                 });
 
-                // Flashcards creation & filter
                 document.getElementById('btn-add-fc').addEventListener('click', () => this.addFC());
-                document.getElementById('filter-fc-subject').addEventListener('change', () => {
-                    this.updateFCChapterFilterOptions();
-                    this.renderFC();
-                });
+                document.getElementById('filter-fc-subject').addEventListener('change', () => { this.updateFCChapterFilterOptions(); this.renderFC(); });
                 document.getElementById('filter-fc-chapter').addEventListener('change', () => this.renderFC());
 
                 document.getElementById('fc-grid').addEventListener('click', e => {
                     const btnDel = e.target.closest('.btn-del-fc');
-                    if (btnDel) {
-                        e.stopPropagation();
-                        this.deleteFC(btnDel.getAttribute('data-id'));
-                        return;
-                    }
+                    if (btnDel) { e.stopPropagation(); this.deleteFC(btnDel.getAttribute('data-id')); return; }
                     const cardInner = e.target.closest('.fc-inner');
                     if (cardInner) cardInner.classList.toggle('rotate-y-180');
                 });
 
-                document.getElementById('btn-open-fc-modal').addEventListener('click', () => {
-                    document.getElementById('input-fc-q').focus();
-                });
-
-                // Quiz Setup & Active controls
-                document.getElementById('quiz-select-subject').addEventListener('change', (e) => {
-                    this.updateQuizChapterFilterOptions(e.target.value);
-                });
+                document.getElementById('quiz-select-subject').addEventListener('change', (e) => this.updateQuizChapterFilterOptions(e.target.value));
                 document.getElementById('btn-start-quiz').addEventListener('click', () => this.startQuiz());
                 document.getElementById('quiz-btn-quit').addEventListener('click', () => this.quitQuiz());
-                document.getElementById('quiz-card-container').addEventListener('click', () => {
-                    document.getElementById('quiz-card-inner').classList.toggle('rotate-y-180');
-                });
+                document.getElementById('quiz-card-container').addEventListener('click', () => document.getElementById('quiz-card-inner').classList.toggle('rotate-y-180'));
                 document.getElementById('quiz-btn-hard').addEventListener('click', () => this.answerQuiz(false));
                 document.getElementById('quiz-btn-easy').addEventListener('click', () => this.answerQuiz(true));
                 document.getElementById('quiz-btn-restart').addEventListener('click', () => {
@@ -1133,7 +1204,6 @@
                 this.updateFilterDropdowns();
             },
 
-            // --- NOTES LOGIC ---
             addNote() {
                 const title = document.getElementById('input-note-title').value.trim();
                 const subject = document.getElementById('input-note-subject').value.trim();
@@ -1141,57 +1211,42 @@
                 const content = document.getElementById('input-note-content').value.trim();
                 if(!title && !content) return;
 
-                AppState.notes.unshift({ 
-                    id: generateId(), 
-                    title: title || 'Sans titre', 
-                    subject: subject ? subject.charAt(0).toUpperCase() + subject.slice(1) : '',
-                    chapter: chapter || '',
-                    content, 
-                    date: new Date().toLocaleDateString('fr') 
-                });
+                AppState.notes.unshift({ id: generateId(), title: title || 'Sans titre', subject: subject ? subject.charAt(0).toUpperCase() + subject.slice(1) : '', chapter: chapter || '', content, date: new Date().toLocaleDateString('fr') });
                 saveState();
                 document.getElementById('input-note-title').value = '';
                 document.getElementById('input-note-subject').value = '';
                 document.getElementById('input-note-chapter').value = '';
                 document.getElementById('input-note-content').value = '';
-                this.renderNotes();
-                this.updateFilterDropdowns();
+                this.renderNotes(); this.updateFilterDropdowns();
                 showToast("Note enregistrée !");
             },
 
             deleteNote(id) {
                 AppState.notes = AppState.notes.filter(n => n.id !== id);
-                saveState();
-                this.renderNotes();
-                this.updateFilterDropdowns();
+                saveState(); this.renderNotes(); this.updateFilterDropdowns();
             },
 
             renderNotes() {
                 const filterSub = document.getElementById('filter-notes-subject').value;
                 const grid = document.getElementById('notes-grid');
-                
-                const filtered = AppState.notes.filter(n => {
-                    if (filterSub && n.subject !== filterSub) return false;
-                    return true;
-                });
+                const filtered = AppState.notes.filter(n => !filterSub || n.subject === filterSub);
 
                 grid.innerHTML = filtered.map(n => `
-                    <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 relative group flex flex-col justify-between">
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 relative group flex flex-col justify-between">
                         <button class="btn-del-note absolute top-3 right-3 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${n.id}"><i class="fa-solid fa-trash-can"></i></button>
                         <div>
-                            <div class="flex items-center gap-2 mb-2">
+                            <div class="flex items-center gap-2 mb-1.5">
                                 ${n.subject ? `<span class="text-[10px] bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-md font-bold uppercase">${escapeHTML(n.subject)}</span>` : ''}
                                 ${n.chapter ? `<span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md font-medium">${escapeHTML(n.chapter)}</span>` : ''}
                             </div>
-                            <h4 class="font-bold text-slate-800 dark:text-white mb-2 pr-6">${escapeHTML(n.title)}</h4>
-                            <p class="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap mb-4">${escapeHTML(n.content)}</p>
+                            <h4 class="font-bold text-slate-800 dark:text-white mb-1.5 pr-6 text-sm">${escapeHTML(n.title)}</h4>
+                            <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap mb-3">${escapeHTML(n.content)}</p>
                         </div>
-                        <span class="text-[11px] text-slate-400 block pt-2 border-t border-slate-100 dark:border-slate-700/60">${n.date}</span>
+                        <span class="text-[10px] text-slate-400 block pt-2 border-t border-slate-100 dark:border-slate-700/60">${n.date}</span>
                     </div>
-                `).join('') || `<div class="col-span-2 py-12 text-center text-slate-400 text-sm italic">Aucune note trouvée.</div>`;
+                `).join('') || `<div class="col-span-2 py-10 text-center text-slate-400 text-xs italic">Aucune note.</div>`;
             },
 
-            // --- FLASHCARDS LOGIC ---
             addFC() {
                 const q = document.getElementById('input-fc-q').value.trim();
                 const a = document.getElementById('input-fc-a').value.trim();
@@ -1199,93 +1254,68 @@
                 const chapter = document.getElementById('input-fc-chapter').value.trim();
                 if(!q || !a) return;
 
-                AppState.flashcards.unshift({ 
-                    id: generateId(), 
-                    q, 
-                    a, 
-                    subject: subject ? subject.charAt(0).toUpperCase() + subject.slice(1) : 'Général', 
-                    chapter: chapter || 'Chapitre 1' 
-                });
+                AppState.flashcards.unshift({ id: generateId(), q, a, subject: subject ? subject.charAt(0).toUpperCase() + subject.slice(1) : 'Général', chapter: chapter || 'Chapitre 1' });
                 saveState();
                 document.getElementById('input-fc-q').value = '';
                 document.getElementById('input-fc-a').value = '';
                 document.getElementById('input-fc-subject').value = '';
                 document.getElementById('input-fc-chapter').value = '';
-                this.renderFC();
-                this.updateFilterDropdowns();
+                this.renderFC(); this.updateFilterDropdowns();
                 showToast("Flashcard créée !");
             },
 
             deleteFC(id) {
                 AppState.flashcards = AppState.flashcards.filter(f => f.id !== id);
-                saveState();
-                this.renderFC();
-                this.updateFilterDropdowns();
+                saveState(); this.renderFC(); this.updateFilterDropdowns();
             },
 
             renderFC() {
                 const filterSub = document.getElementById('filter-fc-subject').value;
                 const filterChap = document.getElementById('filter-fc-chapter').value;
                 const grid = document.getElementById('fc-grid');
-
-                const filtered = AppState.flashcards.filter(f => {
-                    if (filterSub && f.subject !== filterSub) return false;
-                    if (filterChap && f.chapter !== filterChap) return false;
-                    return true;
-                });
+                const filtered = AppState.flashcards.filter(f => (!filterSub || f.subject === filterSub) && (!filterChap || f.chapter === filterChap));
 
                 grid.innerHTML = filtered.map(f => `
-                    <div class="perspective-1000 w-full h-52 cursor-pointer group flex-shrink-0">
-                        <div class="fc-inner relative w-full h-full transform-style-3d shadow-sm hover:shadow-md transition-shadow rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <!-- FRONT -->
-                            <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                    <div class="perspective-1000 w-full h-48 cursor-pointer group flex-shrink-0">
+                        <div class="fc-inner relative w-full h-full transform-style-3d shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700">
+                            <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-4 flex flex-col justify-between items-center text-center">
                                 <div class="w-full flex justify-between items-center">
-                                    <span class="text-[10px] bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-md font-bold uppercase">${escapeHTML(f.subject)}</span>
-                                    <button class="btn-del-fc text-slate-300 hover:text-red-500 z-10 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${f.id}"><i class="fa-solid fa-trash-can"></i></button>
+                                    <span class="text-[9px] bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-md font-bold uppercase">${escapeHTML(f.subject)}</span>
+                                    <button class="btn-del-fc text-slate-300 hover:text-red-500 z-10" data-id="${f.id}"><i class="fa-solid fa-trash-can text-xs"></i></button>
                                 </div>
-                                <p class="font-medium text-slate-800 dark:text-white my-auto px-2 text-sm">${escapeHTML(f.q)}</p>
-                                <span class="text-[10px] text-slate-400 font-medium">${escapeHTML(f.chapter)}</span>
+                                <p class="font-medium text-slate-800 dark:text-white my-auto px-1 text-xs md:text-sm">${escapeHTML(f.q)}</p>
+                                <span class="text-[9px] text-slate-400 font-medium">${escapeHTML(f.chapter)}</span>
                             </div>
-                            <!-- BACK -->
-                            <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
-                                <span class="text-[10px] bg-brand-600 text-white px-2 py-0.5 rounded-md font-bold uppercase">Réponse</span>
-                                <p class="text-slate-800 dark:text-white font-medium whitespace-pre-wrap my-auto px-2 text-sm">${escapeHTML(f.a)}</p>
-                                <span class="text-[10px] text-brand-500 font-medium">${escapeHTML(f.chapter)}</span>
+                            <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-2xl p-4 flex flex-col justify-between items-center text-center">
+                                <span class="text-[9px] bg-brand-600 text-white px-2 py-0.5 rounded-md font-bold uppercase">Réponse</span>
+                                <p class="text-slate-800 dark:text-white font-medium whitespace-pre-wrap my-auto px-1 text-xs md:text-sm">${escapeHTML(f.a)}</p>
+                                <span class="text-[9px] text-brand-500 font-medium">${escapeHTML(f.chapter)}</span>
                             </div>
                         </div>
                     </div>
-                `).join('') || `<div class="col-span-2 py-12 text-center text-slate-400 text-sm italic">Aucune flashcard disponible.</div>`;
+                `).join('') || `<div class="col-span-2 py-10 text-center text-slate-400 text-xs italic">Aucune carte.</div>`;
             },
 
-            // --- DROPDOWN FILTERS & QUIZ SETUP ---
             updateFilterDropdowns() {
                 const subjects = [...new Set(AppState.flashcards.map(f => f.subject).concat(AppState.notes.map(n => n.subject)).filter(Boolean))].sort();
+                
+                const noteSub = document.getElementById('filter-notes-subject');
+                if(noteSub) noteSub.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}">${s}</option>`).join('');
 
-                // Notes subject filter
-                const noteSubSelect = document.getElementById('filter-notes-subject');
-                const curNoteSub = noteSubSelect.value;
-                noteSubSelect.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}" ${s === curNoteSub ? 'selected' : ''}>${s}</option>`).join('');
-
-                // FC subject filters
-                const fcSubSelect = document.getElementById('filter-fc-subject');
-                const curFCSub = fcSubSelect.value;
-                fcSubSelect.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}" ${s === curFCSub ? 'selected' : ''}>${s}</option>`).join('');
+                const fcSub = document.getElementById('filter-fc-subject');
+                if(fcSub) fcSub.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}">${s}</option>`).join('');
                 this.updateFCChapterFilterOptions();
 
-                // Quiz setup filters
-                const quizSubSelect = document.getElementById('quiz-select-subject');
-                const curQuizSub = quizSubSelect.value;
-                quizSubSelect.innerHTML = `<option value="">Toutes les matières (Tout mélanger)</option>` + subjects.map(s => `<option value="${s}" ${s === curQuizSub ? 'selected' : ''}>${s}</option>`).join('');
-                this.updateQuizChapterFilterOptions(curQuizSub);
+                const quizSub = document.getElementById('quiz-select-subject');
+                if(quizSub) quizSub.innerHTML = `<option value="">Toutes les matières (Tout mélanger)</option>` + subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+                this.updateQuizChapterFilterOptions('');
             },
 
             updateFCChapterFilterOptions() {
                 const sub = document.getElementById('filter-fc-subject').value;
                 const chapSelect = document.getElementById('filter-fc-chapter');
-                const curChap = chapSelect.value;
-
                 const chapters = [...new Set(AppState.flashcards.filter(f => !sub || f.subject === sub).map(f => f.chapter).filter(Boolean))].sort();
-                chapSelect.innerHTML = `<option value="">Tous les chapitres</option>` + chapters.map(c => `<option value="${c}" ${c === curChap ? 'selected' : ''}>${c}</option>`).join('');
+                chapSelect.innerHTML = `<option value="">Tous les chapitres</option>` + chapters.map(c => `<option value="${c}">${c}</option>`).join('');
             },
 
             updateQuizChapterFilterOptions(subject) {
@@ -1294,61 +1324,39 @@
                 chapSelect.innerHTML = `<option value="">Tous les chapitres</option>` + chapters.map(c => `<option value="${c}">${c}</option>`).join('');
             },
 
-            initQuizSetup() {
-                this.updateFilterDropdowns();
-            },
-
             startQuiz() {
                 const subject = document.getElementById('quiz-select-subject').value;
                 const chapter = document.getElementById('quiz-select-chapter').value;
+                const pool = AppState.flashcards.filter(f => (!subject || f.subject === subject) && (!chapter || f.chapter === chapter));
 
-                let pool = AppState.flashcards.filter(f => {
-                    if (subject && f.subject !== subject) return false;
-                    if (chapter && f.chapter !== chapter) return false;
-                    return true;
-                });
+                if (pool.length === 0) { showToast("Aucune flashcard pour ce filtre !", "error"); return; }
 
-                if (pool.length === 0) {
-                    showToast("Aucune flashcard ne correspond à ce filtre !", "error");
-                    return;
-                }
-
-                // Shuffle pool randomly
                 this.quizActiveQueue = [...pool].sort(() => Math.random() - 0.5);
-                this.quizCurrentIndex = 0;
-                this.quizScoreEasy = 0;
-                this.quizScoreHard = 0;
+                this.quizCurrentIndex = 0; this.quizScoreEasy = 0; this.quizScoreHard = 0;
 
                 document.getElementById('quiz-setup-screen').classList.add('hidden');
                 document.getElementById('quiz-score-screen').classList.add('hidden');
                 document.getElementById('quiz-active-screen').classList.remove('hidden');
-
                 this.renderActiveQuizCard();
             },
 
             renderActiveQuizCard() {
                 const card = this.quizActiveQueue[this.quizCurrentIndex];
                 const total = this.quizActiveQueue.length;
-
                 document.getElementById('quiz-progress-badge').textContent = `Carte ${this.quizCurrentIndex + 1}/${total}`;
                 document.getElementById('quiz-topic-badge').textContent = `${card.subject} • ${card.chapter}`;
                 document.getElementById('quiz-progress-bar').style.width = `${((this.quizCurrentIndex + 1) / total) * 100}%`;
-
-                // Reset flip state
                 document.getElementById('quiz-card-inner').classList.remove('rotate-y-180');
                 document.getElementById('quiz-card-q').textContent = card.q;
                 document.getElementById('quiz-card-a').textContent = card.a;
             },
 
             answerQuiz(isEasy) {
-                if (isEasy) this.quizScoreEasy++;
-                else this.quizScoreHard++;
-
+                if (isEasy) this.quizScoreEasy++; else this.quizScoreHard++;
                 this.quizCurrentIndex++;
                 if (this.quizCurrentIndex < this.quizActiveQueue.length) {
                     this.renderActiveQuizCard();
                 } else {
-                    // Quiz ended
                     document.getElementById('quiz-active-screen').classList.add('hidden');
                     document.getElementById('quiz-score-screen').classList.remove('hidden');
                     document.getElementById('quiz-score-easy').textContent = this.quizScoreEasy;
@@ -1366,162 +1374,101 @@
         const PomodoroModule = {
             timerId: null, timeLeft: 25 * 60, totalDuration: 25 * 60, isRunning: false, sessionType: 'normal',
             phase: 'work', workDuration: 25 * 60, breakDuration: 5 * 60, endTime: null,
-            audioCtx: null, noiseNode: null, filterNode: null, gainNode: null, activeSound: null, volume: 0.5,
+            audioCtx: null, noiseNode: null, gainNode: null, activeSound: null, volume: 0.5,
 
             init() {
                 document.getElementById('pomo-btn-play').addEventListener('click', () => this.toggle());
                 document.getElementById('pomo-btn-reset').addEventListener('click', () => this.reset());
-                
-                document.querySelectorAll('.pomo-session-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.setSession(e.currentTarget.getAttribute('data-session')));
-                });
-
+                document.querySelectorAll('.pomo-session-btn').forEach(btn => btn.addEventListener('click', (e) => this.setSession(e.currentTarget.getAttribute('data-session'))));
                 document.getElementById('pomo-custom-set').addEventListener('click', () => {
                     const val = parseInt(document.getElementById('pomo-custom-input').value);
                     if (!isNaN(val) && val > 0) {
-                        this.workDuration = val * 60;
-                        this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
-                        this.totalDuration = this.workDuration;
-                        this.timeLeft = this.workDuration;
-                        this.phase = 'work';
-                        this.updateDisplay();
-                        showToast(`Session personnalisée : ${val}m`);
+                        this.workDuration = val * 60; this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
+                        this.totalDuration = this.workDuration; this.timeLeft = this.workDuration; this.phase = 'work';
+                        this.updateDisplay(); showToast(`Session : ${val}m`);
                     }
                 });
-
-                document.querySelectorAll('.pomo-sound-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.toggleSound(e.currentTarget.getAttribute('data-sound'), e.currentTarget));
-                });
-
+                document.querySelectorAll('.pomo-sound-btn').forEach(btn => btn.addEventListener('click', (e) => this.toggleSound(e.currentTarget.getAttribute('data-sound'), e.currentTarget)));
                 document.getElementById('pomo-volume-slider').addEventListener('input', (e) => {
                     this.volume = e.target.value / 100;
                     document.getElementById('pomo-volume-val').textContent = `${e.target.value}%`;
-                    if (this.gainNode && this.audioCtx) {
-                        this.gainNode.gain.setValueAtTime(this.volume * 0.3, this.audioCtx.currentTime);
-                    }
                 });
-
                 this.setSession('normal');
             },
 
             setSession(type) {
                 if (this.isRunning) this.toggle();
-                this.sessionType = type;
-                this.phase = 'work';
+                this.sessionType = type; this.phase = 'work';
                 const customContainer = document.getElementById('pomo-custom-container');
-
                 if (type === 'surmesure') {
                     customContainer.classList.remove('hidden');
                     const val = parseInt(document.getElementById('pomo-custom-input').value) || 30;
-                    this.workDuration = val * 60;
-                    this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
+                    this.workDuration = val * 60; this.breakDuration = Math.max(1, Math.round(val * 0.2)) * 60;
                 } else {
                     customContainer.classList.add('hidden');
                     if (type === 'court') { this.workDuration = 15 * 60; this.breakDuration = 3 * 60; }
                     else if (type === 'normal') { this.workDuration = 25 * 60; this.breakDuration = 5 * 60; }
                     else if (type === 'intensif') { this.workDuration = 50 * 60; this.breakDuration = 10 * 60; }
                 }
-
-                this.totalDuration = this.workDuration;
-                this.timeLeft = this.workDuration;
-                this.updateDisplay();
-
-                document.querySelectorAll('.pomo-session-btn').forEach(b => {
-                    b.className = "pomo-session-btn flex-1 py-2.5 rounded-lg transition-all text-slate-500 hover:text-slate-700 dark:text-slate-400 text-center";
-                });
+                this.totalDuration = this.workDuration; this.timeLeft = this.workDuration; this.updateDisplay();
+                document.querySelectorAll('.pomo-session-btn').forEach(b => b.className = "pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center");
                 const activeBtn = document.querySelector(`.pomo-session-btn[data-session="${type}"]`);
-                if (activeBtn) activeBtn.className = "pomo-session-btn flex-1 py-2.5 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center";
+                if (activeBtn) activeBtn.className = "pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center";
             },
 
             toggle() {
                 const icon = document.querySelector('#pomo-btn-play i');
-                if (this.isRunning) {
-                    cancelAnimationFrame(this.timerId);
-                    this.isRunning = false;
-                    icon.className = "fa-solid fa-play ml-1";
-                } else {
-                    this.isRunning = true;
-                    icon.className = "fa-solid fa-pause";
-                    this.endTime = Date.now() + this.timeLeft * 1000;
-                    this.runAnimation();
-                }
+                if (this.isRunning) { cancelAnimationFrame(this.timerId); this.isRunning = false; icon.className = "fa-solid fa-play ml-0.5"; }
+                else { this.isRunning = true; icon.className = "fa-solid fa-pause"; this.endTime = Date.now() + this.timeLeft * 1000; this.runAnimation(); }
             },
 
             runAnimation() {
                 if (!this.isRunning) return;
-                const diff = Math.max(0, Math.ceil((this.endTime - Date.now()) / 1000));
-                this.timeLeft = diff;
-
+                this.timeLeft = Math.max(0, Math.ceil((this.endTime - Date.now()) / 1000));
                 if (this.timeLeft > 0) {
-                    this.updateDisplay();
-                    this.timerId = requestAnimationFrame(() => this.runAnimation());
+                    this.updateDisplay(); this.timerId = requestAnimationFrame(() => this.runAnimation());
                 } else {
-                    if (this.phase === 'work') {
-                        this.phase = 'break';
-                        this.totalDuration = this.breakDuration;
-                        this.timeLeft = this.breakDuration;
-                        showToast("Travail terminé ! Pause.");
-                    } else {
-                        this.phase = 'work';
-                        this.totalDuration = this.workDuration;
-                        this.timeLeft = this.workDuration;
-                        showToast("Pause terminée ! Reprise.");
-                    }
+                    this.phase = this.phase === 'work' ? 'break' : 'work';
+                    this.totalDuration = this.phase === 'work' ? this.workDuration : this.breakDuration;
+                    this.timeLeft = this.totalDuration;
+                    showToast(this.phase === 'work' ? "Reprise du travail !" : "Pause méritée !");
                     this.endTime = Date.now() + this.timeLeft * 1000;
-                    this.updateDisplay();
-                    this.timerId = requestAnimationFrame(() => this.runAnimation());
+                    this.updateDisplay(); this.timerId = requestAnimationFrame(() => this.runAnimation());
                 }
             },
 
-            reset() {
-                if (this.isRunning) this.toggle();
-                this.phase = 'work';
-                this.setSession(this.sessionType);
-            },
+            reset() { if (this.isRunning) this.toggle(); this.phase = 'work'; this.setSession(this.sessionType); },
 
             updateDisplay() {
                 const m = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
                 const s = (this.timeLeft % 60).toString().padStart(2, '0');
                 document.getElementById('pomo-time-display').textContent = `${m}:${s}`;
-                
-                const radius = 45.5;
-                const circumference = 2 * Math.PI * radius;
+                const radius = 45.5; const circumference = 2 * Math.PI * radius;
                 const elapsed = this.totalDuration > 0 ? (1 - (this.timeLeft / this.totalDuration)) : 0;
                 const ring = document.getElementById('pomo-progress-ring');
-                
-                if (ring) {
-                    ring.style.strokeDasharray = circumference;
-                    ring.style.strokeDashoffset = circumference * (1 - elapsed);
-                }
+                if (ring) { ring.style.strokeDasharray = circumference; ring.style.strokeDashoffset = circumference * (1 - elapsed); }
             },
 
-            stopSound() {
-                if (this.noiseNode) { try { this.noiseNode.stop(); this.noiseNode.disconnect(); } catch(e){} this.noiseNode = null; }
-            },
+            stopSound() { if (this.noiseNode) { try { this.noiseNode.stop(); this.noiseNode.disconnect(); } catch(e){} this.noiseNode = null; } },
 
             toggleSound(type, btnNode) {
                 this.stopSound();
-                document.querySelectorAll('.pomo-sound-btn').forEach(b => b.classList.remove('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30', 'ring-2', 'ring-brand-500'));
+                document.querySelectorAll('.pomo-sound-btn').forEach(b => b.classList.remove('border-brand-500', 'text-brand-600', 'bg-brand-50', 'ring-2'));
                 if (this.activeSound === type) { this.activeSound = null; return; }
                 this.activeSound = type;
-                btnNode.classList.add('border-brand-500', 'text-brand-600', 'bg-brand-50', 'dark:bg-brand-900/30', 'ring-2', 'ring-brand-500');
-
+                btnNode.classList.add('border-brand-500', 'text-brand-600', 'bg-brand-50', 'ring-2');
                 try {
                     if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                     if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
                     this.gainNode = this.audioCtx.createGain();
                     this.gainNode.gain.setValueAtTime(this.volume * 0.3, this.audioCtx.currentTime);
                     this.gainNode.connect(this.audioCtx.destination);
-
                     const buffer = this.audioCtx.createBuffer(1, this.audioCtx.sampleRate * 2, this.audioCtx.sampleRate);
                     const output = buffer.getChannelData(0);
                     for (let i = 0; i < buffer.length; i++) output[i] = (Math.random() * 2 - 1) * 0.1;
-
                     this.noiseNode = this.audioCtx.createBufferSource();
-                    this.noiseNode.buffer = buffer;
-                    this.noiseNode.loop = true;
-                    this.noiseNode.connect(this.gainNode);
-                    this.noiseNode.start();
+                    this.noiseNode.buffer = buffer; this.noiseNode.loop = true;
+                    this.noiseNode.connect(this.gainNode); this.noiseNode.start();
                 } catch(e) {}
             }
         };
@@ -1529,10 +1476,7 @@
         // --- GRADES MODULE ---
         const GradesModule = {
             init() {
-                document.getElementById('form-add-grade').addEventListener('submit', e => {
-                    e.preventDefault();
-                    this.addGrade();
-                });
+                document.getElementById('form-add-grade').addEventListener('submit', e => { e.preventDefault(); this.addGrade(); });
                 document.getElementById('grades-subjects-container').addEventListener('click', e => {
                     const btn = e.target.closest('.btn-del-grade');
                     if(btn) this.deleteGrade(btn.getAttribute('data-id'));
@@ -1541,65 +1485,53 @@
             },
 
             addGrade() {
-                const subjectInput = document.getElementById('input-grade-subject').value.trim();
+                const subject = document.getElementById('input-grade-subject').value.trim();
                 const val = parseFloat(document.getElementById('input-grade-val').value);
                 const maxVal = parseFloat(document.getElementById('input-grade-max').value);
                 const coeff = parseFloat(document.getElementById('input-grade-coeff').value);
-                if(!subjectInput || isNaN(val) || isNaN(maxVal) || maxVal <= 0 || isNaN(coeff)) return;
+                if(!subject || isNaN(val) || isNaN(maxVal) || maxVal <= 0 || isNaN(coeff)) return;
                 
-                const subject = subjectInput.charAt(0).toUpperCase() + subjectInput.slice(1);
-                AppState.grades.push({ id: generateId(), subject, val, maxVal, coeff });
-                saveState();
-                document.getElementById('form-add-grade').reset();
-                document.getElementById('input-grade-max').value = '20';
-                document.getElementById('input-grade-coeff').value = '1';
-                this.render();
-                showToast("Note ajoutée !");
+                AppState.grades.push({ id: generateId(), subject: subject.charAt(0).toUpperCase() + subject.slice(1), val, maxVal, coeff });
+                saveState(); document.getElementById('form-add-grade').reset();
+                document.getElementById('input-grade-max').value = '20'; document.getElementById('input-grade-coeff').value = '1';
+                this.render(); showToast("Note ajoutée !");
             },
 
-            deleteGrade(id) {
-                AppState.grades = AppState.grades.filter(g => g.id !== id);
-                saveState();
-                this.render();
-            },
+            deleteGrade(id) { AppState.grades = AppState.grades.filter(g => g.id !== id); saveState(); this.render(); },
 
             render() {
                 const container = document.getElementById('grades-subjects-container');
                 if (AppState.grades.length === 0) {
-                    container.innerHTML = `<div class="h-48 flex flex-col items-center justify-center text-slate-400 text-sm border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">Aucune note enregistrée.</div>`;
+                    container.innerHTML = `<div class="h-40 flex flex-col items-center justify-center text-slate-400 text-xs border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">Aucune note.</div>`;
                     document.getElementById('grade-average-display').textContent = '--/20';
                     return;
                 }
 
                 const grouped = {};
-                AppState.grades.forEach(g => {
-                    if (!grouped[g.subject]) grouped[g.subject] = [];
-                    grouped[g.subject].push(g);
-                });
+                AppState.grades.forEach(g => { if (!grouped[g.subject]) grouped[g.subject] = []; grouped[g.subject].push(g); });
 
-                let totalWeightedSum = 0, totalCoeffSum = 0, htmlCards = '';
+                let totalWeighted = 0, totalCoeff = 0, htmlCards = '';
                 Object.keys(grouped).sort().forEach(subject => {
                     let subSum = 0, subCoeff = 0;
                     let items = grouped[subject].map(g => {
-                        const norm = (g.val / (g.maxVal || 20)) * 20;
-                        subSum += norm * g.coeff; subCoeff += g.coeff;
-                        return `<div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-800 text-sm">
-                            <div><span class="font-bold text-slate-800 dark:text-slate-100">${g.val}/${g.maxVal}</span></div>
-                            <div class="flex items-center gap-4"><span class="text-xs text-slate-500">Coeff. ${g.coeff}</span><button class="btn-del-grade text-slate-400 hover:text-red-500" data-id="${g.id}"><i class="fa-solid fa-trash-can text-xs"></i></button></div>
+                        subSum += ((g.val / (g.maxVal || 20)) * 20) * g.coeff; subCoeff += g.coeff;
+                        return `<div class="flex items-center justify-between bg-slate-50 dark:bg-slate-900/60 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800 text-xs">
+                            <span class="font-bold text-slate-800 dark:text-slate-100">${g.val}/${g.maxVal}</span>
+                            <div class="flex items-center gap-3"><span class="text-slate-500">Coeff. ${g.coeff}</span><button class="btn-del-grade text-slate-400 hover:text-red-500" data-id="${g.id}"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>`;
                     }).join('');
 
-                    totalWeightedSum += subSum; totalCoeffSum += subCoeff;
-                    htmlCards += `<div class="bg-slate-50/70 dark:bg-slate-900/40 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/80">
-                        <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200 dark:border-slate-800">
-                            <h4 class="font-bold text-slate-800 dark:text-white">${escapeHTML(subject)}</h4>
-                            <div class="text-sm font-bold bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 px-3 py-1 rounded-xl">Moyenne : ${(subSum/subCoeff).toFixed(2)}/20</div>
+                    totalWeighted += subSum; totalCoeff += subCoeff;
+                    htmlCards += `<div class="bg-slate-50/70 dark:bg-slate-900/40 rounded-2xl p-3.5 border border-slate-200 dark:border-slate-700/80">
+                        <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                            <h4 class="font-bold text-slate-800 dark:text-white text-sm">${escapeHTML(subject)}</h4>
+                            <span class="text-xs font-bold bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-lg">${(subSum/subCoeff).toFixed(2)}/20</span>
                         </div>
-                        <div class="space-y-2">${items}</div>
+                        <div class="space-y-1.5">${items}</div>
                     </div>`;
                 });
                 container.innerHTML = htmlCards;
-                document.getElementById('grade-average-display').textContent = `${(totalWeightedSum/totalCoeffSum).toFixed(2)}/20`;
+                document.getElementById('grade-average-display').textContent = `${(totalWeighted/totalCoeff).toFixed(2)}/20`;
             }
         };
 
@@ -1611,9 +1543,7 @@
                     const name = document.getElementById('input-habit-name').value.trim();
                     if(!name) return;
                     AppState.habits.push({ id: generateId(), name, days: {} });
-                    saveState();
-                    document.getElementById('input-habit-name').value = '';
-                    this.render();
+                    saveState(); document.getElementById('input-habit-name').value = ''; this.render();
                 });
                 document.getElementById('habits-body').addEventListener('change', e => {
                     if (e.target.classList.contains('habit-checkbox')) {
@@ -1634,13 +1564,13 @@
             },
             render() {
                 const dates = this.getDates();
-                document.getElementById('habits-header').innerHTML = `<th class="py-3 px-4 w-1/3">Habitude</th>` + dates.map(d => `<th class="py-3 px-2 text-center w-[10%]">${d.substring(8,10)}/${d.substring(5,7)}</th>`).join('') + `<th class="py-3 px-2 w-[5%]"></th>`;
+                document.getElementById('habits-header').innerHTML = `<th class="py-2.5 px-3 w-1/3">Habitude</th>` + dates.map(d => `<th class="py-2.5 px-1 text-center w-[10%]">${d.substring(8,10)}/${d.substring(5,7)}</th>`).join('') + `<th class="py-2.5 px-1 w-[5%]"></th>`;
                 document.getElementById('habits-body').innerHTML = AppState.habits.map(h => `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200 text-sm truncate">${escapeHTML(h.name)}</td>
-                        ${dates.d ? '' : dates.map(d => `<td class="py-3 px-2 text-center"><input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded cursor-pointer" data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}></td>`).join('')}
-                        <td class="py-3 px-2 text-center"><button class="btn-del-habit text-slate-400 hover:text-red-500" data-id="${h.id}"><i class="fa-solid fa-trash-can"></i></button></td>
-                    </tr>`).join('') || `<tr><td colspan="9" class="py-4 text-center text-slate-500 text-sm">Aucune habitude.</td></tr>`;
+                        <td class="py-2.5 px-3 font-medium text-slate-800 dark:text-slate-200 truncate">${escapeHTML(h.name)}</td>
+                        ${dates.map(d => `<td class="py-2.5 px-1 text-center"><input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded cursor-pointer" data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}></td>`).join('')}
+                        <td class="py-2.5 px-1 text-center"><button class="btn-del-habit text-slate-400 hover:text-red-500" data-id="${h.id}"><i class="fa-solid fa-trash-can"></i></button></td>
+                    </tr>`).join('') || `<tr><td colspan="9" class="py-4 text-center text-slate-500 text-xs">Aucune habitude.</td></tr>`;
             }
         };
 
@@ -1649,21 +1579,16 @@
             init() {
                 document.getElementById('btn-export-data').addEventListener('click', () => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState));
-                    const node = document.createElement('a');
-                    node.setAttribute("href", dataStr);
+                    const node = document.createElement('a'); node.setAttribute("href", dataStr);
                     node.setAttribute("download", `eduflow_backup_${new Date().toISOString().split('T')[0]}.json`);
                     document.body.appendChild(node); node.click(); node.remove();
                 });
                 document.getElementById('input-import-data').addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
+                    const file = e.target.files[0]; if (!file) return;
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        try {
-                            AppState = { ...defaultState, ...JSON.parse(event.target.result) };
-                            saveState();
-                            window.location.reload();
-                        } catch(err) { showToast("Fichier invalide", "error"); }
+                        try { AppState = { ...defaultState, ...JSON.parse(event.target.result) }; saveState(); window.location.reload(); }
+                        catch(err) { showToast("Fichier invalide", "error"); }
                     };
                     reader.readAsText(file);
                 });

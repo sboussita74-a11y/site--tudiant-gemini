@@ -27,12 +27,12 @@
         }
     </script>
 
-    <!-- Custom CSS & Mobile Adaptations -->
+    <!-- Custom CSS & Adaptations -->
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
@@ -50,7 +50,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Collapsible Sidebar Styles */
+        /* PC Sidebar Collapse Styles (2 states) */
         #app-sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         #app-sidebar.sidebar-collapsed { width: 4.25rem !important; }
         #app-sidebar.sidebar-collapsed .sidebar-text { display: none !important; }
@@ -63,6 +63,7 @@
         #app-sidebar.sidebar-collapsed .theme-footer-content div { display: none !important; }
         #app-sidebar.sidebar-collapsed .theme-footer-content i { font-size: 1.25rem !important; margin-right: 0 !important; }
 
+        /* Mobile Sidebar 3 States */
         @media (max-width: 768px) {
             #app-sidebar {
                 position: fixed;
@@ -70,13 +71,33 @@
                 left: 0;
                 height: 100vh;
                 z-index: 50;
-                transform: translateX(-100%);
-                width: 18rem !important;
                 margin: 0 !important;
                 border-radius: 0 !important;
+                box-shadow: 10px 0 25px rgba(0,0,0,0.15);
             }
-            #app-sidebar.mobile-open {
+            /* State 1: Open (w-64, translateX(0)) */
+            #app-sidebar.mobile-state-1 {
+                width: 16rem !important;
                 transform: translateX(0);
+            }
+            /* State 2: Compact (w-20, translateX(0)) */
+            #app-sidebar.mobile-state-2 {
+                width: 4.5rem !important;
+                transform: translateX(0);
+            }
+            #app-sidebar.mobile-state-2 .sidebar-text { display: none !important; }
+            #app-sidebar.mobile-state-2 .logo-container { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+            #app-sidebar.mobile-state-2 .logo-container i { margin-right: 0 !important; font-size: 1.25rem !important; }
+            #app-sidebar.mobile-state-2 nav button { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+            #app-sidebar.mobile-state-2 nav button i { margin-right: 0 !important; font-size: 1.15rem !important; }
+            #app-sidebar.mobile-state-2 .theme-footer-content { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+            #app-sidebar.mobile-state-2 .theme-footer-content span,
+            #app-sidebar.mobile-state-2 .theme-footer-content div { display: none !important; }
+            #app-sidebar.mobile-state-2 .theme-footer-content i { font-size: 1.15rem !important; margin-right: 0 !important; }
+
+            /* State 3: Hidden (translateX(-100%)) */
+            #app-sidebar.mobile-state-3 {
+                transform: translateX(-100%);
             }
         }
 
@@ -99,14 +120,19 @@
     <!-- FULL-SCREEN BACKGROUND LAYER -->
     <div class="fixed inset-0 w-screen h-screen bg-gradient-to-b from-brand-100/60 via-slate-50 to-slate-100 dark:from-brand-900/40 dark:via-slate-900 dark:to-slate-900 pointer-events-none -z-10"></div>
 
-    <!-- MOBILE SIDEBAR OVERLAY BACKDROP -->
+    <!-- MOBILE SIDEBAR BACKDROP -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
-    <!-- SIDEBAR (On the side, collapsible desktop, slide-over mobile) -->
+    <!-- MOBILE REOPEN HANDLE (Visible when sidebar is in state 3 / hidden) -->
+    <button id="mobile-sidebar-handle" class="fixed top-6 left-0 z-40 bg-brand-600 text-white w-7 h-12 rounded-r-2xl shadow-md flex items-center justify-center text-xs md:hidden transition hover:bg-brand-700">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <!-- SIDEBAR (Left side, 3 states mobile, 2 states PC) -->
     <aside id="app-sidebar" class="w-64 h-[calc(100vh-2rem)] my-auto ml-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between z-50 flex-shrink-0 overflow-hidden">
         <div class="flex-1 overflow-y-auto overflow-x-hidden">
-            <!-- Logo / Toggle Trigger -->
-            <div id="sidebar-logo-btn" class="logo-container h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors" title="Réduire / Étendre la barre">
+            <!-- Logo / State Toggle Trigger -->
+            <div id="sidebar-logo-btn" class="logo-container h-16 flex items-center px-6 border-b border-slate-100 dark:border-slate-700/60 sticky top-0 bg-white dark:bg-slate-800 z-10 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors" title="Changer l'état de la barre">
                 <i class="fa-solid fa-graduation-cap text-brand-600 dark:text-brand-500 text-2xl mr-3 flex-shrink-0"></i>
                 <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight sidebar-text whitespace-nowrap">EduFlow</h1>
             </div>
@@ -161,40 +187,29 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 overflow-hidden relative flex flex-col h-full bg-transparent">
-        <!-- Mobile Top Header Bar with Hamburger -->
-        <header class="md:hidden flex items-center justify-between px-4 h-16 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-700/80 flex-shrink-0 z-30">
-            <button id="mobile-sidebar-toggle" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-200">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <h1 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-graduation-cap text-brand-600"></i> EduFlow
-            </h1>
-            <div class="w-10"></div> <!-- Placeholder for alignment -->
-        </header>
-
         <div class="p-4 md:p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
             
             <!-- VIEW: DASHBOARD -->
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
                 <header class="mb-6 md:mb-8 flex-shrink-0">
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Prêt à organiser ta journée ?</p>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">Prêt à organiser ta journée ?</p>
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pb-6 flex-shrink-0">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
                         <div id="dash-time" class="text-4xl md:text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
-                        <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize text-sm">Lundi 1 Janvier</div>
+                        <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize text-sm md:text-base">Lundi 1 Janvier</div>
                     </div>
 
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-semibold text-slate-700 dark:text-slate-200 text-sm">Tâches urgentes</h3>
+                            <h3 class="font-semibold text-slate-700 dark:text-slate-200">Tâches urgentes</h3>
                             <div class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-lg"><i class="fa-solid fa-fire"></i></div>
                         </div>
                         <div class="flex items-end gap-2">
                             <span class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white" id="dash-todo-count">0</span>
-                            <span class="text-slate-500 dark:text-slate-400 mb-1 text-xs">à faire</span>
+                            <span class="text-slate-500 dark:text-slate-400 mb-1 text-sm">à faire</span>
                         </div>
                         <div class="mt-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
                             <div id="dash-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -203,15 +218,15 @@
 
                     <div class="bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl p-6 shadow-sm text-white flex flex-col justify-center relative overflow-hidden">
                         <i class="fa-solid fa-quote-right absolute -bottom-4 -right-2 text-6xl opacity-20"></i>
-                        <p class="font-medium text-sm md:text-base leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
-                        <span class="text-brand-100 text-xs mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
+                        <p class="font-medium text-base md:text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
+                        <span class="text-brand-100 text-xs md:text-sm mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
                     </div>
                 </div>
             </section>
 
             <!-- VIEW: TASKS -->
             <section id="tasks-view" class="app-section">
-                <header class="mb-4 md:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
                         <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Gère ton travail avec la méthode Kanban.</p>
@@ -221,31 +236,31 @@
                     </button>
                 </header>
 
-                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0 transition-all">
-                    <form id="form-add-task" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                        <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 sm:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
-                        <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-sm">
+                <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0 transition-all">
+                    <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
+                        <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
                         <div class="flex gap-2">
-                            <input type="date" id="input-task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
+                            <input type="date" id="input-task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
                             <button type="submit" class="bg-brand-600 text-white px-4 rounded-xl hover:bg-brand-700 transition"><i class="fa-solid fa-check"></i></button>
                         </div>
                     </form>
                 </div>
 
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 pb-4 min-h-0 overflow-y-auto md:overflow-hidden">
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[220px] md:min-h-0 md:overflow-hidden">
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pb-4 min-h-0 overflow-y-auto md:overflow-hidden">
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
                             <span>À faire</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-todo">0</span>
                         </h3>
                         <div class="flex-1 md:overflow-y-auto space-y-3 kanban-column pr-1" data-status="todo" id="col-todo"></div>
                     </div>
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[220px] md:min-h-0 md:overflow-hidden">
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
                             <span>En cours</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-inprogress">0</span>
                         </h3>
                         <div class="flex-1 md:overflow-y-auto space-y-3 kanban-column pr-1" data-status="inprogress" id="col-inprogress"></div>
                     </div>
-                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[220px] md:min-h-0 md:overflow-hidden">
+                    <div class="flex flex-col bg-slate-100/70 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 min-h-[250px] md:min-h-0 md:overflow-hidden">
                         <h3 class="font-semibold text-slate-700 dark:text-slate-300 mb-3 flex justify-between items-center flex-shrink-0 text-sm">
                             <span>Terminé</span> <span class="bg-slate-200 dark:bg-slate-700 text-xs px-2 py-0.5 rounded-md" id="count-done">0</span>
                         </h3>
@@ -254,9 +269,9 @@
                 </div>
             </section>
 
-            <!-- VIEW: SCHEDULE (Day-by-day with Arrows / Swipe) -->
+            <!-- VIEW: SCHEDULE (PC: Original Grid | Mobile: Day by Day with Arrows/Swipe) -->
             <section id="schedule-view" class="app-section">
-                <header class="mb-4 md:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
                         <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Emploi du temps</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Organise ta semaine de cours.</p>
@@ -266,7 +281,7 @@
                     </button>
                 </header>
 
-                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0">
+                <div id="schedule-form-container" class="hidden bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex-shrink-0">
                     <form id="form-add-schedule" class="flex flex-wrap gap-3 items-end">
                         <div class="flex-1 min-w-[120px]">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Jour</label>
@@ -276,7 +291,7 @@
                                 <option value="Vendredi">Vendredi</option>
                             </select>
                         </div>
-                        <div class="flex-1 min-w-[140px]">
+                        <div class="flex-1 min-w-[150px]">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Matière</label>
                             <input type="text" id="input-sched-subject" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm outline-none text-slate-800 dark:text-white">
                         </div>
@@ -296,48 +311,51 @@
                     </form>
                 </div>
 
-                <!-- Day Switcher Bar with Arrows & Swipe support -->
-                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 flex items-center justify-between flex-shrink-0">
-                    <button id="sched-prev-day" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/40 transition flex items-center justify-center text-slate-600 dark:text-slate-300">
+                <!-- Mobile Day Switcher Bar (Hidden on PC) -->
+                <div class="flex md:hidden bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 items-center justify-between flex-shrink-0">
+                    <button id="sched-prev-day" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 transition flex items-center justify-center text-slate-600 dark:text-slate-300">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
                     <div class="text-center">
                         <span id="sched-current-day-label" class="text-base font-bold text-slate-900 dark:text-white">Lundi</span>
-                        <span class="block text-[11px] text-slate-400">Glisse l'écran ou utilise les flèches</span>
+                        <span class="block text-[11px] text-slate-400">Glisse ou utilise les flèches</span>
                     </div>
-                    <button id="sched-next-day" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/40 transition flex items-center justify-center text-slate-600 dark:text-slate-300">
+                    <button id="sched-next-day" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-brand-50 transition flex items-center justify-center text-slate-600 dark:text-slate-300">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
 
-                <!-- Day Schedule Content Container (Swipeable area) -->
-                <div class="flex-1 overflow-y-auto pb-4 min-h-0" id="schedule-day-container"></div>
+                <!-- Schedule Content: PC Grid (hidden md:grid) vs Mobile Swipe View (flex md:hidden) -->
+                <div class="flex-1 overflow-y-auto md:overflow-x-auto pb-4 min-h-0">
+                    <div class="hidden md:grid min-w-[800px] grid-cols-5 gap-4 h-full" id="schedule-grid-desktop"></div>
+                    <div class="flex md:hidden flex-col gap-3 h-full" id="schedule-container-mobile"></div>
+                </div>
             </section>
 
             <!-- VIEW: NOTES & FLASHCARDS -->
             <section id="notes-view" class="app-section">
-                <header class="mb-4 md:mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 flex-shrink-0">
+                <header class="mb-4 md:mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 flex-shrink-0">
                     <div>
                         <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Notes & Flashcards</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Organise tes cours et révise activement.</p>
                     </div>
                     <div class="flex bg-slate-200 dark:bg-slate-700 rounded-xl p-1 w-max">
                         <button id="tab-notes" class="px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all">Notes</button>
-                        <button id="tab-flashcards" class="px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all">Flashcards & Quiz</button>
+                        <button id="tab-flashcards" class="px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Flashcards & Quiz</button>
                     </div>
                 </header>
 
                 <!-- SUBVIEW: NOTES -->
                 <div id="subview-notes" class="flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0 overflow-hidden">
                     <div class="w-full md:w-1/3 flex-shrink-0 overflow-y-auto pr-1">
-                        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                        <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                             <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-brand-600"></i> Nouvelle note</h3>
                             <input type="text" id="input-note-title" placeholder="Titre de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none mb-3 text-slate-800 dark:text-white text-xs md:text-sm">
                             <div class="grid grid-cols-2 gap-2 mb-3">
                                 <input type="text" id="input-note-subject" placeholder="Matière" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                                 <input type="text" id="input-note-chapter" placeholder="Chapitre" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
                             </div>
-                            <textarea id="input-note-content" placeholder="Contenu de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none text-slate-800 dark:text-white resize-none h-24 mb-3 text-xs md:text-sm"></textarea>
+                            <textarea id="input-note-content" placeholder="Contenu de la note..." class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 outline-none text-slate-800 dark:text-white resize-none h-24 md:h-32 mb-3 text-xs md:text-sm"></textarea>
                             <button id="btn-add-note" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors text-sm">Enregistrer</button>
                         </div>
                     </div>
@@ -349,7 +367,7 @@
                             </select>
                         </div>
                         <div class="overflow-y-auto pr-2 flex-1">
-                            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-4"></div>
+                            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pb-4"></div>
                         </div>
                     </div>
                 </div>
@@ -359,7 +377,7 @@
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-3 flex-shrink-0 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
                         <div class="flex gap-2">
                             <button id="fc-subtab-lib" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all"><i class="fa-solid fa-layer-group mr-1"></i> Cartes</button>
-                            <button id="fc-subtab-quiz" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"><i class="fa-solid fa-play mr-1"></i> Mode Quiz</button>
+                            <button id="fc-subtab-quiz" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"><i class="fa-solid fa-play mr-1"></i> Mode Quiz</button>
                         </div>
                         <button id="btn-open-fc-modal" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-plus"></i> Nouvelle carte
@@ -369,7 +387,7 @@
                     <!-- TAB 1: LIBRARY -->
                     <div id="fc-section-lib" class="flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0 overflow-hidden">
                         <div class="w-full md:w-1/3 flex-shrink-0 overflow-y-auto pr-1">
-                            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                            <div class="bg-white dark:bg-slate-800 p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                                 <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-bolt text-brand-600"></i> Création rapide</h3>
                                 <div class="grid grid-cols-2 gap-2 mb-2">
                                     <input type="text" id="input-fc-subject" placeholder="Matière" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 outline-none text-slate-800 dark:text-white text-xs">
@@ -391,20 +409,20 @@
                                 </select>
                             </div>
                             <div class="overflow-y-auto pr-2 flex-1">
-                                <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-4"></div>
+                                <div id="fc-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pb-4"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TAB 2: QUIZ CONFIG PANEL -->
+                    <!-- TAB 2: QUIZ SETUP -->
                     <div id="fc-section-quiz" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 items-center justify-center">
-                        <div id="quiz-setup-screen" class="max-w-md mx-auto w-full text-center space-y-4">
-                            <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner">
+                        <div id="quiz-setup-screen" class="max-w-md mx-auto w-full text-center space-y-4 md:space-y-6">
+                            <div class="w-14 h-14 bg-brand-50 dark:bg-brand-900/40 text-brand-600 rounded-2xl mx-auto flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-graduation-cap"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Lancer une session de Quiz</h3>
-                                <p class="text-xs text-slate-500 mt-1">Choisis ton périmètre de révision</p>
+                                <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white">Lancer une session de Quiz</h3>
+                                <p class="text-xs md:text-sm text-slate-500 mt-1">Choisis ton périmètre de révision</p>
                             </div>
                             <div class="space-y-3 text-left bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                                 <div>
@@ -420,7 +438,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button id="btn-start-quiz" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold text-sm shadow-md transition-all hover:scale-[1.02]">
+                            <button id="btn-start-quiz" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold text-sm shadow-md transition-all">
                                 Démarrer le Quiz <i class="fa-solid fa-arrow-right ml-2"></i>
                             </button>
                         </div>
@@ -428,16 +446,16 @@
                 </div>
             </section>
 
-            <!-- VIEW: POMODORO -->
+            <!-- VIEW: POMODORO (Original Proportions Restored) -->
             <section id="pomodoro-view" class="app-section items-center justify-center overflow-y-auto pr-1">
-                <div class="text-center mb-4 flex-shrink-0">
-                    <h2 class="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-xs md:text-sm">Concentre-toi intensément et gère tes pauses.</p>
+                <div class="text-center mb-6 flex-shrink-0">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Pomodoro Focus</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Concentre-toi intensément et gère tes pauses.</p>
                 </div>
 
                 <div class="flex flex-col lg:flex-row gap-6 max-w-4xl w-full flex-shrink-0 items-center justify-center pb-4">
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-sm">
-                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-4 w-full text-[11px] font-medium">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center w-full max-w-sm">
+                        <div class="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl mb-6 w-full text-xs font-medium">
                             <button data-session="court" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center">Court</button>
                             <button data-session="normal" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all shadow bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 font-semibold text-center">Normal</button>
                             <button data-session="intensif" class="pomo-session-btn flex-1 py-2 rounded-lg transition-all text-slate-500 text-center">Intensif</button>
@@ -450,18 +468,18 @@
                             <button id="pomo-custom-set" class="bg-brand-600 text-white px-2.5 py-1 rounded-lg text-xs font-medium">Valider</button>
                         </div>
 
-                        <div class="relative flex items-center justify-center w-48 h-48 mb-6">
+                        <div class="relative flex items-center justify-center w-56 h-56 mb-6">
                             <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                                 <circle id="pomo-bg-ring" cx="50" cy="50" r="45.5" class="text-brand-100 dark:text-brand-900 transition-colors duration-500" stroke-width="5" stroke="currentColor" fill="none"/>
                                 <circle id="pomo-progress-ring" cx="50" cy="50" r="45.5" class="text-brand-500" stroke-width="5" stroke="currentColor" stroke-dasharray="285.88" stroke-dashoffset="285.88" stroke-linecap="round" fill="none"/>
                             </svg>
                             <div class="absolute inset-0 m-auto rounded-full flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900" style="width: 172px; height: 172px;">
-                                <span id="pomo-time-display" class="text-4xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
+                                <span id="pomo-time-display" class="text-5xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">25:00</span>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-4">
-                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-12 h-12 rounded-full flex items-center justify-center text-base shadow-md">
+                            <button id="pomo-btn-play" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center text-lg shadow-md">
                                 <i class="fa-solid fa-play ml-0.5"></i>
                             </button>
                             <button id="pomo-btn-reset" class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 w-10 h-10 rounded-full flex items-center justify-center">
@@ -470,7 +488,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-sm">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between w-full max-w-sm">
                         <div class="grid grid-cols-2 gap-3 mb-4">
                             <button data-sound="noise" class="pomo-sound-btn p-3 rounded-2xl text-xs font-medium bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-2">
                                 <i class="fa-solid fa-wave-square text-lg text-brand-600"></i> Bruit Blanc
@@ -485,7 +503,7 @@
                                 <i class="fa-solid fa-tree text-lg text-brand-600"></i> Forêt
                             </button>
                         </div>
-                        <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/80 space-y-2">
                             <div class="flex justify-between items-center text-xs text-slate-500 font-medium">
                                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-volume-high text-brand-600"></i> Volume</span>
                                 <span id="pomo-volume-val" class="font-bold text-slate-700 dark:text-slate-300">50%</span>
@@ -504,14 +522,14 @@
                 </header>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 flex-1 min-h-0 overflow-y-auto md:overflow-hidden pb-4">
-                    <div class="col-span-1 flex flex-col gap-4 flex-shrink-0">
+                    <div class="col-span-1 flex flex-col gap-4 md:gap-6 flex-shrink-0">
                         <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-5 text-white flex flex-col justify-center items-center shadow-sm">
                             <span class="text-[11px] text-brand-200 uppercase tracking-widest font-semibold mb-1">Moyenne Générale</span>
                             <div id="grade-average-display" class="text-4xl font-bold mb-1">--/20</div>
                             <span class="text-[11px] text-brand-100 opacity-80">Calculée sur toutes les matières</span>
                         </div>
 
-                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-5 shadow-sm border border-slate-200 dark:border-slate-700">
                             <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-plus-circle text-brand-600"></i> Ajouter une note
                             </h3>
@@ -539,7 +557,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-span-1 lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-[220px] overflow-hidden">
+                    <div class="col-span-1 lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col h-full min-h-[250px] overflow-hidden">
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-sm flex-shrink-0">Détail par matière</h3>
                         <div class="overflow-y-auto flex-1 space-y-3 pr-1" id="grades-subjects-container"></div>
                     </div>
@@ -553,10 +571,10 @@
                     <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Construis des routines quotidiennes.</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0 overflow-hidden pb-4">
-                    <form id="form-add-habit" class="flex gap-2 mb-4 max-w-md flex-shrink-0">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0 overflow-hidden pb-4">
+                    <form id="form-add-habit" class="flex gap-2 md:gap-4 mb-4 max-w-md flex-shrink-0">
                         <input type="text" id="input-habit-name" required placeholder="Nouvelle habitude..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm outline-none text-slate-800 dark:text-white">
-                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl text-xs md:text-sm font-medium">Ajouter</button>
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 md:px-6 rounded-xl text-xs md:text-sm font-medium">Ajouter</button>
                     </form>
                     
                     <div class="overflow-x-auto overflow-y-auto flex-1">
@@ -577,7 +595,7 @@
                     <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Gère tes sauvegardes (LocalStorage).</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-5 flex-shrink-0 mb-6">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-5 flex-shrink-0 mb-6">
                     <div>
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-1 text-sm">Sauvegarde (Export)</h3>
                         <p class="text-xs text-slate-500 mb-3">Télécharge toutes tes données au format JSON.</p>
@@ -601,10 +619,9 @@
         </div>
     </main>
 
-    <!-- IMMERSIVE QUIZ OVERLAY (Portrait format, floating card, blurred background) -->
+    <!-- IMMERSIVE QUIZ OVERLAY -->
     <div id="immersive-quiz-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col h-[520px] max-h-[90vh] justify-between relative">
-            <!-- Header & Quit -->
             <div class="flex items-center justify-between flex-shrink-0">
                 <div class="flex items-center gap-2">
                     <span id="quiz-progress-badge" class="px-2.5 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-xl text-xs font-bold">Carte 1/5</span>
@@ -613,12 +630,10 @@
                 <button id="quiz-btn-quit" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-red-500 transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <!-- Progress Bar -->
             <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 flex-shrink-0 my-2">
                 <div id="quiz-progress-bar" class="bg-brand-500 h-1.5 rounded-full transition-all duration-300" style="width: 20%"></div>
             </div>
 
-            <!-- 3D Interactive Card Container -->
             <div class="perspective-1000 w-full flex-1 cursor-pointer group my-2" id="quiz-card-container">
                 <div id="quiz-card-inner" class="relative w-full h-full transform-style-3d shadow-xl rounded-2xl border border-slate-200 dark:border-slate-700">
                     <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
@@ -634,7 +649,6 @@
                 </div>
             </div>
 
-            <!-- Action buttons after flipping -->
             <div class="grid grid-cols-2 gap-3 flex-shrink-0 pt-2">
                 <button id="quiz-btn-hard" class="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 py-3 rounded-2xl font-semibold text-xs flex items-center justify-center gap-1.5 transition">
                     <i class="fa-solid fa-circle-xmark"></i> À revoir
@@ -681,6 +695,7 @@
         const defaultState = {
             theme: 'light',
             sidebarCollapsed: false,
+            mobileSidebarState: 1, // 1: Open, 2: Compact, 3: Hidden
             tasks: [], 
             schedule: [], 
             notes: [], 
@@ -736,7 +751,7 @@
             init() {
                 loadState();
                 this.setupTheme();
-                this.setupSidebarToggle();
+                this.setupSidebar();
                 this.setupNav();
                 this.startClock();
                 this.initQuotes();
@@ -782,38 +797,77 @@
                 }
             },
 
-            setupSidebarToggle() {
+            setupSidebar() {
                 const logoBtn = document.getElementById('sidebar-logo-btn');
                 const sidebar = document.getElementById('app-sidebar');
-                const mobileTrigger = document.getElementById('mobile-sidebar-toggle');
+                const handle = document.getElementById('mobile-sidebar-handle');
                 const backdrop = document.getElementById('sidebar-backdrop');
                 if(!logoBtn || !sidebar) return;
 
-                if (AppState.sidebarCollapsed) {
-                    sidebar.classList.add('sidebar-collapsed');
-                }
-
-                logoBtn.addEventListener('click', () => {
-                    if (window.innerWidth <= 768) {
-                        sidebar.classList.remove('mobile-open');
+                const applySidebarState = () => {
+                    if (window.innerWidth > 768) {
+                        // PC: 2 states (collapsed or open)
+                        sidebar.classList.remove('mobile-state-1', 'mobile-state-2', 'mobile-state-3');
+                        if (AppState.sidebarCollapsed) {
+                            sidebar.classList.add('sidebar-collapsed');
+                        } else {
+                            sidebar.classList.remove('sidebar-collapsed');
+                        }
+                        if(handle) handle.classList.add('hidden');
                         if(backdrop) backdrop.classList.add('hidden');
                     } else {
-                        sidebar.classList.toggle('sidebar-collapsed');
-                        AppState.sidebarCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                        // Mobile: 3 states
+                        sidebar.classList.remove('sidebar-collapsed');
+                        sidebar.classList.remove('mobile-state-1', 'mobile-state-2', 'mobile-state-3');
+                        sidebar.classList.add(`mobile-state-${AppState.mobileSidebarState}`);
+
+                        if (AppState.mobileSidebarState === 3) {
+                            if(handle) handle.classList.remove('hidden');
+                            if(backdrop) backdrop.classList.add('hidden');
+                        } else if (AppState.mobileSidebarState === 1) {
+                            if(handle) handle.classList.add('hidden');
+                            if(backdrop) backdrop.classList.remove('hidden');
+                        } else {
+                            // State 2: Compact on mobile
+                            if(handle) handle.classList.add('hidden');
+                            if(backdrop) backdrop.classList.add('hidden');
+                        }
+                    }
+                };
+
+                applySidebarState();
+
+                logoBtn.addEventListener('click', () => {
+                    if (window.innerWidth > 768) {
+                        AppState.sidebarCollapsed = !AppState.sidebarCollapsed;
                         saveState();
+                        applySidebarState();
+                    } else {
+                        // Cycle mobile state: 1 -> 2 -> 3 -> 1
+                        AppState.mobileSidebarState = AppState.mobileSidebarState >= 3 ? 1 : AppState.mobileSidebarState + 1;
+                        saveState();
+                        applySidebarState();
                     }
                 });
 
-                if(mobileTrigger && backdrop) {
-                    mobileTrigger.addEventListener('click', () => {
-                        sidebar.classList.add('mobile-open');
-                        backdrop.classList.remove('hidden');
-                    });
-                    backdrop.addEventListener('click', () => {
-                        sidebar.classList.remove('mobile-open');
-                        backdrop.classList.add('hidden');
+                if(handle) {
+                    handle.addEventListener('click', () => {
+                        // Reopen from state 3
+                        AppState.mobileSidebarState = 1;
+                        saveState();
+                        applySidebarState();
                     });
                 }
+
+                if(backdrop) {
+                    backdrop.addEventListener('click', () => {
+                        AppState.mobileSidebarState = 3;
+                        saveState();
+                        applySidebarState();
+                    });
+                }
+
+                window.addEventListener('resize', () => applySidebarState());
             },
 
             setupNav() {
@@ -824,7 +878,11 @@
                         if (target) {
                             this.navigate(target);
                             if (window.innerWidth <= 768) {
-                                document.getElementById('app-sidebar').classList.remove('mobile-open');
+                                AppState.mobileSidebarState = 3;
+                                saveState();
+                                document.getElementById('app-sidebar').classList.remove('mobile-state-1', 'mobile-state-2');
+                                document.getElementById('app-sidebar').classList.add('mobile-state-3');
+                                document.getElementById('mobile-sidebar-handle').classList.remove('hidden');
                                 document.getElementById('sidebar-backdrop').classList.add('hidden');
                             }
                         }
@@ -1013,7 +1071,7 @@
             }
         };
 
-        // --- SCHEDULE MODULE (Day-by-day with arrows & swipe) ---
+        // --- SCHEDULE MODULE (PC: Original Grid | Mobile: Day Switcher) ---
         const ScheduleModule = {
             days: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'],
             currentIndex: 0,
@@ -1032,7 +1090,7 @@
                 document.getElementById('sched-prev-day').addEventListener('click', () => this.changeDay(-1));
                 document.getElementById('sched-next-day').addEventListener('click', () => this.changeDay(1));
 
-                const container = document.getElementById('schedule-day-container');
+                const container = document.getElementById('schedule-container-mobile');
                 container.addEventListener('touchstart', e => { this.touchStartX = e.changedTouches[0].screenX; }, {passive: true});
                 container.addEventListener('touchend', e => {
                     const diff = e.changedTouches[0].screenX - this.touchStartX;
@@ -1042,6 +1100,10 @@
                     }
                 });
 
+                document.getElementById('schedule-grid-desktop').addEventListener('click', e => {
+                    const btnDel = e.target.closest('.btn-del-sched');
+                    if (btnDel) this.deleteClass(btnDel.getAttribute('data-id'));
+                });
                 container.addEventListener('click', e => {
                     const btnDel = e.target.closest('.btn-del-sched');
                     if (btnDel) this.deleteClass(btnDel.getAttribute('data-id'));
@@ -1052,7 +1114,7 @@
 
             changeDay(direction) {
                 this.currentIndex = (this.currentIndex + direction + this.days.length) % this.days.length;
-                this.render();
+                this.renderMobile();
             },
 
             addClass() {
@@ -1077,14 +1139,39 @@
             },
 
             render() {
+                this.renderDesktop();
+                this.renderMobile();
+            },
+
+            renderDesktop() {
+                const grid = document.getElementById('schedule-grid-desktop');
+                grid.innerHTML = this.days.map(day => {
+                    const classes = AppState.schedule.filter(c => c.day === day).sort((a, b) => a.start.localeCompare(b.start));
+                    return `
+                    <div class="flex flex-col gap-3 h-full">
+                        <div class="bg-white dark:bg-slate-800 py-2.5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center font-bold text-slate-700 dark:text-slate-200 flex-shrink-0 text-sm">${day}</div>
+                        <div class="flex-1 space-y-2.5 overflow-y-auto pr-1 min-h-0">
+                            ${classes.length === 0 ? `<div class="h-20 flex items-center justify-center text-xs text-slate-400 italic border border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Libre</div>` 
+                            : classes.map(c => `
+                                <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-2.5 relative group text-xs flex-shrink-0">
+                                    <button class="btn-del-sched absolute top-1 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100" data-id="${c.id}"><i class="fa-solid fa-times"></i></button>
+                                    <div class="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">${escapeHTML(c.subject)}</div>
+                                    <div class="text-[11px] text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock"></i> ${c.start} - ${c.end}</div>${c.room ? `<div class="text-[11px] text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot"></i> ${escapeHTML(c.room)}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+                }).join('');
+            },
+
+            renderMobile() {
                 const currentDay = this.days[this.currentIndex];
                 document.getElementById('sched-current-day-label').textContent = currentDay;
-
                 const classes = AppState.schedule.filter(c => c.day === currentDay).sort((a, b) => a.start.localeCompare(b.start));
-                const container = document.getElementById('schedule-day-container');
-
+                const container = document.getElementById('schedule-container-mobile');
+                
                 container.innerHTML = `
-                <div class="space-y-3">
+                <div class="flex-1 space-y-3 overflow-y-auto pr-1">
                     ${classes.length === 0 ? `<div class="h-40 flex flex-col items-center justify-center text-xs text-slate-400 italic border border-dashed border-slate-200 dark:border-slate-700 rounded-2xl"><i class="fa-regular fa-calendar-days text-2xl mb-2 opacity-30"></i>Aucun cours prévu ce jour.</div>` 
                     : classes.map(c => `
                         <div class="bg-white dark:bg-slate-800 border-l-4 border-brand-500 rounded-2xl p-4 relative shadow-sm border border-slate-200 dark:border-slate-700 text-sm">
@@ -1097,7 +1184,7 @@
             }
         };
 
-        // --- NOTES & FLASHCARDS MODULE (Immersive Portrait Quiz) ---
+        // --- NOTES & FLASHCARDS MODULE ---
         const NotesModule = {
             quizActiveQueue: [], quizCurrentIndex: 0, quizScoreEasy: 0, quizScoreHard: 0,
 
@@ -1109,7 +1196,7 @@
 
                 const switchTab = (activeTab, inactiveTab, activeView, inactiveView) => {
                     activeTab.className = "px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium bg-white dark:bg-slate-800 text-brand-600 shadow-sm transition-all";
-                    inactiveTab.className = "px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-950 transition-all";
+                    inactiveTab.className = "px-3 md:px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 transition-all";
                     inactiveView.classList.add('hidden');
                     activeView.classList.remove('hidden');
                 };

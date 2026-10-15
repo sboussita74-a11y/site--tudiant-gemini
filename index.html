@@ -164,10 +164,10 @@
                         </div>
                         <div class="flex items-end gap-2">
                             <span class="text-4xl font-bold text-slate-900 dark:text-white" id="dash-todo-count">0</span>
-                            <span class="text-slate-500 dark:text-slate-400 mb-1">à faire</span>
+                            <span class="text-slate-500 dark:text-slate-400 mb-1">urgentes à faire</span>
                         </div>
                         <div class="mt-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                            <div id="dash-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div id="dash-progress-bar" class="bg-red-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
 
@@ -184,7 +184,7 @@
                 <header class="mb-6 flex justify-between items-center flex-shrink-0">
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Mes Tâches</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">Gère ton travail avec la méthode Kanban.</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Gère ton travail avec la méthode Kanban et tes priorités urgentes.</p>
                     </div>
                     <button id="btn-toggle-task-form" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-sm flex items-center gap-2">
                         <i class="fa-solid fa-plus"></i> Nouvelle tâche
@@ -192,12 +192,17 @@
                 </header>
 
                 <div id="task-form-container" class="hidden bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex-shrink-0 transition-all">
-                    <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <form id="form-add-task" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                         <input type="text" id="input-task-title" required placeholder="Titre de la tâche..." class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
                         <input type="text" id="input-task-subject" placeholder="Matière (ex: Maths)" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                        <div class="flex gap-2">
-                            <input type="date" id="input-task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
-                            <button type="submit" class="bg-brand-600 text-white px-4 rounded-xl hover:bg-brand-700 transition"><i class="fa-solid fa-check"></i></button>
+                        <input type="date" id="input-task-date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 outline-none focus:border-brand-500 text-slate-800 dark:text-white text-sm">
+                        
+                        <div class="col-span-1 md:col-span-4 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                            <label class="flex items-center gap-2 cursor-pointer text-xs select-none">
+                                <input type="checkbox" id="input-task-urgent" class="w-4 h-4 text-red-600 rounded accent-red-600 cursor-pointer">
+                                <span class="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-1.5"><i class="fa-solid fa-fire text-red-500"></i> Marquer comme tâche urgente</span>
+                            </label>
+                            <button type="submit" class="bg-brand-600 text-white px-5 py-2 rounded-xl hover:bg-brand-700 transition flex items-center gap-1.5 text-sm font-medium"><i class="fa-solid fa-check"></i> Ajouter</button>
                         </div>
                     </form>
                 </div>
@@ -271,7 +276,7 @@
                 </div>
             </section>
 
-            <!-- VIEW: NOTES & FLASHCARDS (OVERHAULED) -->
+            <!-- VIEW: NOTES & FLASHCARDS -->
             <section id="notes-view" class="app-section">
                 <header class="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 flex-shrink-0">
                     <div>
@@ -299,7 +304,6 @@
                         </div>
                     </div>
                     <div class="w-full md:w-2/3 flex flex-col flex-1 min-h-0 overflow-hidden">
-                        <!-- Filters for Notes -->
                         <div class="flex items-center gap-3 mb-4 flex-shrink-0">
                             <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter"></i> Filtrer par matière :</span>
                             <select id="filter-notes-subject" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs outline-none text-slate-800 dark:text-white">
@@ -314,7 +318,6 @@
 
                 <!-- SUBVIEW: FLASHCARDS & QUIZ -->
                 <div id="subview-flashcards" class="hidden flex flex-col flex-1 min-h-0 overflow-hidden">
-                    <!-- Flashcard navigation bar inside subview -->
                     <div class="flex items-center justify-between mb-4 flex-shrink-0 bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
                         <div class="flex gap-2">
                             <button id="fc-subtab-lib" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-50 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400 transition-all"><i class="fa-solid fa-layer-group mr-1"></i> Bibliothèque de cartes</button>
@@ -327,7 +330,6 @@
 
                     <!-- TAB 1: LIBRARY / MANAGEMENT -->
                     <div id="fc-section-lib" class="flex flex-col md:flex-row gap-6 flex-1 min-h-0 overflow-hidden">
-                        <!-- Left: quick creation panel -->
                         <div class="w-full md:w-1/3 flex-shrink-0 overflow-y-auto pr-1">
                             <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                                 <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-4 text-sm flex items-center gap-2"><i class="fa-solid fa-bolt text-brand-600"></i> Création rapide</h3>
@@ -340,7 +342,6 @@
                                 <button id="btn-add-fc" class="bg-brand-600 hover:bg-brand-700 text-white w-full py-2.5 rounded-xl font-medium transition-colors text-sm">Créer la carte</button>
                             </div>
                         </div>
-                        <!-- Right: Cards Grid with Filters -->
                         <div class="w-full md:w-2/3 flex flex-col flex-1 min-h-0 overflow-hidden">
                             <div class="flex flex-wrap items-center gap-3 mb-4 flex-shrink-0">
                                 <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-filter"></i> Filtrer :</span>
@@ -359,7 +360,6 @@
 
                     <!-- TAB 2: INTERACTIVE QUIZ MODE -->
                     <div id="fc-section-quiz" class="hidden flex flex-col flex-1 min-h-0 overflow-y-auto bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
-                        <!-- Step 1: Config Quiz -->
                         <div id="quiz-setup-screen" class="max-w-md mx-auto w-full my-auto text-center space-y-6">
                             <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner">
                                 <i class="fa-solid fa-graduation-cap"></i>
@@ -389,7 +389,6 @@
                             </button>
                         </div>
 
-                        <!-- Step 2: Active Quiz Session -->
                         <div id="quiz-active-screen" class="hidden flex flex-col h-full max-w-2xl mx-auto w-full justify-between py-2">
                             <div class="flex items-center justify-between mb-4 flex-shrink-0">
                                 <div class="flex items-center gap-2">
@@ -399,21 +398,17 @@
                                 <button id="quiz-btn-quit" class="text-xs text-slate-400 hover:text-red-500 font-medium"><i class="fa-solid fa-xmark mr-1"></i> Quitter</button>
                             </div>
 
-                            <!-- Progress Bar -->
                             <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-6 flex-shrink-0">
                                 <div id="quiz-progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
                             </div>
 
-                            <!-- 3D Interactive Card Container -->
                             <div class="perspective-1000 w-full flex-1 cursor-pointer group my-2 min-h-[280px]" id="quiz-card-container">
                                 <div id="quiz-card-inner" class="relative w-full h-full transform-style-3d shadow-md hover:shadow-lg transition-all rounded-3xl border border-slate-200 dark:border-slate-700">
-                                    <!-- FRONT -->
                                     <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
                                         <span class="text-xs text-brand-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-question-circle mr-1"></i> Question / Recto</span>
                                         <p id="quiz-card-q" class="text-xl font-semibold text-slate-800 dark:text-white my-auto px-4">--</p>
                                         <span class="text-xs text-slate-400 italic">Clique sur la carte pour voir la réponse</span>
                                     </div>
-                                    <!-- BACK -->
                                     <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
                                         <span class="text-xs text-brand-600 font-bold uppercase tracking-widest"><i class="fa-solid fa-lightbulb mr-1"></i> Réponse / Verso</span>
                                         <p id="quiz-card-a" class="text-xl font-semibold text-slate-800 dark:text-white my-auto px-4 whitespace-pre-wrap">--</p>
@@ -422,7 +417,6 @@
                                 </div>
                             </div>
 
-                            <!-- Action buttons after flipping -->
                             <div class="grid grid-cols-2 gap-4 mt-6 flex-shrink-0">
                                 <button id="quiz-btn-hard" class="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 py-3 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-circle-xmark"></i> Difficile / À revoir
@@ -433,7 +427,6 @@
                             </div>
                         </div>
 
-                        <!-- Step 3: Quiz Score Summary -->
                         <div id="quiz-score-screen" class="hidden max-w-md mx-auto w-full my-auto text-center space-y-6">
                             <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-inner">
                                 <i class="fa-solid fa-trophy"></i>
@@ -633,7 +626,7 @@
 
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-red-600 mb-2">Zone de danger</h3>
-                        <p class="text-sm text-slate-500 mb-3">Efface toutes les données de l'application définitivement.</p>
+                        <p class="text-sm text-slate-500 mb-3">Efface toutes de l'application définitivement.</p>
                         <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
                     </div>
                 </div>
@@ -824,12 +817,12 @@
 
             updateDashboardStats() {
                 try {
-                    const total = AppState.tasks.length;
-                    const done = AppState.tasks.filter(t => t.status === 'done').length;
-                    const todo = total - done;
+                    const urgentPending = AppState.tasks.filter(t => t.urgent && t.status !== 'done').length;
+                    const totalUrgent = AppState.tasks.filter(t => t.urgent).length;
+                    const doneUrgent = totalUrgent - urgentPending;
                     
-                    document.getElementById('dash-todo-count').textContent = todo;
-                    const progress = total === 0 ? 0 : Math.round((done / total) * 100);
+                    document.getElementById('dash-todo-count').textContent = urgentPending;
+                    const progress = totalUrgent === 0 ? 0 : Math.round((doneUrgent / totalUrgent) * 100);
                     document.getElementById('dash-progress-bar').style.width = `${progress}%`;
                 } catch(e) {}
             }
@@ -876,9 +869,10 @@
                 const title = document.getElementById('input-task-title').value.trim();
                 const subject = document.getElementById('input-task-subject').value.trim();
                 const date = document.getElementById('input-task-date').value;
+                const urgent = document.getElementById('input-task-urgent').checked;
                 if (!title) return;
 
-                AppState.tasks.push({ id: generateId(), title, subject, date, status: 'todo' });
+                AppState.tasks.push({ id: generateId(), title, subject, date, status: 'todo', urgent });
                 saveState();
                 
                 document.getElementById('form-add-task').reset();
@@ -950,7 +944,10 @@
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                             
-                            ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 block mb-1">${escapeHTML(t.subject)}</span>` : ''}
+                            <div class="flex items-center gap-2 mb-1">
+                                ${t.urgent ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-red-600 bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-fire"></i> Urgent</span>` : ''}
+                                ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
+                            </div>
                             <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 pr-6 break-words">${escapeHTML(t.title)}</h4>
                             
                             <div class="flex items-center justify-between mt-3">
@@ -1036,7 +1033,7 @@
             }
         };
 
-        // --- NOTES & FLASHCARDS MODULE (RESTRUCTURED) ---
+        // --- NOTES & FLASHCARDS MODULE ---
         const NotesModule = {
             quizActiveQueue: [],
             quizCurrentIndex: 0,
@@ -1044,7 +1041,6 @@
             quizScoreHard: 0,
 
             init() {
-                // Tab switching
                 const tabN = document.getElementById('tab-notes');
                 const tabF = document.getElementById('tab-flashcards');
                 const vN = document.getElementById('subview-notes');
@@ -1060,7 +1056,6 @@
                 tabN.addEventListener('click', () => switchTab(tabN, tabF, vN, vF));
                 tabF.addEventListener('click', () => switchTab(tabF, tabN, vF, vN));
 
-                // Flashcard internal sub-tabs
                 const subLib = document.getElementById('fc-subtab-lib');
                 const subQuiz = document.getElementById('fc-subtab-quiz');
                 const secLib = document.getElementById('fc-section-lib');
@@ -1081,7 +1076,6 @@
                     this.initQuizSetup();
                 });
 
-                // Notes creation & filter
                 document.getElementById('btn-add-note').addEventListener('click', () => this.addNote());
                 document.getElementById('filter-notes-subject').addEventListener('change', () => this.renderNotes());
                 document.getElementById('notes-grid').addEventListener('click', e => {
@@ -1089,7 +1083,6 @@
                     if (btn) this.deleteNote(btn.getAttribute('data-id'));
                 });
 
-                // Flashcards creation & filter
                 document.getElementById('btn-add-fc').addEventListener('click', () => this.addFC());
                 document.getElementById('filter-fc-subject').addEventListener('change', () => {
                     this.updateFCChapterFilterOptions();
@@ -1112,7 +1105,6 @@
                     document.getElementById('input-fc-q').focus();
                 });
 
-                // Quiz Setup & Active controls
                 document.getElementById('quiz-select-subject').addEventListener('change', (e) => {
                     this.updateQuizChapterFilterOptions(e.target.value);
                 });
@@ -1133,7 +1125,6 @@
                 this.updateFilterDropdowns();
             },
 
-            // --- NOTES LOGIC ---
             addNote() {
                 const title = document.getElementById('input-note-title').value.trim();
                 const subject = document.getElementById('input-note-subject').value.trim();
@@ -1191,7 +1182,6 @@
                 `).join('') || `<div class="col-span-2 py-12 text-center text-slate-400 text-sm italic">Aucune note trouvée.</div>`;
             },
 
-            // --- FLASHCARDS LOGIC ---
             addFC() {
                 const q = document.getElementById('input-fc-q').value.trim();
                 const a = document.getElementById('input-fc-a').value.trim();
@@ -1237,7 +1227,6 @@
                 grid.innerHTML = filtered.map(f => `
                     <div class="perspective-1000 w-full h-52 cursor-pointer group flex-shrink-0">
                         <div class="fc-inner relative w-full h-full transform-style-3d shadow-sm hover:shadow-md transition-shadow rounded-2xl border border-slate-200 dark:border-slate-700">
-                            <!-- FRONT -->
                             <div class="absolute w-full h-full backface-hidden bg-white dark:bg-slate-800 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
                                 <div class="w-full flex justify-between items-center">
                                     <span class="text-[10px] bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 px-2 py-0.5 rounded-md font-bold uppercase">${escapeHTML(f.subject)}</span>
@@ -1246,7 +1235,6 @@
                                 <p class="font-medium text-slate-800 dark:text-white my-auto px-2 text-sm">${escapeHTML(f.q)}</p>
                                 <span class="text-[10px] text-slate-400 font-medium">${escapeHTML(f.chapter)}</span>
                             </div>
-                            <!-- BACK -->
                             <div class="absolute w-full h-full backface-hidden card-back bg-brand-50 dark:bg-brand-900/30 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
                                 <span class="text-[10px] bg-brand-600 text-white px-2 py-0.5 rounded-md font-bold uppercase">Réponse</span>
                                 <p class="text-slate-800 dark:text-white font-medium whitespace-pre-wrap my-auto px-2 text-sm">${escapeHTML(f.a)}</p>
@@ -1257,22 +1245,18 @@
                 `).join('') || `<div class="col-span-2 py-12 text-center text-slate-400 text-sm italic">Aucune flashcard disponible.</div>`;
             },
 
-            // --- DROPDOWN FILTERS & QUIZ SETUP ---
             updateFilterDropdowns() {
                 const subjects = [...new Set(AppState.flashcards.map(f => f.subject).concat(AppState.notes.map(n => n.subject)).filter(Boolean))].sort();
 
-                // Notes subject filter
                 const noteSubSelect = document.getElementById('filter-notes-subject');
                 const curNoteSub = noteSubSelect.value;
                 noteSubSelect.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}" ${s === curNoteSub ? 'selected' : ''}>${s}</option>`).join('');
 
-                // FC subject filters
                 const fcSubSelect = document.getElementById('filter-fc-subject');
                 const curFCSub = fcSubSelect.value;
                 fcSubSelect.innerHTML = `<option value="">Toutes les matières</option>` + subjects.map(s => `<option value="${s}" ${s === curFCSub ? 'selected' : ''}>${s}</option>`).join('');
                 this.updateFCChapterFilterOptions();
 
-                // Quiz setup filters
                 const quizSubSelect = document.getElementById('quiz-select-subject');
                 const curQuizSub = quizSubSelect.value;
                 quizSubSelect.innerHTML = `<option value="">Toutes les matières (Tout mélanger)</option>` + subjects.map(s => `<option value="${s}" ${s === curQuizSub ? 'selected' : ''}>${s}</option>`).join('');
@@ -1313,7 +1297,6 @@
                     return;
                 }
 
-                // Shuffle pool randomly
                 this.quizActiveQueue = [...pool].sort(() => Math.random() - 0.5);
                 this.quizCurrentIndex = 0;
                 this.quizScoreEasy = 0;
@@ -1334,7 +1317,6 @@
                 document.getElementById('quiz-topic-badge').textContent = `${card.subject} • ${card.chapter}`;
                 document.getElementById('quiz-progress-bar').style.width = `${((this.quizCurrentIndex + 1) / total) * 100}%`;
 
-                // Reset flip state
                 document.getElementById('quiz-card-inner').classList.remove('rotate-y-180');
                 document.getElementById('quiz-card-q').textContent = card.q;
                 document.getElementById('quiz-card-a').textContent = card.a;
@@ -1348,7 +1330,6 @@
                 if (this.quizCurrentIndex < this.quizActiveQueue.length) {
                     this.renderActiveQuizCard();
                 } else {
-                    // Quiz ended
                     document.getElementById('quiz-active-screen').classList.add('hidden');
                     document.getElementById('quiz-score-screen').classList.remove('hidden');
                     document.getElementById('quiz-score-easy').textContent = this.quizScoreEasy;
@@ -1638,7 +1619,7 @@
                 document.getElementById('habits-body').innerHTML = AppState.habits.map(h => `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200 text-sm truncate">${escapeHTML(h.name)}</td>
-                        ${dates.d ? '' : dates.map(d => `<td class="py-3 px-2 text-center"><input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded cursor-pointer" data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}></td>`).join('')}
+                        ${dates.map(d => `<td class="py-3 px-2 text-center"><input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded cursor-pointer" data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}></td>`).join('')}
                         <td class="py-3 px-2 text-center"><button class="btn-del-habit text-slate-400 hover:text-red-500" data-id="${h.id}"><i class="fa-solid fa-trash-can"></i></button></td>
                     </tr>`).join('') || `<tr><td colspan="9" class="py-4 text-center text-slate-500 text-sm">Aucune habitude.</td></tr>`;
             }

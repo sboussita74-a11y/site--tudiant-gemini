@@ -146,12 +146,13 @@
             
             <!-- VIEW: DASHBOARD -->
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
-                <header class="mb-8 flex-shrink-0">
+                <header class="mb-6 flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-2">Prêt à organiser ta journée ?</p>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ?</p>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-6 flex-shrink-0">
+                <!-- TOP STATS CARDS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 flex-shrink-0">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
                         <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
                         <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
@@ -176,6 +177,56 @@
                         <p class="font-medium text-lg leading-snug italic relative z-10" id="dash-quote-text">"Le succès est la somme de petits efforts."</p>
                         <span class="text-brand-100 text-sm mt-4 font-semibold block" id="dash-quote-author">- Collier</span>
                     </div>
+                </div>
+
+                <!-- MAIN WIDGETS SECTION -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
+                    
+                    <!-- WIDGET 1: EMPLOI DU TEMPS DE DEMAIN -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 text-lg"></i>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Emploi du temps</h3>
+                            </div>
+                            <span id="widget-sched-day-name" class="text-xs font-semibold px-2.5 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-lg">Demain</span>
+                        </div>
+                        <div id="widget-sched-container" class="space-y-3 flex-1 overflow-y-auto max-h-[340px] pr-1">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- WIDGET 2: TÂCHES PRIORITAIRES (MAX 5) -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400 text-lg"></i>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Prochaines tâches</h3>
+                            </div>
+                            <button onclick="CoreUI.navigate('tasks')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
+                        </div>
+                        <div id="widget-tasks-container" class="space-y-3 flex-1 overflow-y-auto max-h-[340px] pr-1">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- WIDGET 3: PRISE DE NOTE RAPIDE -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                                <i class="fa-solid fa-bolt text-amber-500 text-lg"></i>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Note rapide</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <input type="text" id="widget-note-title" placeholder="Titre de l'idée..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                                <textarea id="widget-note-content" placeholder="Écris rapidement ce que tu dois retenir..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none h-32"></textarea>
+                            </div>
+                        </div>
+                        <button id="widget-btn-add-note" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Enregistrer dans les notes
+                        </button>
+                    </div>
+
                 </div>
             </section>
 
@@ -708,6 +759,7 @@
                 this.setupNav();
                 this.startClock();
                 this.initQuotes();
+                this.setupWidgetQuickNote();
                 
                 try { TasksModule.init(); } catch (e) { console.error("Tasks init failed", e); }
                 try { ScheduleModule.init(); } catch (e) { console.error("Schedule init failed", e); }
@@ -718,6 +770,7 @@
                 try { SettingsModule.init(); } catch (e) { console.error("Settings init failed", e); }
 
                 this.updateDashboardStats();
+                this.renderDashboardWidgets();
                 this.navigate('dashboard');
             },
 
@@ -784,7 +837,10 @@
                     activeBtn.className = "nav-btn w-full flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400";
                 }
                 
-                if(viewId === 'dashboard') this.updateDashboardStats();
+                if(viewId === 'dashboard') {
+                    this.updateDashboardStats();
+                    this.renderDashboardWidgets();
+                }
             },
 
             startClock() {
@@ -825,6 +881,98 @@
                     const progress = totalUrgent === 0 ? 0 : Math.round((doneUrgent / totalUrgent) * 100);
                     document.getElementById('dash-progress-bar').style.width = `${progress}%`;
                 } catch(e) {}
+            },
+
+            setupWidgetQuickNote() {
+                document.getElementById('widget-btn-add-note').addEventListener('click', () => {
+                    const title = document.getElementById('widget-note-title').value.trim();
+                    const content = document.getElementById('widget-note-content').value.trim();
+
+                    if (!title && !content) return;
+
+                    AppState.notes.unshift({
+                        id: generateId(),
+                        title: title || 'Note rapide',
+                        subject: 'Accueil',
+                        chapter: '',
+                        content: content,
+                        date: new Date().toLocaleDateString('fr')
+                    });
+
+                    saveState();
+                    document.getElementById('widget-note-title').value = '';
+                    document.getElementById('widget-note-content').value = '';
+                    NotesModule.renderNotes();
+                    NotesModule.updateFilterDropdowns();
+                    showToast("Note enregistrée dans l'onglet Notes !");
+                });
+            },
+
+            renderDashboardWidgets() {
+                // 1. RENDER NEXT DAY SCHEDULE
+                const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+                const tomorrowDate = new Date();
+                tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+                const tomorrowDayIndex = tomorrowDate.getDay();
+                let tomorrowDayName = dayNames[tomorrowDayIndex];
+
+                // If tomorrow is Weekend (Saturday/Sunday), jump to Monday
+                if (tomorrowDayName === 'Samedi' || tomorrowDayName === 'Dimanche') {
+                    tomorrowDayName = 'Lundi';
+                }
+
+                document.getElementById('widget-sched-day-name').textContent = tomorrowDayName;
+                const schedContainer = document.getElementById('widget-sched-container');
+                const tomorrowClasses = AppState.schedule
+                    .filter(c => c.day === tomorrowDayName)
+                    .sort((a, b) => a.start.localeCompare(b.start));
+
+                if (tomorrowClasses.length === 0) {
+                    schedContainer.innerHTML = `<div class="h-32 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
+                } else {
+                    schedContainer.innerHTML = tomorrowClasses.map(c => `
+                        <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 text-sm">
+                            <div class="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">${escapeHTML(c.subject)}</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1"></i> ${c.start} - ${c.end}</div>
+                            ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> ${escapeHTML(c.room)}</div>` : ''}
+                        </div>
+                    `).join('');
+                }
+
+                // 2. RENDER TASKS WIDGET (MAX 5 UNFINISHED TASKS, URGENT FIRST)
+                const tasksContainer = document.getElementById('widget-tasks-container');
+                const pendingTasks = AppState.tasks
+                    .filter(t => t.status !== 'done')
+                    .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0))
+                    .slice(0, 5);
+
+                if (pendingTasks.length === 0) {
+                    tasksContainer.innerHTML = `<div class="h-32 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Toutes tes tâches sont terminées ! 🎉</div>`;
+                } else {
+                    tasksContainer.innerHTML = pendingTasks.map(t => {
+                        const cardBgClass = t.urgent 
+                            ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800' 
+                            : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-700/80';
+
+                        return `
+                        <div class="${cardBgClass} p-3 rounded-xl border flex items-center justify-between text-sm transition-all">
+                            <div class="flex items-center gap-2.5 overflow-hidden pr-2">
+                                <button onclick="TasksModule.updateStatus('${t.id}', 'done')" class="w-5 h-5 rounded-md border-2 border-slate-300 dark:border-slate-600 hover:border-brand-500 flex items-center justify-center text-xs flex-shrink-0 transition-colors" title="Marquer comme fait">
+                                </button>
+                                <div class="truncate">
+                                    <div class="flex items-center gap-1.5 mb-0.5">
+                                        ${t.urgent ? `<span class="text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 px-1.5 py-0.2 rounded"><i class="fa-solid fa-fire mr-0.5"></i> Urgent</span>` : ''}
+                                        ${t.subject ? `<span class="text-[10px] font-bold uppercase text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
+                                    </div>
+                                    <p class="font-medium text-slate-800 dark:text-slate-200 text-xs truncate">${escapeHTML(t.title)}</p>
+                                </div>
+                            </div>
+                            <button onclick="TasksModule.toggleUrgent('${t.id}')" class="text-xs p-1 ${t.urgent ? 'text-red-500' : 'text-slate-300 hover:text-slate-500'}" title="${t.urgent ? 'Retirer l urgence' : 'Rendre urgent'}">
+                                <i class="fa-solid fa-fire"></i>
+                            </button>
+                        </div>`;
+                    }).join('');
+                }
             }
         };
 
@@ -884,6 +1032,7 @@
                 document.getElementById('task-form-container').classList.add('hidden');
                 this.render();
                 CoreUI.updateDashboardStats();
+                CoreUI.renderDashboardWidgets();
                 showToast('Tâche ajoutée');
             },
 
@@ -894,6 +1043,7 @@
                     saveState();
                     this.render();
                     CoreUI.updateDashboardStats();
+                    CoreUI.renderDashboardWidgets();
                 }
             },
 
@@ -904,6 +1054,7 @@
                     saveState();
                     this.render();
                     CoreUI.updateDashboardStats();
+                    CoreUI.renderDashboardWidgets();
                     showToast(task.urgent ? "Marquée comme urgente" : "Marquée comme normale");
                 }
             },
@@ -913,6 +1064,7 @@
                 saveState();
                 this.render();
                 CoreUI.updateDashboardStats();
+                CoreUI.renderDashboardWidgets();
             },
 
             handleDragStart(e, id) {
@@ -1024,6 +1176,7 @@
                 
                 document.getElementById('form-add-schedule').reset();
                 this.render();
+                CoreUI.renderDashboardWidgets();
                 showToast('Cours ajouté');
             },
 
@@ -1031,6 +1184,7 @@
                 AppState.schedule = AppState.schedule.filter(c => c.id !== id);
                 saveState();
                 this.render();
+                CoreUI.renderDashboardWidgets();
             },
 
             render() {

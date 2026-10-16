@@ -626,7 +626,7 @@
 
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-red-600 mb-2">Zone de danger</h3>
-                        <p class="text-sm text-slate-500 mb-3">Efface toutes de l'application définitivement.</p>
+                        <p class="text-sm text-slate-500 mb-3">Efface toutes les données de l'application définitivement.</p>
                         <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
                     </div>
                 </div>
@@ -860,6 +860,11 @@
                         const id = btnDel.getAttribute('data-id');
                         if (id) this.deleteTask(id);
                     }
+                    const btnUrgent = e.target.closest('.btn-toggle-urgent');
+                    if (btnUrgent) {
+                        const id = btnUrgent.getAttribute('data-id');
+                        if (id) this.toggleUrgent(id);
+                    }
                 });
 
                 this.render();
@@ -889,6 +894,17 @@
                     saveState();
                     this.render();
                     CoreUI.updateDashboardStats();
+                }
+            },
+
+            toggleUrgent(id) {
+                const task = AppState.tasks.find(t => t.id === id);
+                if (task) {
+                    task.urgent = !task.urgent;
+                    saveState();
+                    this.render();
+                    CoreUI.updateDashboardStats();
+                    showToast(task.urgent ? "Marquée comme urgente" : "Marquée comme normale");
                 }
             },
 
@@ -940,12 +956,17 @@
                         <div draggable="true" ondragstart="TasksModule.handleDragStart(event, '${t.id}')" ondragend="TasksModule.handleDragEnd(event)"
                              class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab relative group flex-shrink-0">
                             
-                            <button class="btn-del-task absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity" data-id="${t.id}">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
+                            <div class="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button class="btn-toggle-urgent p-1.5 rounded-lg text-xs ${t.urgent ? 'text-red-600 bg-red-100 dark:bg-red-900/40' : 'text-slate-400 hover:text-red-500 bg-slate-100 dark:bg-slate-700'}" data-id="${t.id}" title="${t.urgent ? 'Retirer l urgence' : 'Marquer comme urgente'}">
+                                    <i class="fa-solid fa-fire"></i>
+                                </button>
+                                <button class="btn-del-task p-1.5 rounded-lg text-xs text-slate-400 hover:text-red-500 bg-slate-100 dark:bg-slate-700" data-id="${t.id}" title="Supprimer">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
                             
-                            <div class="flex items-center gap-2 mb-1">
-                                ${t.urgent ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-red-600 bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-fire"></i> Urgent</span>` : ''}
+                            <div class="flex items-center gap-2 mb-1 pr-16">
+                                ${t.urgent ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 shadow-sm px-2.5 py-0.5 rounded-md"><i class="fa-solid fa-fire"></i> Urgent</span>` : ''}
                                 ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
                             </div>
                             <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 pr-6 break-words">${escapeHTML(t.title)}</h4>

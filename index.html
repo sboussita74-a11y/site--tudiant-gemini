@@ -182,37 +182,47 @@
                 <!-- MAIN WIDGETS SECTION (AÉRÉ ET VARIÉ) -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 items-start">
                     
-                    <!-- WIDGET 1: EMPLOI DU TEMPS (FIDÈLE À LA MAQUETTE) -->
+                    <!-- WIDGET 1: EMPLOI DU TEMPS (AVEC TITRE ET BOUTON VOIR TOUT) -->
                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                        <!-- Top Day Header Card (style maquette) -->
-                        <div id="widget-sched-day-name" class="bg-slate-900 dark:bg-slate-950 text-white font-bold py-3.5 rounded-2xl text-center text-base tracking-wide shadow-sm mb-4 flex-shrink-0">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 text-lg"></i>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Emploi du temps</h3>
+                            </div>
+                            <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
+                        </div>
+                        <!-- Day Header Card (Bloc en bleu propre) -->
+                        <div id="widget-sched-day-name" class="bg-brand-600 text-white font-bold py-3.5 rounded-2xl text-center text-base tracking-wide shadow-sm mb-4 flex-shrink-0">
                             Demain
                         </div>
-                        <div id="widget-sched-container" class="space-y-3.5 flex-1 overflow-y-auto pr-1">
+                        <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
 
-                    <!-- WIDGET 2: TÂCHES (APERÇU 3 ÉLÉMENTS MAX, SANS VALIDATION) -->
+                    <!-- WIDGET 2: TÂCHES (NON COMPRESSÉ, SANS ICÔNE INUTILE, ESPACÉ) -->
                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
                             <div class="flex items-center gap-2.5">
                                 <i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Prochaines tâches</h3>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Tâches</h3>
                             </div>
                             <button onclick="CoreUI.navigate('tasks')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
                         </div>
-                        <div id="widget-tasks-container" class="space-y-3.5 flex-1 overflow-y-auto pr-1">
+                        <div id="widget-tasks-container" class="space-y-4 flex-1 overflow-y-auto pr-1">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
 
-                    <!-- WIDGET 3: NOTES (PLUS COMPACT ET COMPLET) -->
+                    <!-- WIDGET 3: NOTES (AVEC MATIÈRE/CHAPITRE ET BOUTON VOIR TOUT) -->
                     <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
                         <div>
-                            <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                                <i class="fa-solid fa-pen-to-square text-brand-600 dark:text-brand-400 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Notes</h3>
+                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-pen-to-square text-brand-600 dark:text-brand-400 text-lg"></i>
+                                    <h3 class="font-bold text-slate-800 dark:text-white">Notes</h3>
+                                </div>
+                                <button onclick="CoreUI.navigate('notes')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
                             </div>
                             <div class="space-y-3">
                                 <input type="text" id="widget-note-title" placeholder="Titre de la note..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
@@ -914,7 +924,7 @@
             },
 
             renderDashboardWidgets() {
-                // 1. RENDER NEXT DAY SCHEDULE (Fidèle au design de la maquette)
+                // 1. RENDER NEXT DAY SCHEDULE (Fidèle au design de la maquette, jour en bleu propre)
                 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
                 const tomorrowDate = new Date();
                 tomorrowDate.setDate(tomorrowDate.getDate() + 1);
@@ -942,7 +952,7 @@
                     `).join('');
                 }
 
-                // 2. RENDER TASKS WIDGET (MAX 3 TÂCHES, URGENTES D'ABORD, SANS VALIDATION)
+                // 2. RENDER TASKS WIDGET (Aéré, sans icône inutile, affichage clair sans coupure)
                 const tasksContainer = document.getElementById('widget-tasks-container');
                 const pendingTasks = AppState.tasks
                     .filter(t => t.status !== 'done')
@@ -955,23 +965,17 @@
                     tasksContainer.innerHTML = pendingTasks.map(t => {
                         const cardBgClass = t.urgent 
                             ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800' 
-                            : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-700/80';
+                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
 
                         return `
-                        <div class="${cardBgClass} p-3.5 rounded-2xl border flex items-center justify-between text-sm transition-all">
-                            <div class="flex items-center gap-3 overflow-hidden pr-2">
-                                <div class="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0 text-xs font-bold">
-                                    <i class="fa-solid fa-thumbtack"></i>
+                        <div class="${cardBgClass} p-4 rounded-2xl border flex items-center justify-between text-sm transition-all shadow-sm">
+                            <div class="flex flex-col gap-1 pr-2 w-full">
+                                <div class="flex items-center gap-2">
+                                    ${t.urgent ? `<span class="text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 px-2 py-0.5 rounded"><i class="fa-solid fa-fire mr-1"></i>Urgent</span>` : ''}
+                                    ${t.subject ? `<span class="text-[10px] font-bold uppercase text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
                                 </div>
-                                <div class="truncate">
-                                    <div class="flex items-center gap-1.5 mb-0.5">
-                                        ${t.urgent ? `<span class="text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 px-1.5 py-0.2 rounded"><i class="fa-solid fa-fire mr-0.5"></i> Urgent</span>` : ''}
-                                        ${t.subject ? `<span class="text-[10px] font-bold uppercase text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
-                                    </div>
-                                    <p class="font-medium text-slate-800 dark:text-slate-200 text-xs truncate">${escapeHTML(t.title)}</p>
-                                </div>
+                                <p class="font-medium text-slate-800 dark:text-slate-100 text-sm">${escapeHTML(t.title)}</p>
                             </div>
-                            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
                         </div>`;
                     }).join('');
                 }

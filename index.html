@@ -145,14 +145,14 @@
         <div class="p-8 max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
             
             <!-- VIEW: DASHBOARD -->
-            <section id="dashboard-view" class="app-section active overflow-y-auto pr-1">
-                <header class="mb-6 flex-shrink-0">
+            <section id="dashboard-view" class="app-section active overflow-y-auto pr-1 space-y-8">
+                <header class="flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
                     <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ?</p>
                 </header>
 
                 <!-- TOP STATS CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 flex-shrink-0">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-shrink-0">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
                         <div id="dash-time" class="text-5xl font-bold text-brand-600 dark:text-brand-500 tracking-tighter mb-2">00:00</div>
                         <div id="dash-date" class="text-slate-500 dark:text-slate-400 font-medium capitalize">Lundi 1 Janvier</div>
@@ -179,25 +179,22 @@
                     </div>
                 </div>
 
-                <!-- MAIN WIDGETS SECTION -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
+                <!-- MAIN WIDGETS SECTION (AÉRÉ ET VARIÉ) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 items-start">
                     
-                    <!-- WIDGET 1: EMPLOI DU TEMPS DE DEMAIN -->
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                            <div class="flex items-center gap-2.5">
-                                <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Emploi du temps</h3>
-                            </div>
-                            <span id="widget-sched-day-name" class="text-xs font-semibold px-2.5 py-1 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-lg">Demain</span>
+                    <!-- WIDGET 1: EMPLOI DU TEMPS (FIDÈLE À LA MAQUETTE) -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                        <!-- Top Day Header Card (style maquette) -->
+                        <div id="widget-sched-day-name" class="bg-slate-900 dark:bg-slate-950 text-white font-bold py-3.5 rounded-2xl text-center text-base tracking-wide shadow-sm mb-4 flex-shrink-0">
+                            Demain
                         </div>
-                        <div id="widget-sched-container" class="space-y-3 flex-1 overflow-y-auto max-h-[340px] pr-1">
+                        <div id="widget-sched-container" class="space-y-3.5 flex-1 overflow-y-auto pr-1">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
 
-                    <!-- WIDGET 2: TÂCHES PRIORITAIRES (MAX 5) -->
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
+                    <!-- WIDGET 2: TÂCHES (APERÇU 3 ÉLÉMENTS MAX, SANS VALIDATION) -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
                         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
                             <div class="flex items-center gap-2.5">
                                 <i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400 text-lg"></i>
@@ -205,25 +202,29 @@
                             </div>
                             <button onclick="CoreUI.navigate('tasks')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
                         </div>
-                        <div id="widget-tasks-container" class="space-y-3 flex-1 overflow-y-auto max-h-[340px] pr-1">
+                        <div id="widget-tasks-container" class="space-y-3.5 flex-1 overflow-y-auto pr-1">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
 
-                    <!-- WIDGET 3: PRISE DE NOTE RAPIDE -->
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+                    <!-- WIDGET 3: NOTES (PLUS COMPACT ET COMPLET) -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                                <i class="fa-solid fa-bolt text-amber-500 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Note rapide</h3>
+                                <i class="fa-solid fa-pen-to-square text-brand-600 dark:text-brand-400 text-lg"></i>
+                                <h3 class="font-bold text-slate-800 dark:text-white">Notes</h3>
                             </div>
                             <div class="space-y-3">
-                                <input type="text" id="widget-note-title" placeholder="Titre de l'idée..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                                <textarea id="widget-note-content" placeholder="Écris rapidement ce que tu dois retenir..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none h-32"></textarea>
+                                <input type="text" id="widget-note-title" placeholder="Titre de la note..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" id="widget-note-subject" placeholder="Matière" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                                    <input type="text" id="widget-note-chapter" placeholder="Chapitre" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                                </div>
+                                <textarea id="widget-note-content" placeholder="Contenu..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none h-20"></textarea>
                             </div>
                         </div>
                         <button id="widget-btn-add-note" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> Enregistrer dans les notes
+                            <i class="fa-solid fa-plus"></i> Enregistrer
                         </button>
                     </div>
 
@@ -886,37 +887,39 @@
             setupWidgetQuickNote() {
                 document.getElementById('widget-btn-add-note').addEventListener('click', () => {
                     const title = document.getElementById('widget-note-title').value.trim();
+                    const subject = document.getElementById('widget-note-subject').value.trim();
+                    const chapter = document.getElementById('widget-note-chapter').value.trim();
                     const content = document.getElementById('widget-note-content').value.trim();
 
                     if (!title && !content) return;
 
                     AppState.notes.unshift({
                         id: generateId(),
-                        title: title || 'Note rapide',
-                        subject: 'Accueil',
-                        chapter: '',
+                        title: title || 'Sans titre',
+                        subject: subject ? subject.charAt(0).toUpperCase() + subject.slice(1) : '',
+                        chapter: chapter || '',
                         content: content,
                         date: new Date().toLocaleDateString('fr')
                     });
 
                     saveState();
                     document.getElementById('widget-note-title').value = '';
+                    document.getElementById('widget-note-subject').value = '';
+                    document.getElementById('widget-note-chapter').value = '';
                     document.getElementById('widget-note-content').value = '';
                     NotesModule.renderNotes();
                     NotesModule.updateFilterDropdowns();
-                    showToast("Note enregistrée dans l'onglet Notes !");
+                    showToast("Note enregistrée !");
                 });
             },
 
             renderDashboardWidgets() {
-                // 1. RENDER NEXT DAY SCHEDULE
+                // 1. RENDER NEXT DAY SCHEDULE (Fidèle au design de la maquette)
                 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
                 const tomorrowDate = new Date();
                 tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-                const tomorrowDayIndex = tomorrowDate.getDay();
-                let tomorrowDayName = dayNames[tomorrowDayIndex];
+                let tomorrowDayName = dayNames[tomorrowDate.getDay()];
 
-                // If tomorrow is Weekend (Saturday/Sunday), jump to Monday
                 if (tomorrowDayName === 'Samedi' || tomorrowDayName === 'Dimanche') {
                     tomorrowDayName = 'Lundi';
                 }
@@ -928,26 +931,26 @@
                     .sort((a, b) => a.start.localeCompare(b.start));
 
                 if (tomorrowClasses.length === 0) {
-                    schedContainer.innerHTML = `<div class="h-32 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
+                    schedContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
                 } else {
                     schedContainer.innerHTML = tomorrowClasses.map(c => `
-                        <div class="bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-xl p-3 text-sm">
-                            <div class="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">${escapeHTML(c.subject)}</div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1"></i> ${c.start} - ${c.end}</div>
-                            ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> ${escapeHTML(c.room)}</div>` : ''}
+                        <div class="bg-brand-50/70 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-2xl p-3.5 text-sm">
+                            <div class="font-bold text-slate-800 dark:text-slate-100 mb-1">${escapeHTML(c.subject)}</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1.5 text-brand-500"></i> ${c.start} - ${c.end}</div>
+                            ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1.5 text-brand-500"></i> ${escapeHTML(c.room)}</div>` : ''}
                         </div>
                     `).join('');
                 }
 
-                // 2. RENDER TASKS WIDGET (MAX 5 UNFINISHED TASKS, URGENT FIRST)
+                // 2. RENDER TASKS WIDGET (MAX 3 TÂCHES, URGENTES D'ABORD, SANS VALIDATION)
                 const tasksContainer = document.getElementById('widget-tasks-container');
                 const pendingTasks = AppState.tasks
                     .filter(t => t.status !== 'done')
                     .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0))
-                    .slice(0, 5);
+                    .slice(0, 3);
 
                 if (pendingTasks.length === 0) {
-                    tasksContainer.innerHTML = `<div class="h-32 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">Toutes tes tâches sont terminées ! 🎉</div>`;
+                    tasksContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Toutes tes tâches sont terminées ! 🎉</div>`;
                 } else {
                     tasksContainer.innerHTML = pendingTasks.map(t => {
                         const cardBgClass = t.urgent 
@@ -955,10 +958,11 @@
                             : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-700/80';
 
                         return `
-                        <div class="${cardBgClass} p-3 rounded-xl border flex items-center justify-between text-sm transition-all">
-                            <div class="flex items-center gap-2.5 overflow-hidden pr-2">
-                                <button onclick="TasksModule.updateStatus('${t.id}', 'done')" class="w-5 h-5 rounded-md border-2 border-slate-300 dark:border-slate-600 hover:border-brand-500 flex items-center justify-center text-xs flex-shrink-0 transition-colors" title="Marquer comme fait">
-                                </button>
+                        <div class="${cardBgClass} p-3.5 rounded-2xl border flex items-center justify-between text-sm transition-all">
+                            <div class="flex items-center gap-3 overflow-hidden pr-2">
+                                <div class="w-8 h-8 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center text-brand-600 dark:text-brand-400 flex-shrink-0 text-xs font-bold">
+                                    <i class="fa-solid fa-thumbtack"></i>
+                                </div>
                                 <div class="truncate">
                                     <div class="flex items-center gap-1.5 mb-0.5">
                                         ${t.urgent ? `<span class="text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 px-1.5 py-0.2 rounded"><i class="fa-solid fa-fire mr-0.5"></i> Urgent</span>` : ''}
@@ -967,9 +971,7 @@
                                     <p class="font-medium text-slate-800 dark:text-slate-200 text-xs truncate">${escapeHTML(t.title)}</p>
                                 </div>
                             </div>
-                            <button onclick="TasksModule.toggleUrgent('${t.id}')" class="text-xs p-1 ${t.urgent ? 'text-red-500' : 'text-slate-300 hover:text-slate-500'}" title="${t.urgent ? 'Retirer l urgence' : 'Rendre urgent'}">
-                                <i class="fa-solid fa-fire"></i>
-                            </button>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
                         </div>`;
                     }).join('');
                 }

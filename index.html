@@ -744,7 +744,9 @@
                     }
                     AppState = { ...defaultState, ...parsed };
                     if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes', 'habits'];
+                    if (!AppState.dashboardOrder.includes('habits')) AppState.dashboardOrder.push('habits');
                     if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true, habits: true };
+                    if (AppState.widgetVisibility.habits === undefined) AppState.widgetVisibility.habits = true;
                 }
             } catch (e) { console.error("Load Error", e); }
         }
@@ -793,10 +795,10 @@
                     </div>
                     <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
                 </div>
-                <div class="bg-brand-600/30 dark:bg-brand-600/40 border border-brand-500/30 text-white font-semibold py-2.5 px-4 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0 flex items-center justify-between">
-                    <button id="widget-sched-prev" class="text-white/70 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour précédent"><i class="fa-solid fa-chevron-left"></i></button>
-                    <span id="widget-sched-day-name" class="text-white font-bold">${currentDayName}</span>
-                    <button id="widget-sched-next" class="text-white/70 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour suivant"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="bg-brand-600/30 dark:bg-brand-600/40 border border-brand-500/30 font-semibold py-2.5 px-4 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0 flex items-center justify-between">
+                    <button id="widget-sched-prev" class="text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white transition-colors p-1 pointer-events-auto" title="Jour précédent"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="widget-sched-day-name" class="text-slate-900 dark:text-white font-bold">${currentDayName}</span>
+                    <button id="widget-sched-next" class="text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white transition-colors p-1 pointer-events-auto" title="Jour suivant"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1"></div>
             `;

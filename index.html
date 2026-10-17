@@ -148,7 +148,7 @@
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1 space-y-12">
                 <header class="flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ? Tu peux glisser et déplacer les widgets ci-dessous librement.</p>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ?</p>
                 </header>
 
                 <!-- TOP STATS CARDS -->
@@ -182,9 +182,14 @@
                 <!-- SÉPARATEUR DISCRET & ESPACÉ -->
                 <hr class="border-slate-200/80 dark:border-slate-800 my-6">
 
+                <!-- SECTION TITRE WIDGETS -->
+                <div class="flex-shrink-0">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Widgets</h3>
+                </div>
+
                 <!-- MAIN WIDGETS SECTION (DRAGGABLE & REORDERABLE) -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 items-start" id="dashboard-widgets-container">
-                    <!-- Injected dynamically via AppState.dashboardOrder -->
+                    <!-- Injected dynamically via AppState.dashboardOrder & widgetVisibility -->
                 </div>
             </section>
 
@@ -617,11 +622,31 @@
             <section id="settings-view" class="app-section overflow-y-auto pr-1">
                 <header class="mb-6 flex-shrink-0">
                     <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Paramètres & Données</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes sauvegardes (LocalStorage).</p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes préférences et tes sauvegardes (LocalStorage).</p>
                 </header>
 
                 <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6 flex-shrink-0 mb-6">
+                    <!-- Widget Visibility Settings -->
                     <div>
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Affichage des widgets sur l'accueil</h3>
+                        <p class="text-sm text-slate-500 mb-3">Coche ou décoche les widgets que tu souhaites afficher sur ta page d'accueil.</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="setting-widget-schedule" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
+                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Emploi du temps</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="setting-widget-tasks" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
+                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Tâches</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="setting-widget-notes" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
+                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Notes</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
                         <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Sauvegarde (Export)</h3>
                         <p class="text-sm text-slate-500 mb-3">Télécharge toutes tes données au format JSON pour ne pas les perdre.</p>
                         <button id="btn-export-data" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm transition-colors"><i class="fa-solid fa-download mr-2"></i> Exporter mes données</button>
@@ -659,6 +684,7 @@
             theme: 'light',
             sidebarCollapsed: false,
             dashboardOrder: ['schedule', 'tasks', 'notes'],
+            widgetVisibility: { schedule: true, tasks: true, notes: true },
             tasks: [], 
             schedule: [], 
             notes: [], 
@@ -684,6 +710,7 @@
                     }
                     AppState = { ...defaultState, ...parsed };
                     if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
+                    if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
                 }
             } catch (e) { console.error("Load Error", e); }
         }
@@ -710,8 +737,20 @@
             }, 3000);
         }
 
+        // Dashboard Schedule Day Navigation State
+        const weekdaysList = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+        let currentDashboardDayIndex = (() => {
+            const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            let name = dayNames[tomorrow.getDay()];
+            let idx = weekdaysList.indexOf(name);
+            return idx !== -1 ? idx : 0;
+        })();
+
         // Widget HTML templates for dynamic drag-and-drop ordering
         function getScheduleWidgetHTML() {
+            const currentDayName = weekdaysList[currentDashboardDayIndex];
             return `
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60 pointer-events-none">
                     <div class="flex items-center gap-2.5">
@@ -720,8 +759,10 @@
                     </div>
                     <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
                 </div>
-                <div id="widget-sched-day-name" class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 font-semibold py-2.5 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0">
-                    Demain
+                <div class="bg-brand-500/80 dark:bg-brand-600/70 text-white font-semibold py-2.5 px-4 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0 flex items-center justify-between">
+                    <button id="widget-sched-prev" class="text-white/80 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour précédent"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="widget-sched-day-name" class="text-white font-bold">${currentDayName}</span>
+                    <button id="widget-sched-next" class="text-white/80 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour suivant"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1"></div>
             `;
@@ -856,6 +897,8 @@
                 if(viewId === 'dashboard') {
                     this.updateDashboardStats();
                     this.renderDashboardWidgets();
+                } else if(viewId === 'settings') {
+                    SettingsModule.syncUI();
                 }
             },
 
@@ -959,8 +1002,11 @@
             renderDashboardWidgets() {
                 const container = document.getElementById('dashboard-widgets-container');
                 if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
+                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
 
-                container.innerHTML = AppState.dashboardOrder.map(id => {
+                const visibleOrder = AppState.dashboardOrder.filter(id => AppState.widgetVisibility[id] !== false);
+
+                container.innerHTML = visibleOrder.map(id => {
                     if (id === 'schedule') {
                         return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'schedule')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'schedule')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-grab active:cursor-grabbing">${getScheduleWidgetHTML()}</div>`;
                     } else if (id === 'tasks') {
@@ -972,29 +1018,36 @@
 
                 this.setupWidgetQuickNote();
 
-                // 1. RENDER NEXT DAY SCHEDULE
-                const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-                const tomorrowDate = new Date();
-                tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-                let tomorrowDayName = dayNames[tomorrowDate.getDay()];
-
-                if (tomorrowDayName === 'Samedi' || tomorrowDayName === 'Dimanche') {
-                    tomorrowDayName = 'Lundi';
+                // Setup Schedule Day Navigation Arrows
+                const prevBtn = document.getElementById('widget-sched-prev');
+                const nextBtn = document.getElementById('widget-sched-next');
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentDashboardDayIndex = (currentDashboardDayIndex - 1 + weekdaysList.length) % weekdaysList.length;
+                        this.renderDashboardWidgets();
+                    });
+                }
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        currentDashboardDayIndex = (currentDashboardDayIndex + 1) % weekdaysList.length;
+                        this.renderDashboardWidgets();
+                    });
                 }
 
-                const dayNameEl = document.getElementById('widget-sched-day-name');
-                if (dayNameEl) dayNameEl.textContent = tomorrowDayName;
-
+                // 1. RENDER SCHEDULE FOR SELECTED DAY
+                const currentDayName = weekdaysList[currentDashboardDayIndex];
                 const schedContainer = document.getElementById('widget-sched-container');
                 if (schedContainer) {
-                    const tomorrowClasses = AppState.schedule
-                        .filter(c => c.day === tomorrowDayName)
+                    const dayClasses = AppState.schedule
+                        .filter(c => c.day === currentDayName)
                         .sort((a, b) => a.start.localeCompare(b.start));
 
-                    if (tomorrowClasses.length === 0) {
-                        schedContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
+                    if (dayClasses.length === 0) {
+                        schedContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucun cours prévu pour ${currentDayName.toLowerCase()}.</div>`;
                     } else {
-                        schedContainer.innerHTML = tomorrowClasses.map(c => `
+                        schedContainer.innerHTML = dayClasses.map(c => `
                             <div class="bg-brand-50/70 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-2xl p-3.5 text-sm pointer-events-auto">
                                 <div class="font-bold text-slate-800 dark:text-slate-100 mb-1">${escapeHTML(c.subject)}</div>
                                 <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1.5 text-brand-500"></i> ${c.start} - ${c.end}</div>
@@ -1004,7 +1057,7 @@
                     }
                 }
 
-                // 2. RENDER TASKS WIDGET (avec distinction urgente / prochaine en bleu)
+                // 2. RENDER TASKS WIDGET
                 const tasksContainer = document.getElementById('widget-tasks-container');
                 if (tasksContainer) {
                     const pendingTasks = AppState.tasks
@@ -1895,6 +1948,22 @@
         // --- SETTINGS MODULE ---
         const SettingsModule = {
             init() {
+                const chkSched = document.getElementById('setting-widget-schedule');
+                const chkTasks = document.getElementById('setting-widget-tasks');
+                const chkNotes = document.getElementById('setting-widget-notes');
+
+                const updateVisibilityFromUI = () => {
+                    AppState.widgetVisibility.schedule = chkSched.checked;
+                    AppState.widgetVisibility.tasks = chkTasks.checked;
+                    AppState.widgetVisibility.notes = chkNotes.checked;
+                    saveState();
+                    CoreUI.renderDashboardWidgets();
+                };
+
+                chkSched.addEventListener('change', updateVisibilityFromUI);
+                chkTasks.addEventListener('change', updateVisibilityFromUI);
+                chkNotes.addEventListener('change', updateVisibilityFromUI);
+
                 document.getElementById('btn-export-data').addEventListener('click', () => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState));
                     const node = document.createElement('a');
@@ -1918,6 +1987,16 @@
                 document.getElementById('btn-clear-data').addEventListener('click', () => {
                     if (confirm("Effacer toutes les données ?")) { localStorage.removeItem(STORAGE_KEY); window.location.reload(); }
                 });
+            },
+
+            syncUI() {
+                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
+                const chkSched = document.getElementById('setting-widget-schedule');
+                const chkTasks = document.getElementById('setting-widget-tasks');
+                const chkNotes = document.getElementById('setting-widget-notes');
+                if(chkSched) chkSched.checked = AppState.widgetVisibility.schedule !== false;
+                if(chkTasks) chkTasks.checked = AppState.widgetVisibility.tasks !== false;
+                if(chkNotes) chkNotes.checked = AppState.widgetVisibility.notes !== false;
             }
         };
 

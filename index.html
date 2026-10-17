@@ -625,43 +625,77 @@
                     <p class="text-slate-500 dark:text-slate-400 text-sm">Gère tes préférences et tes sauvegardes (LocalStorage).</p>
                 </header>
 
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 max-w-lg space-y-6 flex-shrink-0 mb-6">
-                    <!-- Widget Visibility Settings -->
-                    <div>
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Affichage des widgets sur l'accueil</h3>
-                        <p class="text-sm text-slate-500 mb-3">Coche ou décoche les widgets que tu souhaites afficher sur ta page d'accueil.</p>
-                        <div class="space-y-2 text-sm">
-                            <label class="flex items-center gap-3 cursor-pointer">
+                <div class="max-w-3xl space-y-6 pb-8">
+                    <!-- Card 1: Widgets Customization -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+                        <div class="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-table-cells-large"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Personnalisation des widgets</h3>
+                                <p class="text-xs text-slate-500">Choisissez les blocs à afficher sur votre page d'accueil</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-brand-300 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2"><i class="fa-regular fa-calendar-days text-brand-500"></i> Emploi du temps</span>
                                 <input type="checkbox" id="setting-widget-schedule" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
-                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Emploi du temps</span>
                             </label>
-                            <label class="flex items-center gap-3 cursor-pointer">
+                            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-brand-300 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2"><i class="fa-solid fa-list-check text-brand-500"></i> Tâches</span>
                                 <input type="checkbox" id="setting-widget-tasks" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
-                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Tâches</span>
                             </label>
-                            <label class="flex items-center gap-3 cursor-pointer">
+                            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-brand-300 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-brand-500"></i> Notes</span>
                                 <input type="checkbox" id="setting-widget-notes" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
-                                <span class="text-slate-700 dark:text-slate-300 font-medium">Widget Notes</span>
+                            </label>
+                            <label class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-brand-300 transition-colors">
+                                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2"><i class="fa-solid fa-check-double text-brand-500"></i> Habitudes</span>
+                                <input type="checkbox" id="setting-widget-habits" class="w-4 h-4 text-brand-600 rounded accent-brand-600 cursor-pointer">
                             </label>
                         </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Sauvegarde (Export)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Télécharge toutes tes données au format JSON pour ne pas les perdre.</p>
-                        <button id="btn-export-data" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm transition-colors"><i class="fa-solid fa-download mr-2"></i> Exporter mes données</button>
-                    </div>
-                    
-                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Restauration (Import)</h3>
-                        <p class="text-sm text-slate-500 mb-3">Restaure tes données depuis un fichier JSON. <strong>Attention : écrase les données actuelles.</strong></p>
-                        <input type="file" id="input-import-data" accept=".json" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 mb-2">
+                    <!-- Card 2: Data & Backup -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+                        <div class="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-database"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Données et Sauvegarde</h3>
+                                <p class="text-xs text-slate-500">Exportez ou restaurez vos informations locales</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                            <button id="btn-export-data" class="flex-1 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-4 py-3 rounded-2xl text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-download"></i> Exporter mes données
+                            </button>
+                            <label class="flex-1 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-700 dark:text-brand-300 px-4 py-3 rounded-2xl text-sm font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm text-center">
+                                <i class="fa-solid fa-upload"></i> Importer un fichier
+                                <input type="file" id="input-import-data" accept=".json" class="hidden">
+                            </label>
+                        </div>
                     </div>
 
-                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h3 class="font-semibold text-red-600 mb-2">Zone de danger</h3>
-                        <p class="text-sm text-slate-500 mb-3">Efface toutes les données de l'application définitivement.</p>
-                        <button id="btn-clear-data" class="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-xl text-sm transition-colors font-medium"><i class="fa-solid fa-trash-can mr-2"></i> Tout effacer</button>
+                    <!-- Card 3: Danger Zone -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-red-200 dark:border-red-900/50 space-y-4">
+                        <div class="flex items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-700/60">
+                            <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-900/40 text-red-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-red-600 text-base">Zone de danger</h3>
+                                <p class="text-xs text-slate-500">Suppression définitive de vos données</p>
+                            </div>
+                        </div>
+                        <div class="pt-2 flex items-center justify-between">
+                            <p class="text-sm text-slate-500">Efface toutes les données stockées dans l'application.</p>
+                            <button id="btn-clear-data" class="bg-red-100 hover:bg-red-200 text-red-600 px-4 py-2.5 rounded-xl text-sm transition-colors font-medium flex items-center gap-2 flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i> Tout effacer
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -683,8 +717,8 @@
         const defaultState = {
             theme: 'light',
             sidebarCollapsed: false,
-            dashboardOrder: ['schedule', 'tasks', 'notes'],
-            widgetVisibility: { schedule: true, tasks: true, notes: true },
+            dashboardOrder: ['schedule', 'tasks', 'notes', 'habits'],
+            widgetVisibility: { schedule: true, tasks: true, notes: true, habits: true },
             tasks: [], 
             schedule: [], 
             notes: [], 
@@ -709,8 +743,8 @@
                         parsed.grades = parsed.grades.map(g => ({ ...g, maxVal: g.maxVal || 20 }));
                     }
                     AppState = { ...defaultState, ...parsed };
-                    if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
-                    if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
+                    if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes', 'habits'];
+                    if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true, habits: true };
                 }
             } catch (e) { console.error("Load Error", e); }
         }
@@ -759,10 +793,10 @@
                     </div>
                     <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
                 </div>
-                <div class="bg-brand-500/80 dark:bg-brand-600/70 text-white font-semibold py-2.5 px-4 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0 flex items-center justify-between">
-                    <button id="widget-sched-prev" class="text-white/80 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour précédent"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="bg-brand-600/30 dark:bg-brand-600/40 border border-brand-500/30 text-white font-semibold py-2.5 px-4 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0 flex items-center justify-between">
+                    <button id="widget-sched-prev" class="text-white/70 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour précédent"><i class="fa-solid fa-chevron-left"></i></button>
                     <span id="widget-sched-day-name" class="text-white font-bold">${currentDayName}</span>
-                    <button id="widget-sched-next" class="text-white/80 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour suivant"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button id="widget-sched-next" class="text-white/70 hover:text-white transition-colors p-1 pointer-events-auto" title="Jour suivant"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1"></div>
             `;
@@ -803,6 +837,19 @@
                 <button id="widget-btn-add-note" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2">
                     <i class="fa-solid fa-plus"></i> Enregistrer
                 </button>
+            `;
+        }
+
+        function getHabitsWidgetHTML() {
+            return `
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60 pointer-events-none">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-check-double text-brand-600 dark:text-brand-400 text-lg"></i>
+                        <h3 class="font-bold text-slate-800 dark:text-white">Habitudes</h3>
+                    </div>
+                    <button onclick="CoreUI.navigate('habits')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
+                </div>
+                <div id="widget-habits-container" class="space-y-3 flex-1 overflow-y-auto pr-1"></div>
             `;
         }
 
@@ -1001,8 +1048,8 @@
 
             renderDashboardWidgets() {
                 const container = document.getElementById('dashboard-widgets-container');
-                if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
-                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
+                if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes', 'habits'];
+                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true, habits: true };
 
                 const visibleOrder = AppState.dashboardOrder.filter(id => AppState.widgetVisibility[id] !== false);
 
@@ -1013,6 +1060,8 @@
                         return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'tasks')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'tasks')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-grab active:cursor-grabbing">${getTasksWidgetHTML()}</div>`;
                     } else if (id === 'notes') {
                         return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'notes')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'notes')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between cursor-grab active:cursor-grabbing">${getNotesWidgetHTML()}</div>`;
+                    } else if (id === 'habits') {
+                        return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'habits')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'habits')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-grab active:cursor-grabbing">${getHabitsWidgetHTML()}</div>`;
                     }
                 }).join('');
 
@@ -1102,6 +1151,41 @@
                                 </div>
                             </div>`;
                         }).join('');
+                    }
+                }
+
+                // 3. RENDER HABITS WIDGET
+                const habitsContainer = document.getElementById('widget-habits-container');
+                if (habitsContainer) {
+                    if (AppState.habits.length === 0) {
+                        habitsContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucune habitude créée.</div>`;
+                    } else {
+                        const todayStr = new Date().toISOString().split('T')[0];
+                        habitsContainer.innerHTML = AppState.habits.map(h => {
+                            const checked = h.days && h.days[todayStr] ? 'checked' : '';
+                            return `
+                                <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-between text-sm pointer-events-auto">
+                                    <span class="font-medium text-slate-800 dark:text-slate-200 truncate pr-2">${escapeHTML(h.name)}</span>
+                                    <label class="relative flex items-center cursor-pointer">
+                                        <input type="checkbox" class="widget-habit-checkbox w-5 h-5 text-brand-600 rounded accent-brand-600 cursor-pointer" data-id="${h.id}" data-date="${todayStr}" ${checked}>
+                                    </label>
+                                </div>
+                            `;
+                        }).join('');
+
+                        habitsContainer.querySelectorAll('.widget-habit-checkbox').forEach(chk => {
+                            chk.addEventListener('change', (e) => {
+                                const id = e.target.getAttribute('data-id');
+                                const date = e.target.getAttribute('data-date');
+                                const habit = AppState.habits.find(x => x.id === id);
+                                if (habit) {
+                                    if (!habit.days) habit.days = {};
+                                    habit.days[date] = e.target.checked;
+                                    saveState();
+                                    HabitsModule.render();
+                                }
+                            });
+                        });
                     }
                 }
             }
@@ -1915,16 +1999,17 @@
                     saveState();
                     document.getElementById('input-habit-name').value = '';
                     this.render();
+                    CoreUI.renderDashboardWidgets();
                 });
                 document.getElementById('habits-body').addEventListener('change', e => {
                     if (e.target.classList.contains('habit-checkbox')) {
                         const h = AppState.habits.find(x => x.id === e.target.getAttribute('data-id'));
-                        if (h) { if(!h.days) h.days = {}; h.days[e.target.getAttribute('data-date')] = e.target.checked; saveState(); }
+                        if (h) { if(!h.days) h.days = {}; h.days[e.target.getAttribute('data-date')] = e.target.checked; saveState(); CoreUI.renderDashboardWidgets(); }
                     }
                 });
                 document.getElementById('habits-body').addEventListener('click', e => {
                     const btn = e.target.closest('.btn-del-habit');
-                    if (btn) { AppState.habits = AppState.habits.filter(x => x.id !== btn.getAttribute('data-id')); saveState(); this.render(); }
+                    if (btn) { AppState.habits = AppState.habits.filter(x => x.id !== btn.getAttribute('data-id')); saveState(); this.render(); CoreUI.renderDashboardWidgets(); }
                 });
                 this.render();
             },
@@ -1935,8 +2020,12 @@
             },
             render() {
                 const dates = this.getDates();
-                document.getElementById('habits-header').innerHTML = `<th class="py-3 px-4 w-1/3">Habitude</th>` + dates.map(d => `<th class="py-3 px-2 text-center w-[10%]">${d.substring(8,10)}/${d.substring(5,7)}</th>`).join('') + `<th class="py-3 px-2 w-[5%]"></th>`;
-                document.getElementById('habits-body').innerHTML = AppState.habits.map(h => `
+                const headerEl = document.getElementById('habits-header');
+                const bodyEl = document.getElementById('habits-body');
+                if (!headerEl || !bodyEl) return;
+
+                headerEl.innerHTML = `<th class="py-3 px-4 w-1/3">Habitude</th>` + dates.map(d => `<th class="py-3 px-2 text-center w-[10%]">${d.substring(8,10)}/${d.substring(5,7)}</th>`).join('') + `<th class="py-3 px-2 w-[5%]"></th>`;
+                bodyEl.innerHTML = AppState.habits.map(h => `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                         <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200 text-sm truncate">${escapeHTML(h.name)}</td>
                         ${dates.map(d => `<td class="py-3 px-2 text-center"><input type="checkbox" class="habit-checkbox w-4 h-4 text-brand-600 rounded cursor-pointer" data-id="${h.id}" data-date="${d}" ${h.days && h.days[d] ? 'checked' : ''}></td>`).join('')}
@@ -1951,18 +2040,21 @@
                 const chkSched = document.getElementById('setting-widget-schedule');
                 const chkTasks = document.getElementById('setting-widget-tasks');
                 const chkNotes = document.getElementById('setting-widget-notes');
+                const chkHabits = document.getElementById('setting-widget-habits');
 
                 const updateVisibilityFromUI = () => {
                     AppState.widgetVisibility.schedule = chkSched.checked;
                     AppState.widgetVisibility.tasks = chkTasks.checked;
                     AppState.widgetVisibility.notes = chkNotes.checked;
+                    AppState.widgetVisibility.habits = chkHabits.checked;
                     saveState();
                     CoreUI.renderDashboardWidgets();
                 };
 
-                chkSched.addEventListener('change', updateVisibilityFromUI);
-                chkTasks.addEventListener('change', updateVisibilityFromUI);
-                chkNotes.addEventListener('change', updateVisibilityFromUI);
+                if(chkSched) chkSched.addEventListener('change', updateVisibilityFromUI);
+                if(chkTasks) chkTasks.addEventListener('change', updateVisibilityFromUI);
+                if(chkNotes) chkNotes.addEventListener('change', updateVisibilityFromUI);
+                if(chkHabits) chkHabits.addEventListener('change', updateVisibilityFromUI);
 
                 document.getElementById('btn-export-data').addEventListener('click', () => {
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(AppState));
@@ -1990,13 +2082,16 @@
             },
 
             syncUI() {
-                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true };
+                if (!AppState.widgetVisibility) AppState.widgetVisibility = { schedule: true, tasks: true, notes: true, habits: true };
                 const chkSched = document.getElementById('setting-widget-schedule');
                 const chkTasks = document.getElementById('setting-widget-tasks');
                 const chkNotes = document.getElementById('setting-widget-notes');
+                const chkHabits = document.getElementById('setting-widget-habits');
+
                 if(chkSched) chkSched.checked = AppState.widgetVisibility.schedule !== false;
                 if(chkTasks) chkTasks.checked = AppState.widgetVisibility.tasks !== false;
                 if(chkNotes) chkNotes.checked = AppState.widgetVisibility.notes !== false;
+                if(chkHabits) chkHabits.checked = AppState.widgetVisibility.habits !== false;
             }
         };
 

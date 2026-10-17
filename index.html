@@ -148,7 +148,7 @@
             <section id="dashboard-view" class="app-section active overflow-y-auto pr-1 space-y-12">
                 <header class="flex-shrink-0">
                     <h2 class="text-3xl font-bold text-slate-900 dark:text-white" id="dash-greeting">Bonjour !</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ?</p>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Prêt à organiser ta journée ? Tu peux glisser et déplacer les widgets ci-dessous librement.</p>
                 </header>
 
                 <!-- TOP STATS CARDS -->
@@ -182,65 +182,9 @@
                 <!-- SÉPARATEUR DISCRET & ESPACÉ -->
                 <hr class="border-slate-200/80 dark:border-slate-800 my-6">
 
-                <!-- MAIN WIDGETS SECTION (AÉRÉ ET VARIÉ) -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 items-start">
-                    
-                    <!-- WIDGET 1: EMPLOI DU TEMPS -->
-                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                            <div class="flex items-center gap-2.5">
-                                <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Emploi du temps</h3>
-                            </div>
-                            <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
-                        </div>
-                        <!-- Day Header Card (Bleu sobre et discret) -->
-                        <div id="widget-sched-day-name" class="bg-brand-500 text-white font-semibold py-3 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0">
-                            Demain
-                        </div>
-                        <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1">
-                            <!-- Injected dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- WIDGET 2: TÂCHES (NON COMPRESSÉ, TAILLE NORMALE, AVEC DATE) -->
-                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                            <div class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400 text-lg"></i>
-                                <h3 class="font-bold text-slate-800 dark:text-white">Tâches</h3>
-                            </div>
-                            <button onclick="CoreUI.navigate('tasks')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
-                        </div>
-                        <div id="widget-tasks-container" class="space-y-4 flex-1 overflow-y-auto pr-1">
-                            <!-- Injected dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- WIDGET 3: NOTES -->
-                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60">
-                                <div class="flex items-center gap-2.5">
-                                    <i class="fa-solid fa-pen-to-square text-brand-600 dark:text-brand-400 text-lg"></i>
-                                    <h3 class="font-bold text-slate-800 dark:text-white">Notes</h3>
-                                </div>
-                                <button onclick="CoreUI.navigate('notes')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium">Voir tout</button>
-                            </div>
-                            <div class="space-y-3">
-                                <input type="text" id="widget-note-title" placeholder="Titre de la note..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="text" id="widget-note-subject" placeholder="Matière" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                                    <input type="text" id="widget-note-chapter" placeholder="Chapitre" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
-                                </div>
-                                <textarea id="widget-note-content" placeholder="Contenu..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none h-20"></textarea>
-                            </div>
-                        </div>
-                        <button id="widget-btn-add-note" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-plus"></i> Enregistrer
-                        </button>
-                    </div>
-
+                <!-- MAIN WIDGETS SECTION (DRAGGABLE & REORDERABLE) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 items-start" id="dashboard-widgets-container">
+                    <!-- Injected dynamically via AppState.dashboardOrder -->
                 </div>
             </section>
 
@@ -714,6 +658,7 @@
         const defaultState = {
             theme: 'light',
             sidebarCollapsed: false,
+            dashboardOrder: ['schedule', 'tasks', 'notes'],
             tasks: [], 
             schedule: [], 
             notes: [], 
@@ -738,6 +683,7 @@
                         parsed.grades = parsed.grades.map(g => ({ ...g, maxVal: g.maxVal || 20 }));
                     }
                     AppState = { ...defaultState, ...parsed };
+                    if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
                 }
             } catch (e) { console.error("Load Error", e); }
         }
@@ -764,7 +710,64 @@
             }, 3000);
         }
 
+        // Widget HTML templates for dynamic drag-and-drop ordering
+        function getScheduleWidgetHTML() {
+            return `
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60 pointer-events-none">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-regular fa-calendar-days text-brand-600 dark:text-brand-400 text-lg"></i>
+                        <h3 class="font-bold text-slate-800 dark:text-white">Emploi du temps</h3>
+                    </div>
+                    <button onclick="CoreUI.navigate('schedule')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
+                </div>
+                <div id="widget-sched-day-name" class="bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 font-semibold py-2.5 rounded-2xl text-center text-sm tracking-wide shadow-sm mb-4 flex-shrink-0">
+                    Demain
+                </div>
+                <div id="widget-sched-container" class="space-y-4 flex-1 overflow-y-auto pr-1"></div>
+            `;
+        }
+
+        function getTasksWidgetHTML() {
+            return `
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60 pointer-events-none">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400 text-lg"></i>
+                        <h3 class="font-bold text-slate-800 dark:text-white">Tâches</h3>
+                    </div>
+                    <button onclick="CoreUI.navigate('tasks')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
+                </div>
+                <div id="widget-tasks-container" class="space-y-4 flex-1 overflow-y-auto pr-1"></div>
+            `;
+        }
+
+        function getNotesWidgetHTML() {
+            return `
+                <div>
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-700/60 pointer-events-none">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-pen-to-square text-brand-600 dark:text-brand-400 text-lg"></i>
+                            <h3 class="font-bold text-slate-800 dark:text-white">Notes</h3>
+                        </div>
+                        <button onclick="CoreUI.navigate('notes')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium pointer-events-auto">Voir tout</button>
+                    </div>
+                    <div class="space-y-3">
+                        <input type="text" id="widget-note-title" placeholder="Titre de la note..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="widget-note-subject" placeholder="Matière" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                            <input type="text" id="widget-note-chapter" placeholder="Chapitre" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs outline-none focus:border-brand-500 text-slate-800 dark:text-white">
+                        </div>
+                        <textarea id="widget-note-content" placeholder="Contenu..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-brand-500 text-slate-800 dark:text-white resize-none h-20"></textarea>
+                    </div>
+                </div>
+                <button id="widget-btn-add-note" class="w-full mt-4 bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Enregistrer
+                </button>
+            `;
+        }
+
         // --- CORE UI ---
+        let draggedWidgetId = null;
+
         const CoreUI = {
             init() {
                 loadState();
@@ -773,7 +776,6 @@
                 this.setupNav();
                 this.startClock();
                 this.initQuotes();
-                this.setupWidgetQuickNote();
                 
                 try { TasksModule.init(); } catch (e) { console.error("Tasks init failed", e); }
                 try { ScheduleModule.init(); } catch (e) { console.error("Schedule init failed", e); }
@@ -898,7 +900,9 @@
             },
 
             setupWidgetQuickNote() {
-                document.getElementById('widget-btn-add-note').addEventListener('click', () => {
+                const btnAdd = document.getElementById('widget-btn-add-note');
+                if (!btnAdd) return;
+                btnAdd.addEventListener('click', () => {
                     const title = document.getElementById('widget-note-title').value.trim();
                     const subject = document.getElementById('widget-note-subject').value.trim();
                     const chapter = document.getElementById('widget-note-chapter').value.trim();
@@ -926,7 +930,48 @@
                 });
             },
 
+            handleWidgetDragStart(e, id) {
+                draggedWidgetId = id;
+                e.dataTransfer.effectAllowed = 'move';
+                e.target.classList.add('dragging');
+            },
+
+            handleWidgetDrop(e, targetId) {
+                e.preventDefault();
+                document.querySelectorAll('#dashboard-widgets-container > div').forEach(el => el.classList.remove('dragging'));
+                if (!draggedWidgetId || draggedWidgetId === targetId) return;
+
+                const order = [...AppState.dashboardOrder];
+                const draggedIdx = order.indexOf(draggedWidgetId);
+                const targetIdx = order.indexOf(targetId);
+
+                if (draggedIdx > -1 && targetIdx > -1) {
+                    order.splice(draggedIdx, 1);
+                    order.splice(targetIdx, 0, draggedWidgetId);
+                    AppState.dashboardOrder = order;
+                    saveState();
+                    this.renderDashboardWidgets();
+                    showToast("Disposition des widgets mise à jour !");
+                }
+                draggedWidgetId = null;
+            },
+
             renderDashboardWidgets() {
+                const container = document.getElementById('dashboard-widgets-container');
+                if (!AppState.dashboardOrder) AppState.dashboardOrder = ['schedule', 'tasks', 'notes'];
+
+                container.innerHTML = AppState.dashboardOrder.map(id => {
+                    if (id === 'schedule') {
+                        return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'schedule')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'schedule')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-grab active:cursor-grabbing">${getScheduleWidgetHTML()}</div>`;
+                    } else if (id === 'tasks') {
+                        return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'tasks')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'tasks')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col cursor-grab active:cursor-grabbing">${getTasksWidgetHTML()}</div>`;
+                    } else if (id === 'notes') {
+                        return `<div draggable="true" ondragstart="CoreUI.handleWidgetDragStart(event, 'notes')" ondragover="event.preventDefault()" ondrop="CoreUI.handleWidgetDrop(event, 'notes')" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between cursor-grab active:cursor-grabbing">${getNotesWidgetHTML()}</div>`;
+                    }
+                }).join('');
+
+                this.setupWidgetQuickNote();
+
                 // 1. RENDER NEXT DAY SCHEDULE
                 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
                 const tomorrowDate = new Date();
@@ -937,57 +982,74 @@
                     tomorrowDayName = 'Lundi';
                 }
 
-                document.getElementById('widget-sched-day-name').textContent = tomorrowDayName;
-                const schedContainer = document.getElementById('widget-sched-container');
-                const tomorrowClasses = AppState.schedule
-                    .filter(c => c.day === tomorrowDayName)
-                    .sort((a, b) => a.start.localeCompare(b.start));
+                const dayNameEl = document.getElementById('widget-sched-day-name');
+                if (dayNameEl) dayNameEl.textContent = tomorrowDayName;
 
-                if (tomorrowClasses.length === 0) {
-                    schedContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
-                } else {
-                    schedContainer.innerHTML = tomorrowClasses.map(c => `
-                        <div class="bg-brand-50/70 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-2xl p-3.5 text-sm">
-                            <div class="font-bold text-slate-800 dark:text-slate-100 mb-1">${escapeHTML(c.subject)}</div>
-                            <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1.5 text-brand-500"></i> ${c.start} - ${c.end}</div>
-                            ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1.5 text-brand-500"></i> ${escapeHTML(c.room)}</div>` : ''}
-                        </div>
-                    `).join('');
+                const schedContainer = document.getElementById('widget-sched-container');
+                if (schedContainer) {
+                    const tomorrowClasses = AppState.schedule
+                        .filter(c => c.day === tomorrowDayName)
+                        .sort((a, b) => a.start.localeCompare(b.start));
+
+                    if (tomorrowClasses.length === 0) {
+                        schedContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Aucun cours prévu pour ${tomorrowDayName.toLowerCase()}.</div>`;
+                    } else {
+                        schedContainer.innerHTML = tomorrowClasses.map(c => `
+                            <div class="bg-brand-50/70 dark:bg-brand-900/20 border-l-4 border-brand-500 rounded-r-2xl p-3.5 text-sm pointer-events-auto">
+                                <div class="font-bold text-slate-800 dark:text-slate-100 mb-1">${escapeHTML(c.subject)}</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400"><i class="fa-regular fa-clock mr-1.5 text-brand-500"></i> ${c.start} - ${c.end}</div>
+                                ${c.room ? `<div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-location-dot mr-1.5 text-brand-500"></i> ${escapeHTML(c.room)}</div>` : ''}
+                            </div>
+                        `).join('');
+                    }
                 }
 
-                // 2. RENDER TASKS WIDGET (Non compressé, avec date visible sous la tâche)
+                // 2. RENDER TASKS WIDGET (avec distinction urgente / prochaine en bleu)
                 const tasksContainer = document.getElementById('widget-tasks-container');
-                const pendingTasks = AppState.tasks
-                    .filter(t => t.status !== 'done')
-                    .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0))
-                    .slice(0, 3);
+                if (tasksContainer) {
+                    const pendingTasks = AppState.tasks
+                        .filter(t => t.status !== 'done')
+                        .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0))
+                        .slice(0, 3);
 
-                if (pendingTasks.length === 0) {
-                    tasksContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Toutes tes tâches sont terminées ! 🎉</div>`;
-                } else {
-                    tasksContainer.innerHTML = pendingTasks.map(t => {
-                        let dateStr = 'Non planifiée';
-                        if (t.date) {
-                            const d = new Date(t.date);
-                            dateStr = `${d.getDate()} ${d.toLocaleString('fr', {month:'short'})}`;
-                        }
-                        const cardBgClass = t.urgent 
-                            ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800' 
-                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+                    if (pendingTasks.length === 0) {
+                        tasksContainer.innerHTML = `<div class="h-28 flex flex-col items-center justify-center text-slate-400 text-xs italic border-2 border-dashed border-slate-200 dark:border-slate-700/80 rounded-2xl">Toutes tes tâches sont terminées ! 🎉</div>`;
+                    } else {
+                        tasksContainer.innerHTML = pendingTasks.map(t => {
+                            let dateStr = 'Non planifiée';
+                            let isUpcoming = false;
+                            if (t.date) {
+                                const d = new Date(t.date);
+                                dateStr = `${d.getDate()} ${d.toLocaleString('fr', {month:'short'})}`;
+                                
+                                const today = new Date(); today.setHours(0,0,0,0);
+                                const tDate = new Date(t.date); tDate.setHours(0,0,0,0);
+                                const diffDays = Math.round((tDate - today) / (1000 * 60 * 60 * 24));
+                                if (diffDays >= 0 && diffDays <= 2) isUpcoming = true;
+                            }
 
-                        return `
-                        <div class="${cardBgClass} p-4 rounded-2xl border flex flex-col justify-between text-sm transition-all shadow-sm">
-                            <div class="flex items-center gap-2 mb-1.5">
-                                ${t.urgent ? `<span class="text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 px-2 py-0.5 rounded-md"><i class="fa-solid fa-fire mr-1"></i>Urgent</span>` : ''}
-                                ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
-                            </div>
-                            <p class="font-medium text-slate-800 dark:text-slate-100 text-sm mb-3">${escapeHTML(t.title)}</p>
-                            <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-700/60">
-                                <span><i class="fa-regular fa-calendar mr-1"></i> ${dateStr}</span>
-                                <span class="text-brand-600 dark:text-brand-400 font-medium">À faire</span>
-                            </div>
-                        </div>`;
-                    }).join('');
+                            let cardBgClass = 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+                            if (t.urgent) {
+                                cardBgClass = 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800';
+                            } else if (isUpcoming) {
+                                cardBgClass = 'bg-brand-50/80 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800';
+                            }
+
+                            return `
+                            <div class="${cardBgClass} p-4 rounded-2xl border flex flex-col justify-between text-sm transition-all shadow-sm pointer-events-auto">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    ${t.urgent ? `<span class="text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 px-2 py-0.5 rounded-md"><i class="fa-solid fa-fire mr-1"></i>Urgent</span>` : ''}
+                                    ${isUpcoming && !t.urgent ? `<span class="text-[10px] font-bold uppercase tracking-wider text-white bg-brand-600 px-2 py-0.5 rounded-md"><i class="fa-regular fa-clock mr-1"></i>Bientôt</span>` : ''}
+                                    ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
+                                </div>
+                                <p class="font-medium text-slate-800 dark:text-slate-100 text-sm mb-3">${escapeHTML(t.title)}</p>
+                                <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-700/60">
+                                    <span><i class="fa-regular fa-calendar mr-1"></i> ${dateStr}</span>
+                                    <span class="text-brand-600 dark:text-brand-400 font-medium">À faire</span>
+                                </div>
+                            </div>`;
+                        }).join('');
+                    }
                 }
             }
         };
@@ -1115,14 +1177,23 @@
                     
                     col.innerHTML = cols[status].map(t => {
                         let dateStr = '';
+                        let isUpcoming = false;
                         if (t.date) {
                             const d = new Date(t.date);
                             dateStr = `${d.getDate()} ${d.toLocaleString('fr', {month:'short'})}`;
+
+                            const today = new Date(); today.setHours(0,0,0,0);
+                            const tDate = new Date(t.date); tDate.setHours(0,0,0,0);
+                            const diffDays = Math.round((tDate - today) / (1000 * 60 * 60 * 24));
+                            if (diffDays >= 0 && diffDays <= 2) isUpcoming = true;
                         }
                         
-                        const cardBgClass = t.urgent 
-                            ? 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800' 
-                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+                        let cardBgClass = 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+                        if (t.urgent) {
+                            cardBgClass = 'bg-red-50 dark:bg-red-950/50 border-red-300 dark:border-red-800';
+                        } else if (isUpcoming) {
+                            cardBgClass = 'bg-brand-50/80 dark:bg-brand-950/40 border-brand-200 dark:border-brand-800';
+                        }
 
                         return `
                         <div draggable="true" ondragstart="TasksModule.handleDragStart(event, '${t.id}')" ondragend="TasksModule.handleDragEnd(event)"
@@ -1139,6 +1210,7 @@
                             
                             <div class="flex items-center gap-2 mb-1 pr-16">
                                 ${t.urgent ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white bg-red-500 shadow-sm px-2.5 py-0.5 rounded-md"><i class="fa-solid fa-fire"></i> Urgent</span>` : ''}
+                                ${isUpcoming && !t.urgent ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white bg-brand-600 shadow-sm px-2.5 py-0.5 rounded-md"><i class="fa-regular fa-clock"></i> Bientôt</span>` : ''}
                                 ${t.subject ? `<span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">${escapeHTML(t.subject)}</span>` : ''}
                             </div>
                             <h4 class="text-sm font-medium text-slate-800 dark:text-slate-100 pr-6 break-words">${escapeHTML(t.title)}</h4>
